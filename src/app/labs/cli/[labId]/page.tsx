@@ -1,0 +1,228 @@
+"use client";
+
+import { useState, useCallback, use } from "react";
+import { ArrowLeft, BookOpen, Terminal, HelpCircle } from "lucide-react";
+import Link from "next/link";
+import dynamic from "next/dynamic";
+import LabInstructions from "@/components/labs/LabInstructions";
+import GradingPanel from "@/components/labs/GradingPanel";
+import type { DeviceState } from "@/lib/ios/state";
+import type { TaskResult } from "@/components/labs/GradingPanel";
+import { cn } from "@/lib/utils";
+
+// Dynamic import — xterm.js requires browser APIs
+const CiscoTerminal = dynamic(() => import("@/components/labs/CiscoTerminal"), {
+  ssr: false,
+  loading: () => (
+    <div className="flex items-center justify-center h-full bg-[#0d1117] rounded-lg">
+      <div className="text-teal-500 animate-pulse text-sm font-mono">Loading terminal...</div>
+    </div>
+  ),
+});
+
+// Lab definitions are loaded client-side from JSON
+import type labType from "@/content/labs/cli/lab-001-basic-router-config.json";
+type LabDef = typeof labType;
+
+async function fetchLab(labId: string): Promise<LabDef | null> {
+  const slugMap: Record<string, string> = {
+    "lab-001": "lab-001-basic-router-config",
+    "lab-002": "lab-002-static-routing",
+    "lab-003": "lab-003-vlan-config",
+    "lab-004": "lab-004-router-on-a-stick",
+    "lab-005": "lab-005-ospf-single-area",
+    "lab-006": "lab-006-device-security",
+    "lab-007": "lab-007-trunk-links",
+    "lab-008": "lab-008-loopback-and-serial",
+    "lab-009": "lab-009-banner-and-motd",
+    "lab-010": "lab-010-full-router-setup",
+  };
+  const fileName = slugMap[labId];
+  if (!fileName) return null;
+  try {
+    const mod = await import(`@/content/labs/cli/${fileName}.json`);
+    return mod.default as LabDef;
+  } catch {
+    return null;
+  }
+}
+
+import { useEffect } from "react";
+
+export default function CliLabPage({ params }: { params: Promise<{ labId: string }> }) {
+  const { labId } = use(params);
+  const [lab, setLab] = useState<LabDef | null>(null);
+  const [deviceState, setDeviceState] = useState<DeviceState | null>(null);
+  const [taskResults, setTaskResults] = useState<Record<string, TaskResult>>({});
+  const [isGrading, setIsGrading] = useState(false);
+  const [allPassed, setAllPassed] = useState(false);
+  const [activeTab, setActiveTab] = useState<"instructions" | "grading">("instructions");
+
+  useEffect(() => {
+    fetchLab(labId).then(setLab);
+  }, [labId]);
+
+  const handleStateChange = useCallback((state: DeviceState) => {
+    setDeviceState(state);
+  }, []);
+
+  const handleGrade = useCallback(async () => {
+    if (!deviceState || !lab) return;
+    setIsGrading(true);
+    try {
+      const res = await fetch("/api/grade-lab", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ labId: lab.id, deviceState }),
+      });
+      const data = await res.json();
+      setTaskResults(data.taskResults ?? {});
+      setAllPassed(data.allPassed ?? false);
+      setActiveTab("grading");
+    } catch {
+      // fallback: silently fail
+    } finally {
+      setIsGrading(false);
+    }
+  }, [deviceState, lab]);
+
+  if (!lab) {
+    return (
+      <div className="min-h-screen bg-[#080b10] flex items-center justify-center">
+        <div className="text-teal-500 animate-pulse font-mono">Loading lab...</div>
+      </div>
+    );
+  }
+
+  const initialState = lab.initialState as Partial<DeviceState> | undefined;
+
+  return (
+    <div className="h-screen bg-[#080b10] flex flex-col overflow-hidden">
+      {/* Top bar */}
+      <div className="flex-shrink-0 border-b border-zinc-800/60 bg-zinc-950/80 backdrop-blur-sm px-4 py-2.5 flex items-center gap-4">
+        <Link
+          href="/labs"
+          className="flex items-center gap-1.5 text-zinc-400 hover:text-white transition-colors text-sm"
+        >
+          <ArrowLeft className="w-4 h-4" />
+          Labs
+        </Link>
+        <div className="h-4 w-px bg-zinc-800" />
+        <div className="flex items-center gap-2">
+          <Terminal className="w-4 h-4 text-teal-500" />
+          <span className="text-white font-semibold text-sm truncate">{lab.title}</span>
+        </div>
+        <div className="ml-auto flex items-center gap-2 text-xs text-zinc-500">
+          <span className="hidden sm:block capitalize">{lab.domain.replace(/-/g, " ")}</span>
+          <span className="hidden sm:block">·</span>
+          <span>{lab.estimatedMinutes} min</span>
+        </div>
+      </div>
+
+      {/* Main layout: instructions left (40%) + terminal right (60%) */}
+      <div className="flex-1 flex min-h-0">
+        {/* Left panel — instructions + grading */}
+        <div className="w-[40%] min-w-[320px] border-r border-zinc-800/60 flex flex-col bg-zinc-950/40">
+          {/* Tab bar */}
+          <div className="flex-shrink-0 flex border-b border-zinc-800/60">
+            <button
+              onClick={() => setActiveTab("instructions")}
+              className={cn(
+                "flex-1 flex items-center justify-center gap-1.5 py-2.5 text-xs font-semibold transition-colors",
+                activeTab === "instructions"
+                  ? "text-teal-400 border-b-2 border-teal-500"
+                  : "text-zinc-500 hover:text-zinc-300",
+              )}
+            >
+              <BookOpen className="w-3.5 h-3.5" />
+              Instructions
+            </button>
+            <button
+              onClick={() => setActiveTab("grading")}
+              className={cn(
+                "flex-1 flex items-center justify-center gap-1.5 py-2.5 text-xs font-semibold transition-colors",
+                activeTab === "grading"
+                  ? "text-teal-400 border-b-2 border-teal-500"
+                  : "text-zinc-500 hover:text-zinc-300",
+              )}
+            >
+              <HelpCircle className="w-3.5 h-3.5" />
+              Check Work
+              {Object.keys(taskResults).length > 0 && (
+                <span
+                  className={cn(
+                    "ml-1 px-1.5 py-0.5 rounded-full text-[10px] font-bold",
+                    allPassed ? "bg-emerald-500/20 text-emerald-400" : "bg-red-500/20 text-red-400",
+                  )}
+                >
+                  {Object.values(taskResults).filter((r) => r.passed).length}/
+                  {lab.tasks.length}
+                </span>
+              )}
+            </button>
+          </div>
+
+          {/* Panel content */}
+          <div className="flex-1 overflow-y-auto p-4">
+            {activeTab === "instructions" ? (
+              <LabInstructions
+                title={lab.title}
+                scenario={lab.scenario}
+                tasks={lab.tasks}
+                taskResults={taskResults}
+                domain={lab.domain}
+                difficulty={lab.difficulty as "beginner" | "intermediate" | "advanced"}
+                estimatedMinutes={lab.estimatedMinutes}
+              />
+            ) : (
+              <GradingPanel
+                taskResults={taskResults}
+                tasks={lab.tasks}
+                isGrading={isGrading}
+                onGrade={handleGrade}
+                allPassed={allPassed}
+              />
+            )}
+          </div>
+
+          {/* Grade button always visible at bottom */}
+          {activeTab === "instructions" && (
+            <div className="flex-shrink-0 p-3 border-t border-zinc-800/60">
+              <button
+                onClick={handleGrade}
+                disabled={isGrading || !deviceState}
+                className="w-full py-2 px-4 bg-teal-500/20 hover:bg-teal-500/30 border border-teal-500/40 text-teal-300 text-sm font-semibold rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+              >
+                {isGrading ? (
+                  <>
+                    <span className="w-3.5 h-3.5 border-2 border-teal-400/30 border-t-teal-400 rounded-full animate-spin" />
+                    Grading...
+                  </>
+                ) : (
+                  "Check My Work"
+                )}
+              </button>
+            </div>
+          )}
+        </div>
+
+        {/* Right panel — terminal */}
+        <div className="flex-1 flex flex-col min-w-0 p-3 gap-2">
+          <div className="flex items-center gap-2 flex-shrink-0">
+            <div className="flex gap-1.5">
+              <div className="w-3 h-3 rounded-full bg-red-500/70" />
+              <div className="w-3 h-3 rounded-full bg-yellow-500/70" />
+              <div className="w-3 h-3 rounded-full bg-green-500/70" />
+            </div>
+            <span className="text-xs text-zinc-500 font-mono">cisco-ios-simulator</span>
+          </div>
+          <CiscoTerminal
+            initialState={initialState}
+            onStateChange={handleStateChange}
+            className="flex-1 min-h-0 rounded-lg overflow-hidden"
+          />
+        </div>
+      </div>
+    </div>
+  );
+}

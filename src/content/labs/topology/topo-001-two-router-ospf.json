@@ -1,0 +1,89 @@
+{
+  "id": "topo-001",
+  "title": "Two-Router OSPF Adjacency",
+  "domain": "ip-connectivity",
+  "difficulty": "intermediate",
+  "estimatedMinutes": 35,
+  "description": "Configure OSPFv2 between two routers connected via a serial link. Establish an OSPF adjacency in area 0 so both routers share their connected networks.",
+  "objectives": ["3.4"],
+  "devices": [
+    {
+      "id": "R1",
+      "type": "router",
+      "label": "R1",
+      "position": { "x": 150, "y": 250 },
+      "initialState": {
+        "hostname": "R1",
+        "mode": "user",
+        "interfaces": {
+          "Serial0/0/0": { "name": "Serial0/0/0", "ip": "10.0.0.1", "mask": "255.255.255.252", "status": "up" },
+          "GigabitEthernet0/0": { "name": "GigabitEthernet0/0", "ip": "192.168.1.1", "mask": "255.255.255.0", "status": "up" },
+          "Loopback0": { "name": "Loopback0", "ip": "1.1.1.1", "mask": "255.255.255.255", "status": "up" }
+        }
+      }
+    },
+    {
+      "id": "R2",
+      "type": "router",
+      "label": "R2",
+      "position": { "x": 650, "y": 250 },
+      "initialState": {
+        "hostname": "R2",
+        "mode": "user",
+        "interfaces": {
+          "Serial0/0/0": { "name": "Serial0/0/0", "ip": "10.0.0.2", "mask": "255.255.255.252", "status": "up" },
+          "GigabitEthernet0/0": { "name": "GigabitEthernet0/0", "ip": "172.16.1.1", "mask": "255.255.255.0", "status": "up" },
+          "Loopback0": { "name": "Loopback0", "ip": "2.2.2.2", "mask": "255.255.255.255", "status": "up" }
+        }
+      }
+    }
+  ],
+  "links": [
+    { "id": "e1", "source": "R1", "target": "R2", "label": "10.0.0.0/30 Serial" }
+  ],
+  "scenario": "R1 and R2 are connected via a serial link (10.0.0.0/30). R1 has LAN 192.168.1.0/24 and loopback 1.1.1.1/32. R2 has LAN 172.16.1.0/24 and loopback 2.2.2.2/32. Configure OSPF process 1 on both routers in area 0 so all networks are visible in each router's routing table.",
+  "tasks": [
+    {
+      "deviceId": "R1",
+      "id": "t1",
+      "description": "Configure OSPF on R1: process 1, router-id 1.1.1.1",
+      "hint": "router ospf 1 → router-id 1.1.1.1",
+      "check": { "type": "ospf_router_id", "description": "R1 OSPF router-id", "expected": { "pid": 1, "routerId": "1.1.1.1" } }
+    },
+    {
+      "deviceId": "R1",
+      "id": "t2",
+      "description": "Advertise R1's serial link (10.0.0.0/30) into OSPF area 0",
+      "hint": "network 10.0.0.0 0.0.0.3 area 0",
+      "check": { "type": "ospf_network", "description": "R1 advertises 10.0.0.0", "expected": { "pid": 1, "network": "10.0.0.0", "area": 0 } }
+    },
+    {
+      "deviceId": "R1",
+      "id": "t3",
+      "description": "Advertise R1's LAN (192.168.1.0/24) into OSPF area 0",
+      "hint": "network 192.168.1.0 0.0.0.255 area 0",
+      "check": { "type": "ospf_network", "description": "R1 advertises 192.168.1.0", "expected": { "pid": 1, "network": "192.168.1.0", "area": 0 } }
+    },
+    {
+      "deviceId": "R2",
+      "id": "t4",
+      "description": "Configure OSPF on R2: process 1, router-id 2.2.2.2",
+      "hint": "router ospf 1 → router-id 2.2.2.2",
+      "check": { "type": "ospf_router_id", "description": "R2 OSPF router-id", "expected": { "pid": 1, "routerId": "2.2.2.2" } }
+    },
+    {
+      "deviceId": "R2",
+      "id": "t5",
+      "description": "Advertise R2's serial link (10.0.0.0/30) into OSPF area 0",
+      "hint": "network 10.0.0.0 0.0.0.3 area 0",
+      "check": { "type": "ospf_network", "description": "R2 advertises 10.0.0.0", "expected": { "pid": 1, "network": "10.0.0.0", "area": 0 } }
+    },
+    {
+      "deviceId": "R2",
+      "id": "t6",
+      "description": "Advertise R2's LAN (172.16.1.0/24) into OSPF area 0",
+      "hint": "network 172.16.1.0 0.0.0.255 area 0",
+      "check": { "type": "ospf_network", "description": "R2 advertises 172.16.1.0", "expected": { "pid": 1, "network": "172.16.1.0", "area": 0 } }
+    }
+  ]
+}

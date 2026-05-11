@@ -1,0 +1,143 @@
+{
+  "id": "lab-010",
+  "title": "Complete Router Setup Challenge",
+  "domain": "ip-connectivity",
+  "difficulty": "advanced",
+  "estimatedMinutes": 40,
+  "topology": "single-router",
+  "description": "A capstone challenge combining hostname, interface configuration, static routing, OSPF, and device security. This lab simulates a real deployment scenario and tests your ability to configure a production-ready router from scratch.",
+  "objectives": ["3.1", "3.3", "3.4", "5.3", "5.6"],
+  "initialState": {
+    "hostname": "Router",
+    "mode": "user"
+  },
+  "scenario": "You are deploying a new branch office router (BRANCH-R1). It connects to HQ via GigabitEthernet0/0 (10.0.0.2/30, next-hop 10.0.0.1) and to the local LAN via GigabitEthernet0/1 (172.20.1.1/24). OSPF process 1 will advertise both connected networks in area 0. The router must also be secured with an enable secret, a local admin account, SSH v2, and VTY login-local.",
+  "tasks": [
+    {
+      "id": "t1",
+      "description": "Set hostname to BRANCH-R1",
+      "hint": "configure terminal → hostname BRANCH-R1",
+      "check": {
+        "type": "hostname",
+        "description": "Hostname must be BRANCH-R1",
+        "expected": { "hostname": "BRANCH-R1" }
+      }
+    },
+    {
+      "id": "t2",
+      "description": "Configure Gi0/0 with IP 10.0.0.2/30 and bring it up",
+      "hint": "interface GigabitEthernet0/0 → ip address 10.0.0.2 255.255.255.252 → no shutdown",
+      "check": {
+        "type": "interface_ip",
+        "description": "Gi0/0 must have IP 10.0.0.2/30",
+        "expected": { "interface": "GigabitEthernet0/0", "ip": "10.0.0.2", "mask": "255.255.255.252" }
+      }
+    },
+    {
+      "id": "t3",
+      "description": "Bring GigabitEthernet0/0 up",
+      "hint": "no shutdown",
+      "check": {
+        "type": "interface_status",
+        "description": "Gi0/0 must be up",
+        "expected": { "interface": "GigabitEthernet0/0", "status": "up" }
+      }
+    },
+    {
+      "id": "t4",
+      "description": "Configure Gi0/1 with IP 172.20.1.1/24 and bring it up",
+      "hint": "interface GigabitEthernet0/1 → ip address 172.20.1.1 255.255.255.0 → no shutdown",
+      "check": {
+        "type": "interface_ip",
+        "description": "Gi0/1 must have IP 172.20.1.1/24",
+        "expected": { "interface": "GigabitEthernet0/1", "ip": "172.20.1.1", "mask": "255.255.255.0" }
+      }
+    },
+    {
+      "id": "t5",
+      "description": "Add a default static route via 10.0.0.1",
+      "hint": "ip route 0.0.0.0 0.0.0.0 10.0.0.1",
+      "check": {
+        "type": "static_route",
+        "description": "Default route 0.0.0.0/0 via 10.0.0.1",
+        "expected": { "network": "0.0.0.0", "mask": "0.0.0.0", "nextHop": "10.0.0.1" }
+      }
+    },
+    {
+      "id": "t6",
+      "description": "Configure OSPF 1 and advertise 10.0.0.0/30 in area 0",
+      "hint": "router ospf 1 → network 10.0.0.0 0.0.0.3 area 0",
+      "check": {
+        "type": "ospf_network",
+        "description": "10.0.0.0 must be in OSPF area 0",
+        "expected": { "pid": 1, "network": "10.0.0.0", "area": 0 }
+      }
+    },
+    {
+      "id": "t7",
+      "description": "Advertise 172.20.1.0/24 in OSPF area 0",
+      "hint": "network 172.20.1.0 0.0.0.255 area 0",
+      "check": {
+        "type": "ospf_network",
+        "description": "172.20.1.0 must be in OSPF area 0",
+        "expected": { "pid": 1, "network": "172.20.1.0", "area": 0 }
+      }
+    },
+    {
+      "id": "t8",
+      "description": "Set enable secret to 'Branch$ecret1'",
+      "hint": "enable secret Branch$ecret1",
+      "check": {
+        "type": "enable_secret",
+        "description": "Enable secret must be configured",
+        "expected": {}
+      }
+    },
+    {
+      "id": "t9",
+      "description": "Create local username 'netadmin' with a secret",
+      "hint": "username netadmin secret NetAdmin2024",
+      "check": {
+        "type": "username_exists",
+        "description": "Username 'netadmin' must exist",
+        "expected": { "username": "netadmin" }
+      }
+    },
+    {
+      "id": "t10",
+      "description": "Set SSH version 2 and configure VTY to use local login",
+      "hint": "ip ssh version 2 → line vty 0 4 → login local → transport input ssh",
+      "check": {
+        "type": "ssh_version",
+        "description": "SSH version must be 2",
+        "expected": { "version": 2 }
+      }
+    }
+  ],
+  "solutionWalkthrough": [
+    "enable",
+    "configure terminal",
+    "hostname BRANCH-R1",
+    "interface GigabitEthernet0/0",
+    "ip address 10.0.0.2 255.255.255.252",
+    "no shutdown",
+    "exit",
+    "interface GigabitEthernet0/1",
+    "ip address 172.20.1.1 255.255.255.0",
+    "no shutdown",
+    "exit",
+    "ip route 0.0.0.0 0.0.0.0 10.0.0.1",
+    "router ospf 1",
+    "network 10.0.0.0 0.0.0.3 area 0",
+    "network 172.20.1.0 0.0.0.255 area 0",
+    "exit",
+    "enable secret Branch$ecret1",
+    "username netadmin secret NetAdmin2024",
+    "ip ssh version 2",
+    "line vty 0 4",
+    "login local",
+    "transport input ssh",
+    "end",
+    "show running-config"
+  ]
+}

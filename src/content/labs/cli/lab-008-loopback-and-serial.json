@@ -1,0 +1,83 @@
+{
+  "id": "lab-008",
+  "title": "Loopback Interfaces and Serial WAN Links",
+  "domain": "ip-connectivity",
+  "difficulty": "beginner",
+  "estimatedMinutes": 15,
+  "topology": "single-router",
+  "description": "Configure loopback interfaces (used as stable router-ids and management addresses) and a serial WAN interface. Understand why loopbacks are always up and how they differ from physical interfaces.",
+  "objectives": ["3.1", "3.4"],
+  "initialState": {
+    "hostname": "R2",
+    "mode": "user"
+  },
+  "scenario": "Router R2 connects to the WAN via Serial0/0/0 and needs a management loopback. Configure the serial interface for the 172.16.0.0/30 point-to-point link and create two loopback interfaces: Loopback0 as the router-id address and Loopback1 simulating an internal network.",
+  "tasks": [
+    {
+      "id": "t1",
+      "description": "Configure Loopback0 with IP 2.2.2.2/32",
+      "hint": "interface Loopback0 → ip address 2.2.2.2 255.255.255.255",
+      "check": {
+        "type": "interface_ip",
+        "description": "Loopback0 must have IP 2.2.2.2/32",
+        "expected": { "interface": "Loopback0", "ip": "2.2.2.2", "mask": "255.255.255.255" }
+      }
+    },
+    {
+      "id": "t2",
+      "description": "Configure Loopback1 with IP 10.2.2.0/24 (first host address: 10.2.2.1)",
+      "hint": "interface Loopback1 → ip address 10.2.2.1 255.255.255.0",
+      "check": {
+        "type": "interface_ip",
+        "description": "Loopback1 must have IP 10.2.2.1/24",
+        "expected": { "interface": "Loopback1", "ip": "10.2.2.1", "mask": "255.255.255.0" }
+      }
+    },
+    {
+      "id": "t3",
+      "description": "Configure Serial0/0/0 with IP 172.16.0.2/30",
+      "hint": "interface Serial0/0/0 → ip address 172.16.0.2 255.255.255.252",
+      "check": {
+        "type": "interface_ip",
+        "description": "Serial0/0/0 must have IP 172.16.0.2/30",
+        "expected": { "interface": "Serial0/0/0", "ip": "172.16.0.2", "mask": "255.255.255.252" }
+      }
+    },
+    {
+      "id": "t4",
+      "description": "Bring Serial0/0/0 up",
+      "hint": "no shutdown",
+      "check": {
+        "type": "interface_status",
+        "description": "Serial0/0/0 must be up",
+        "expected": { "interface": "Serial0/0/0", "status": "up" }
+      }
+    },
+    {
+      "id": "t5",
+      "description": "Add description 'WAN link to ISP' on Serial0/0/0",
+      "hint": "description WAN link to ISP",
+      "check": {
+        "type": "interface_description",
+        "description": "Serial0/0/0 must have description 'WAN link to ISP'",
+        "expected": { "interface": "Serial0/0/0", "description": "WAN link to ISP" }
+      }
+    }
+  ],
+  "solutionWalkthrough": [
+    "enable",
+    "configure terminal",
+    "interface Loopback0",
+    "ip address 2.2.2.2 255.255.255.255",
+    "exit",
+    "interface Loopback1",
+    "ip address 10.2.2.1 255.255.255.0",
+    "exit",
+    "interface Serial0/0/0",
+    "ip address 172.16.0.2 255.255.255.252",
+    "description WAN link to ISP",
+    "no shutdown",
+    "end",
+    "show ip interface brief"
+  ]
+}

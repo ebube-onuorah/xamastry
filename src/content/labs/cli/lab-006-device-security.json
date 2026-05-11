@@ -1,0 +1,101 @@
+{
+  "id": "lab-006",
+  "title": "Device Security Hardening",
+  "domain": "security-fundamentals",
+  "difficulty": "beginner",
+  "estimatedMinutes": 20,
+  "topology": "single-router",
+  "description": "Secure a Cisco router by setting an enable secret, configuring local usernames, enabling service password-encryption, setting SSH version 2, and configuring the VTY lines for SSH-only access.",
+  "objectives": ["5.3", "5.6"],
+  "initialState": {
+    "hostname": "Router",
+    "mode": "user"
+  },
+  "scenario": "A router has just been installed and has no security configured. You must harden it before it goes into production. Company policy requires SSH-only remote access, local authentication, and all passwords stored with encryption.",
+  "tasks": [
+    {
+      "id": "t1",
+      "description": "Set the hostname to CORP-R1",
+      "hint": "configure terminal → hostname CORP-R1",
+      "check": {
+        "type": "hostname",
+        "description": "Hostname must be CORP-R1",
+        "expected": { "hostname": "CORP-R1" }
+      }
+    },
+    {
+      "id": "t2",
+      "description": "Set an enable secret of Cisco123",
+      "hint": "enable secret Cisco123",
+      "check": {
+        "type": "enable_secret",
+        "description": "Enable secret must be configured",
+        "expected": {}
+      }
+    },
+    {
+      "id": "t3",
+      "description": "Enable service password-encryption",
+      "hint": "service password-encryption",
+      "check": {
+        "type": "service_password_encryption",
+        "description": "Service password-encryption must be enabled",
+        "expected": {}
+      }
+    },
+    {
+      "id": "t4",
+      "description": "Create local username 'admin' with secret 'Admin@2024'",
+      "hint": "username admin secret Admin@2024",
+      "check": {
+        "type": "username_exists",
+        "description": "Username 'admin' must exist",
+        "expected": { "username": "admin" }
+      }
+    },
+    {
+      "id": "t5",
+      "description": "Set SSH version 2",
+      "hint": "ip ssh version 2",
+      "check": {
+        "type": "ssh_version",
+        "description": "SSH version must be 2",
+        "expected": { "version": 2 }
+      }
+    },
+    {
+      "id": "t6",
+      "description": "Configure VTY lines 0-4 to use local login",
+      "hint": "line vty 0 4 → login local",
+      "check": {
+        "type": "line_login",
+        "description": "VTY 0 4 must use local authentication",
+        "expected": { "line": "vty 0 4", "method": "local" }
+      }
+    },
+    {
+      "id": "t7",
+      "description": "Restrict VTY lines to SSH only (no Telnet)",
+      "hint": "line vty 0 4 → transport input ssh",
+      "check": {
+        "type": "line_password",
+        "description": "VTY lines must have transport input configured",
+        "expected": { "line": "vty 0 4" }
+      }
+    }
+  ],
+  "solutionWalkthrough": [
+    "enable",
+    "configure terminal",
+    "hostname CORP-R1",
+    "enable secret Cisco123",
+    "service password-encryption",
+    "username admin secret Admin@2024",
+    "ip ssh version 2",
+    "line vty 0 4",
+    "login local",
+    "transport input ssh",
+    "end",
+    "show running-config"
+  ]
+}

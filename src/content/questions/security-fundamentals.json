@@ -1,0 +1,1082 @@
+[
+  {
+    "id": "sf-001",
+    "domain": "security-fundamentals",
+    "objective": "5.1",
+    "difficulty": "easy",
+    "text": "What is the CIA triad in network security?",
+    "options": [
+      "A. Confidentiality, Integrity, Availability",
+      "B. Certification, Intrusion, Authentication",
+      "C. Connectivity, Integrity, Access",
+      "D. Confidentiality, Infrastructure, Authorization"
+    ],
+    "correct": "A",
+    "explanation": "The CIA triad is the foundation of information security: Confidentiality (data accessible only to authorized parties), Integrity (data is accurate and unmodified), and Availability (systems and data are accessible when needed). Security policies aim to protect all three.",
+    "tags": [
+      "CIA-triad",
+      "security-fundamentals"
+    ],
+    "reference": "Odom CCNA v2 Ch.20"
+  },
+  {
+    "id": "sf-002",
+    "domain": "security-fundamentals",
+    "objective": "5.2",
+    "difficulty": "medium",
+    "text": "What is the difference between authentication and authorization?",
+    "options": [
+      "A. Authentication checks what you can do; authorization checks who you are",
+      "B. Authentication verifies identity; authorization determines what the authenticated user can do",
+      "C. They are the same concept",
+      "D. Authorization occurs before authentication"
+    ],
+    "correct": "B",
+    "explanation": "Authentication ('who are you?') verifies identity using credentials (username/password, certificate, biometric). Authorization ('what can you do?') determines what resources and actions the authenticated user is permitted. AAA = Authentication, Authorization, Accounting.",
+    "tags": [
+      "AAA",
+      "authentication",
+      "authorization"
+    ],
+    "reference": "Odom CCNA v2 Ch.20"
+  },
+  {
+    "id": "sf-003",
+    "domain": "security-fundamentals",
+    "objective": "5.2",
+    "difficulty": "medium",
+    "text": "What does the 'Accounting' component of AAA provide?",
+    "options": [
+      "A. Verifies the identity of users",
+      "B. Determines user access rights",
+      "C. Records what actions authenticated users perform for audit purposes",
+      "D. Encrypts user credentials"
+    ],
+    "correct": "C",
+    "explanation": "Accounting in AAA tracks and logs what authenticated and authorized users actually do: commands executed, sessions started, data transferred, login/logout times. This creates an audit trail for compliance, troubleshooting, and detecting misuse. Cisco IOS uses RADIUS or TACACS+ for AAA.",
+    "tags": [
+      "AAA",
+      "accounting",
+      "audit-trail"
+    ],
+    "reference": "Odom CCNA v2 Ch.20"
+  },
+  {
+    "id": "sf-004",
+    "domain": "security-fundamentals",
+    "objective": "5.3",
+    "difficulty": "medium",
+    "text": "Which ACL type filters based on source IP address only?",
+    "options": [
+      "A. Extended ACL",
+      "B. Standard ACL",
+      "C. Named ACL",
+      "D. Dynamic ACL"
+    ],
+    "correct": "B",
+    "explanation": "Standard ACLs (numbered 1-99 and 1300-1999) filter only on source IP address. Extended ACLs (numbered 100-199 and 2000-2699) filter on source IP, destination IP, protocol, and port numbers. Standard ACLs should be placed close to the destination; extended ACLs close to the source.",
+    "tags": [
+      "ACL",
+      "standard-ACL",
+      "source-IP"
+    ],
+    "reference": "Odom CCNA v2 Ch.3"
+  },
+  {
+    "id": "sf-005",
+    "domain": "security-fundamentals",
+    "objective": "5.3",
+    "difficulty": "hard",
+    "text": "An extended ACL entry reads: 'permit tcp 192.168.1.0 0.0.0.255 any eq 80'. What does this permit?",
+    "options": [
+      "A. All TCP traffic from any source to 192.168.1.0/24 on port 80",
+      "B. TCP traffic from 192.168.1.0/24 to any destination on destination port 80",
+      "C. TCP traffic from 192.168.1.0/24 to any destination on source port 80",
+      "D. All traffic from 192.168.1.0/24 to any destination"
+    ],
+    "correct": "B",
+    "explanation": "Extended ACL syntax: access-list [num] [permit|deny] [protocol] [src] [src-wildcard] [dst] [dst-wildcard] [operator] [port]. 'eq 80' applies to the destination ('any eq 80' = any destination on port 80). This permits HTTP requests FROM 192.168.1.0/24 to ANY web server.",
+    "tags": [
+      "ACL",
+      "extended-ACL",
+      "TCP",
+      "port-80"
+    ],
+    "reference": "Odom CCNA v2 Ch.3"
+  },
+  {
+    "id": "sf-006",
+    "domain": "security-fundamentals",
+    "objective": "5.3",
+    "difficulty": "medium",
+    "text": "An ACL is applied to an interface with 'ip access-group 10 in'. Where is traffic filtered?",
+    "options": [
+      "A. Traffic exiting the interface toward the connected network",
+      "B. Traffic entering the interface from the connected network toward the router",
+      "C. Traffic on all interfaces simultaneously",
+      "D. Traffic from the router's own processes"
+    ],
+    "correct": "B",
+    "explanation": "'in' direction means the ACL filters packets as they enter the router interface (arriving from the attached network). 'out' filters packets as they leave the interface (heading toward the attached network). ACLs don't filter traffic generated by the router itself (use control-plane policies for that).",
+    "tags": [
+      "ACL",
+      "inbound",
+      "outbound",
+      "direction"
+    ],
+    "reference": "Odom CCNA v2 Ch.3"
+  },
+  {
+    "id": "sf-007",
+    "domain": "security-fundamentals",
+    "objective": "5.3",
+    "difficulty": "medium",
+    "text": "What is the implicit rule at the end of every Cisco ACL?",
+    "options": [
+      "A. Permit any any",
+      "B. Deny any any (implicit deny all)",
+      "C. Log any any",
+      "D. Forward to default gateway"
+    ],
+    "correct": "B",
+    "explanation": "Every Cisco ACL has an implicit 'deny any any' at the end that is not shown but always exists. Any traffic not matched by an explicit permit or deny statement is dropped. This is why it's critical to ensure your ACL permits all desired traffic before deploying it.",
+    "tags": [
+      "ACL",
+      "implicit-deny",
+      "security"
+    ],
+    "reference": "Odom CCNA v2 Ch.3"
+  },
+  {
+    "id": "sf-008",
+    "domain": "security-fundamentals",
+    "objective": "5.4",
+    "difficulty": "medium",
+    "text": "What does port security on a switch do?",
+    "options": [
+      "A. Blocks all traffic on a port until SSH authentication completes",
+      "B. Limits the number of MAC addresses allowed on a port and can take action when the limit is exceeded",
+      "C. Encrypts all traffic leaving a switch port",
+      "D. Prevents trunk ports from being configured on the switch"
+    ],
+    "correct": "B",
+    "explanation": "Port security limits the number of MAC addresses allowed on a switch port. If an unauthorized MAC connects, the port can: restrict (drop frames from unknown MACs), protect (drop and send no notification), or shut down (err-disable the port). It prevents MAC flooding and unauthorized device connections.",
+    "tags": [
+      "port-security",
+      "MAC-address",
+      "switch-security"
+    ],
+    "reference": "Odom CCNA v2 Ch.21"
+  },
+  {
+    "id": "sf-009",
+    "domain": "security-fundamentals",
+    "objective": "5.4",
+    "difficulty": "hard",
+    "text": "What is the difference between port security 'restrict' and 'shutdown' violation modes?",
+    "options": [
+      "A. Restrict keeps the port up and drops violating frames; shutdown err-disables the port",
+      "B. Restrict shuts down the port; shutdown drops violating frames",
+      "C. Both modes shut down the port but restrict sends a syslog first",
+      "D. Shutdown allows one more device; restrict allows none"
+    ],
+    "correct": "A",
+    "explanation": "Port security violation modes: Protect (drops frames silently), Restrict (drops frames + increments violation counter + sends syslog/SNMP), Shutdown (default — err-disables the port + sends syslog/SNMP). Shutdown is the most secure. The err-disabled port must be manually re-enabled with 'shutdown' then 'no shutdown'.",
+    "tags": [
+      "port-security",
+      "violation-mode",
+      "restrict",
+      "shutdown"
+    ],
+    "reference": "Odom CCNA v2 Ch.21"
+  },
+  {
+    "id": "sf-010",
+    "domain": "security-fundamentals",
+    "objective": "5.5",
+    "difficulty": "medium",
+    "text": "What is DHCP Snooping?",
+    "options": [
+      "A. A feature that captures all DHCP traffic for analysis",
+      "B. A Layer 2 security feature that prevents rogue DHCP servers by trusting only designated ports",
+      "C. A method of encrypting DHCP messages",
+      "D. A protocol to authenticate DHCP clients"
+    ],
+    "correct": "B",
+    "explanation": "DHCP Snooping builds a binding table of MAC address to IP address mappings. Only 'trusted' ports (uplinks to legitimate DHCP servers) are allowed to send DHCP Offer/Ack messages. Untrusted ports (client ports) can only send DHCP Discover/Request. Prevents rogue DHCP server attacks.",
+    "tags": [
+      "DHCP-Snooping",
+      "rogue-DHCP",
+      "Layer2-security"
+    ],
+    "reference": "Odom CCNA v2 Ch.21"
+  },
+  {
+    "id": "sf-011",
+    "domain": "security-fundamentals",
+    "objective": "5.5",
+    "difficulty": "medium",
+    "text": "What type of attack does Dynamic ARP Inspection (DAI) prevent?",
+    "options": [
+      "A. MAC flooding attacks",
+      "B. ARP poisoning/spoofing attacks",
+      "C. DHCP starvation attacks",
+      "D. VLAN hopping attacks"
+    ],
+    "correct": "B",
+    "explanation": "DAI prevents ARP spoofing (ARP poisoning) attacks where a malicious host sends fake ARP replies, mapping their MAC to another host's IP (e.g., the gateway's IP). DAI validates ARP packets against the DHCP snooping binding table, dropping invalid ARP messages.",
+    "tags": [
+      "DAI",
+      "ARP-poisoning",
+      "Layer2-security"
+    ],
+    "reference": "Odom CCNA v2 Ch.21"
+  },
+  {
+    "id": "sf-012",
+    "domain": "security-fundamentals",
+    "objective": "5.6",
+    "difficulty": "medium",
+    "text": "What is the purpose of a VPN?",
+    "options": [
+      "A. To increase bandwidth between two sites",
+      "B. To create an encrypted tunnel over a public network like the Internet",
+      "C. To translate private IP addresses to public",
+      "D. To assign IP addresses dynamically"
+    ],
+    "correct": "B",
+    "explanation": "A VPN (Virtual Private Network) creates an encrypted tunnel over an untrusted public network (Internet), allowing secure communication between remote sites or users. Site-to-site VPNs use IPsec. Remote-access VPNs (client VPN) allow mobile users to securely access corporate resources.",
+    "tags": [
+      "VPN",
+      "IPsec",
+      "encryption",
+      "tunnel"
+    ],
+    "reference": "Odom CCNA v2 Ch.19"
+  },
+  {
+    "id": "sf-013",
+    "domain": "security-fundamentals",
+    "objective": "5.6",
+    "difficulty": "medium",
+    "text": "What are the two modes of IPsec?",
+    "options": [
+      "A. Secure mode and Insecure mode",
+      "B. Transport mode (encrypts payload only) and Tunnel mode (encrypts entire original packet)",
+      "C. Server mode and Client mode",
+      "D. Symmetric mode and Asymmetric mode"
+    ],
+    "correct": "B",
+    "explanation": "IPsec Transport mode encrypts only the payload of the original IP packet, preserving the original IP header. Tunnel mode encrypts the entire original IP packet and adds a new outer IP header. Tunnel mode is standard for site-to-site VPNs. Transport mode is used for host-to-host encryption.",
+    "tags": [
+      "IPsec",
+      "transport-mode",
+      "tunnel-mode"
+    ],
+    "reference": "Odom CCNA v2 Ch.19"
+  },
+  {
+    "id": "sf-014",
+    "domain": "security-fundamentals",
+    "objective": "5.7",
+    "difficulty": "medium",
+    "text": "What type of attack sends so much traffic to a target that it can no longer serve legitimate requests?",
+    "options": [
+      "A. Man-in-the-Middle",
+      "B. Denial of Service (DoS)",
+      "C. Phishing",
+      "D. SQL Injection"
+    ],
+    "correct": "B",
+    "explanation": "A Denial of Service (DoS) attack overwhelms a target (server, router, link) with traffic or requests, making it unavailable to legitimate users. A Distributed DoS (DDoS) uses multiple compromised hosts (botnet). Rate limiting, ACLs, and dedicated DDoS mitigation appliances are common defenses.",
+    "tags": [
+      "DoS",
+      "DDoS",
+      "attack-types"
+    ],
+    "reference": "Odom CCNA v2 Ch.20"
+  },
+  {
+    "id": "sf-015",
+    "domain": "security-fundamentals",
+    "objective": "5.7",
+    "difficulty": "medium",
+    "text": "In a man-in-the-middle attack, what does the attacker do?",
+    "options": [
+      "A. Floods the network with broadcast packets",
+      "B. Intercepts and potentially modifies communication between two parties without their knowledge",
+      "C. Guesses passwords using a dictionary attack",
+      "D. Exploits buffer overflow vulnerabilities in servers"
+    ],
+    "correct": "B",
+    "explanation": "A Man-in-the-Middle (MitM) attack positions the attacker between two communicating parties, allowing them to eavesdrop, modify, or inject traffic. ARP poisoning is a common technique to execute MitM on a LAN. Encryption (TLS/IPsec) and authentication mitigate MitM attacks.",
+    "tags": [
+      "MitM",
+      "attack-types",
+      "eavesdropping"
+    ],
+    "reference": "Odom CCNA v2 Ch.20"
+  },
+  {
+    "id": "sf-016",
+    "domain": "security-fundamentals",
+    "objective": "5.8",
+    "difficulty": "medium",
+    "text": "Which protocol provides centralized AAA services for network device management and is Cisco proprietary?",
+    "options": [
+      "A. RADIUS",
+      "B. TACACS+",
+      "C. Kerberos",
+      "D. LDAP"
+    ],
+    "correct": "B",
+    "explanation": "TACACS+ (Terminal Access Controller Access-Control System Plus) is Cisco proprietary, uses TCP port 49, encrypts the entire payload, and separates authentication, authorization, and accounting. RADIUS (RFC 2865) is an open standard using UDP 1812/1813, encrypts only the password, and combines authentication and authorization.",
+    "tags": [
+      "TACACS+",
+      "AAA",
+      "Cisco-proprietary"
+    ],
+    "reference": "Odom CCNA v2 Ch.20"
+  },
+  {
+    "id": "sf-017",
+    "domain": "security-fundamentals",
+    "objective": "5.8",
+    "difficulty": "medium",
+    "text": "Which command secures line console 0 with a local username and password?",
+    "options": [
+      "A. line console 0 → password cisco → login",
+      "B. line console 0 → login local (combined with 'username admin secret cisco' in global config)",
+      "C. username console admin secret cisco",
+      "D. console-password cisco"
+    ],
+    "correct": "B",
+    "explanation": "To use local usernames on the console: 1) Create a user in global config: 'username admin secret cisco', 2) Configure the console line: 'line con 0', then 'login local'. 'login local' tells IOS to check the local user database. 'login' (without local) uses the line password configured with 'password'.",
+    "tags": [
+      "console",
+      "login-local",
+      "username",
+      "IOS-security"
+    ],
+    "reference": "Odom CCNA v1 Ch.5"
+  },
+  {
+    "id": "sf-018",
+    "domain": "security-fundamentals",
+    "objective": "5.4",
+    "difficulty": "medium",
+    "text": "What Cisco switch feature prevents a user from associating a rogue wireless access point to an access port and gaining trunk access? (VLAN hopping prevention)",
+    "options": [
+      "A. PortFast",
+      "B. BPDU Guard",
+      "C. Setting non-negotiating trunking mode: switchport nonegotiate + switchport mode access",
+      "D. Root Guard"
+    ],
+    "correct": "C",
+    "explanation": "VLAN hopping via switch spoofing: an attacker connects a device that negotiates a trunk (using DTP). Prevention: disable DTP with 'switchport nonegotiate' and explicitly set the port as access with 'switchport mode access'. Also: set access ports to a non-VLAN 1 VLAN and disable unused ports.",
+    "tags": [
+      "VLAN-hopping",
+      "DTP",
+      "switchport-nonegotiate",
+      "switch-security"
+    ],
+    "reference": "Odom CCNA v2 Ch.21"
+  },
+  {
+    "id": "sf-019",
+    "domain": "security-fundamentals",
+    "objective": "5.9",
+    "difficulty": "easy",
+    "text": "What is a firewall's primary function?",
+    "options": [
+      "A. To route traffic between VLANs",
+      "B. To inspect and filter traffic based on security policy, permitting or denying connections",
+      "C. To provide wireless access to clients",
+      "D. To assign IP addresses to hosts"
+    ],
+    "correct": "B",
+    "explanation": "A firewall inspects network traffic and enforces security policy by permitting or denying connections based on rules (IP addresses, ports, protocols, application signatures, user identity). Stateful firewalls track connection state to allow return traffic automatically.",
+    "tags": [
+      "firewall",
+      "security-policy",
+      "stateful"
+    ],
+    "reference": "Odom CCNA v2 Ch.19"
+  },
+  {
+    "id": "sf-020",
+    "domain": "security-fundamentals",
+    "objective": "5.9",
+    "difficulty": "medium",
+    "text": "What is the difference between an IDS and an IPS?",
+    "options": [
+      "A. IDS blocks attacks inline; IPS detects and logs attacks",
+      "B. IPS is deployed inline and can block attacks; IDS is passive and only detects/alerts",
+      "C. IDS is hardware; IPS is software",
+      "D. They are the same device with different names"
+    ],
+    "correct": "B",
+    "explanation": "IDS (Intrusion Detection System) is passive — it monitors a copy of traffic (via port mirroring) and alerts administrators. IPS (Intrusion Prevention System) is inline — all traffic passes through it, so it can actively block malicious traffic in real time, at the cost of adding latency.",
+    "tags": [
+      "IDS",
+      "IPS",
+      "intrusion-detection"
+    ],
+    "reference": "Odom CCNA v2 Ch.19"
+  },
+  {
+    "id": "sf-021",
+    "domain": "security-fundamentals",
+    "objective": "5.3",
+    "difficulty": "hard",
+    "text": "Where should a standard ACL be placed for maximum effectiveness?",
+    "options": [
+      "A. As close to the source as possible",
+      "B. As close to the destination as possible",
+      "C. On the core layer switches only",
+      "D. On every interface in the network"
+    ],
+    "correct": "B",
+    "explanation": "Standard ACLs only filter on source IP. Placing them close to the source could block the source from reaching ALL destinations, not just the intended one. Placing them close to the destination provides precise filtering. Extended ACLs should be placed close to the source to prevent unwanted traffic from traversing the network.",
+    "tags": [
+      "ACL",
+      "placement",
+      "standard-ACL",
+      "best-practice"
+    ],
+    "reference": "Odom CCNA v2 Ch.3"
+  },
+  {
+    "id": "sf-022",
+    "domain": "security-fundamentals",
+    "objective": "5.8",
+    "difficulty": "medium",
+    "text": "Which command encrypts all plaintext passwords in the Cisco IOS running configuration?",
+    "options": [
+      "A. enable password",
+      "B. service password-encryption",
+      "C. crypto encrypt passwords",
+      "D. enable secret"
+    ],
+    "correct": "B",
+    "explanation": "'service password-encryption' applies Type 7 (reversible Vigenere cipher) encryption to all plaintext passwords in the config (line passwords, username passwords, etc.). Note: 'enable secret' uses MD5 (Type 5) and is stronger — it's not affected by service password-encryption because it's already encrypted.",
+    "tags": [
+      "service-password-encryption",
+      "IOS-security",
+      "password"
+    ],
+    "reference": "Odom CCNA v1 Ch.5"
+  },
+  {
+    "id": "sf-023",
+    "domain": "security-fundamentals",
+    "objective": "5.10",
+    "difficulty": "medium",
+    "text": "What is the purpose of 802.1X authentication?",
+    "options": [
+      "A. To encrypt VLAN traffic on trunk links",
+      "B. To authenticate users or devices before granting LAN/WLAN access",
+      "C. To prevent DHCP snooping attacks",
+      "D. To configure port security on switch ports"
+    ],
+    "correct": "B",
+    "explanation": "802.1X is a port-based network access control (PNAC) standard. When a device connects to a port, it must authenticate (via username/password or certificate) through an authenticator (switch/AP) to a RADIUS server before being granted network access. Unauthenticated devices are placed in a restricted VLAN.",
+    "tags": [
+      "802.1X",
+      "NAC",
+      "RADIUS",
+      "port-authentication"
+    ],
+    "reference": "Odom CCNA v2 Ch.20"
+  },
+  {
+    "id": "sf-024",
+    "domain": "security-fundamentals",
+    "objective": "5.7",
+    "difficulty": "medium",
+    "text": "What type of malware replicates itself to spread across a network without requiring a host file?",
+    "options": [
+      "A. Virus",
+      "B. Trojan Horse",
+      "C. Worm",
+      "D. Ransomware"
+    ],
+    "correct": "C",
+    "explanation": "A worm is self-replicating malware that spreads independently across networks without needing to attach to a host file. Viruses attach to programs and need user action to spread. Trojans disguise as legitimate software. Ransomware encrypts data and demands payment for the decryption key.",
+    "tags": [
+      "malware",
+      "worm",
+      "virus",
+      "trojan"
+    ],
+    "reference": "Odom CCNA v2 Ch.20"
+  },
+  {
+    "id": "sf-025",
+    "domain": "security-fundamentals",
+    "objective": "5.11",
+    "difficulty": "medium",
+    "text": "What is the benefit of split tunneling in a remote-access VPN?",
+    "options": [
+      "A. It encrypts all traffic, including Internet traffic",
+      "B. It allows only corporate-destined traffic through the VPN tunnel while Internet traffic goes directly out",
+      "C. It creates two VPN tunnels for redundancy",
+      "D. It prevents users from accessing corporate resources without authentication"
+    ],
+    "correct": "B",
+    "explanation": "Split tunneling allows a VPN client to route corporate traffic through the encrypted VPN tunnel while sending Internet traffic directly to the Internet (not through the corporate network). This reduces bandwidth load on corporate infrastructure but introduces security risk since Internet traffic bypasses corporate security controls.",
+    "tags": [
+      "VPN",
+      "split-tunneling",
+      "remote-access"
+    ],
+    "reference": "Odom CCNA v2 Ch.19"
+  },
+  {
+    "id": "sf-026",
+    "domain": "security-fundamentals",
+    "objective": "5.1",
+    "difficulty": "easy",
+    "text": "What is the numeric range for standard IPv4 ACLs on Cisco IOS?",
+    "options": [
+      "A. 1–99 and 1300–1999",
+      "B. 100–199 and 2000–2699",
+      "C. 1–199",
+      "D. 1–50"
+    ],
+    "correct": "A",
+    "explanation": "Standard ACLs use numbers 1–99 and 1300–1999 (extended range). Extended ACLs use 100–199 and 2000–2699. Standard ACLs filter based on source IP only.",
+    "tags": [
+      "ACL",
+      "standard",
+      "numbered",
+      "range"
+    ],
+    "reference": "Odom CCNA v2 Ch.3"
+  },
+  {
+    "id": "sf-027",
+    "domain": "security-fundamentals",
+    "objective": "5.1",
+    "difficulty": "medium",
+    "text": "Where should a standard ACL be placed relative to the traffic it is filtering?",
+    "options": [
+      "A. As close to the source as possible",
+      "B. As close to the destination as possible",
+      "C. On the core router only",
+      "D. On the first router encountered from the internet"
+    ],
+    "correct": "B",
+    "explanation": "Standard ACLs filter only on source IP. Placing them close to the destination minimizes the chance of blocking legitimate traffic from reaching other destinations.",
+    "tags": [
+      "ACL",
+      "standard",
+      "placement",
+      "best-practice"
+    ],
+    "reference": "Odom CCNA v2 Ch.3"
+  },
+  {
+    "id": "sf-028",
+    "domain": "security-fundamentals",
+    "objective": "5.1",
+    "difficulty": "medium",
+    "text": "An extended ACL entry reads: 'permit tcp 10.0.0.0 0.0.0.255 any eq 80'. What does this permit?",
+    "options": [
+      "A. HTTP traffic from the 10.0.0.0/24 subnet to anywhere",
+      "B. All TCP traffic from anywhere to 10.0.0.0/24 on port 80",
+      "C. All traffic from 10.0.0.0/24",
+      "D. HTTPS traffic to the 10.0.0.0/24 subnet"
+    ],
+    "correct": "A",
+    "explanation": "'permit tcp [source] [wildcard] any eq 80' permits TCP traffic from 10.0.0.0/24 going to any destination on destination port 80 (HTTP). 'eq 80' applies to the destination port.",
+    "tags": [
+      "ACL",
+      "extended",
+      "TCP",
+      "HTTP"
+    ],
+    "reference": "Odom CCNA v2 Ch.3"
+  },
+  {
+    "id": "sf-029",
+    "domain": "security-fundamentals",
+    "objective": "5.1",
+    "difficulty": "medium",
+    "text": "What wildcard mask matches only the host 192.168.1.100 in an ACL?",
+    "options": [
+      "A. 0.0.0.255",
+      "B. 255.255.255.255",
+      "C. 0.0.0.0",
+      "D. 255.0.0.0"
+    ],
+    "correct": "C",
+    "explanation": "A wildcard of 0.0.0.0 means all bits must match — this matches exactly one host. The keyword 'host' is equivalent: 'host 192.168.1.100' = '192.168.1.100 0.0.0.0'.",
+    "tags": [
+      "ACL",
+      "wildcard",
+      "host",
+      "match"
+    ],
+    "reference": "Odom CCNA v2 Ch.3"
+  },
+  {
+    "id": "sf-030",
+    "domain": "security-fundamentals",
+    "objective": "5.1",
+    "difficulty": "easy",
+    "text": "What implicit rule exists at the end of every Cisco ACL?",
+    "options": [
+      "A. permit any",
+      "B. deny any (implicit deny all)",
+      "C. log any",
+      "D. No implicit rule — traffic is forwarded by default"
+    ],
+    "correct": "B",
+    "explanation": "Every Cisco ACL ends with an implicit 'deny any' statement. Traffic that doesn't match any explicit permit entry is silently dropped. This is why ACLs must explicitly permit desired traffic.",
+    "tags": [
+      "ACL",
+      "implicit-deny",
+      "default"
+    ],
+    "reference": "Odom CCNA v2 Ch.3"
+  },
+  {
+    "id": "sf-031",
+    "domain": "security-fundamentals",
+    "objective": "5.2",
+    "difficulty": "easy",
+    "text": "Which command encrypts all plaintext passwords in the running configuration?",
+    "options": [
+      "A. enable password-encryption",
+      "B. service password-encryption",
+      "C. encrypt all passwords",
+      "D. security passwords min-length"
+    ],
+    "correct": "B",
+    "explanation": "'service password-encryption' encrypts passwords using Cisco Type 7 (weak, reversible). It encrypts line passwords, username passwords, and the enable password. The enable secret uses MD5 regardless.",
+    "tags": [
+      "security",
+      "password-encryption",
+      "Type7"
+    ],
+    "reference": "Odom CCNA v2 Ch.1"
+  },
+  {
+    "id": "sf-032",
+    "domain": "security-fundamentals",
+    "objective": "5.2",
+    "difficulty": "medium",
+    "text": "What is the difference between 'enable password' and 'enable secret'?",
+    "options": [
+      "A. There is no difference",
+      "B. enable secret is encrypted with MD5; enable password is plaintext (Type 0) or Type 7",
+      "C. enable password is for Telnet; enable secret is for SSH",
+      "D. enable secret requires a TACACS+ server"
+    ],
+    "correct": "B",
+    "explanation": "'enable secret' uses MD5 (Type 5) hashing — significantly stronger. 'enable password' uses weak reversible Type 7 or is plaintext. If both are configured, 'enable secret' takes precedence.",
+    "tags": [
+      "security",
+      "enable-secret",
+      "enable-password",
+      "MD5"
+    ],
+    "reference": "Odom CCNA v2 Ch.1"
+  },
+  {
+    "id": "sf-033",
+    "domain": "security-fundamentals",
+    "objective": "5.3",
+    "difficulty": "medium",
+    "text": "Which SSH configuration command generates the RSA key pair needed for SSH on a Cisco router?",
+    "options": [
+      "A. ssh generate key",
+      "B. crypto key generate rsa",
+      "C. ip ssh rsa key generate",
+      "D. crypto rsa key generate modulus"
+    ],
+    "correct": "B",
+    "explanation": "'crypto key generate rsa' generates the RSA key pair. You'll be prompted for modulus size (recommend ≥2048 bits). SSH v2 requires a domain name: 'ip domain-name [name]' must be set first.",
+    "tags": [
+      "SSH",
+      "RSA",
+      "crypto",
+      "key-generate"
+    ],
+    "reference": "Odom CCNA v2 Ch.1"
+  },
+  {
+    "id": "sf-034",
+    "domain": "security-fundamentals",
+    "objective": "5.3",
+    "difficulty": "easy",
+    "text": "Which command restricts VTY lines to SSH only (no Telnet)?",
+    "options": [
+      "A. transport input ssh",
+      "B. no transport telnet",
+      "C. line vty 0 4 ssh",
+      "D. ip ssh only"
+    ],
+    "correct": "A",
+    "explanation": "Under 'line vty 0 4', 'transport input ssh' permits only SSH connections. 'transport input telnet' allows only Telnet. 'transport input all' or 'transport input ssh telnet' allows both.",
+    "tags": [
+      "SSH",
+      "VTY",
+      "transport-input",
+      "security"
+    ],
+    "reference": "Odom CCNA v2 Ch.1"
+  },
+  {
+    "id": "sf-035",
+    "domain": "security-fundamentals",
+    "objective": "5.4",
+    "difficulty": "medium",
+    "text": "What is the main difference between RADIUS and TACACS+ for AAA?",
+    "options": [
+      "A. RADIUS uses TCP; TACACS+ uses UDP",
+      "B. TACACS+ encrypts the entire payload and separates auth/authz; RADIUS encrypts only the password",
+      "C. RADIUS is Cisco-proprietary; TACACS+ is an IETF standard",
+      "D. TACACS+ is only for network access; RADIUS is for device administration"
+    ],
+    "correct": "B",
+    "explanation": "TACACS+ (TCP 49, Cisco-proprietary) encrypts the entire message body and separates Authentication, Authorization, and Accounting. RADIUS (UDP 1812/1813) encrypts only the password field. TACACS+ is preferred for device administration.",
+    "tags": [
+      "TACACS+",
+      "RADIUS",
+      "AAA",
+      "encryption"
+    ],
+    "reference": "Odom CCNA v2 Ch.1"
+  },
+  {
+    "id": "sf-036",
+    "domain": "security-fundamentals",
+    "objective": "5.7",
+    "difficulty": "medium",
+    "text": "Which port security violation mode drops the frame, increments the violation counter, but does NOT send a syslog message or shutdown the port?",
+    "options": [
+      "A. Shutdown",
+      "B. Restrict",
+      "C. Protect",
+      "D. Warning"
+    ],
+    "correct": "C",
+    "explanation": "Port security modes: Protect (drop, no log, no shutdown), Restrict (drop + syslog + increment counter), Shutdown (err-disable port + syslog + SNMP trap). Protect is the least disruptive.",
+    "tags": [
+      "port-security",
+      "protect",
+      "violation",
+      "Layer2"
+    ],
+    "reference": "Odom CCNA v2 Ch.4"
+  },
+  {
+    "id": "sf-037",
+    "domain": "security-fundamentals",
+    "objective": "5.7",
+    "difficulty": "easy",
+    "text": "Which command enables port security on a switch interface?",
+    "options": [
+      "A. security port enable",
+      "B. switchport port-security",
+      "C. port security maximum 1",
+      "D. ip port-security enable"
+    ],
+    "correct": "B",
+    "explanation": "'switchport port-security' enables port security with defaults (max 1 MAC, violation shutdown). The interface must be an access port ('switchport mode access') for port security to work.",
+    "tags": [
+      "port-security",
+      "switchport",
+      "configuration"
+    ],
+    "reference": "Odom CCNA v2 Ch.4"
+  },
+  {
+    "id": "sf-038",
+    "domain": "security-fundamentals",
+    "objective": "5.7",
+    "difficulty": "medium",
+    "text": "What does 'switchport port-security mac-address sticky' do?",
+    "options": [
+      "A. Manually specifies an allowed MAC address",
+      "B. Dynamically learns and stores MAC addresses in the running config",
+      "C. Sets the maximum number of MAC addresses",
+      "D. Clears the secure MAC table"
+    ],
+    "correct": "B",
+    "explanation": "Sticky learning dynamically learns MAC addresses from connected devices and adds them to the running configuration as secure static entries. Saves the need to manually configure MAC addresses.",
+    "tags": [
+      "port-security",
+      "sticky",
+      "dynamic-MAC"
+    ],
+    "reference": "Odom CCNA v2 Ch.4"
+  },
+  {
+    "id": "sf-039",
+    "domain": "security-fundamentals",
+    "objective": "5.5",
+    "difficulty": "medium",
+    "text": "What does DHCP snooping do?",
+    "options": [
+      "A. Monitors DHCP traffic to log all IP assignments",
+      "B. Blocks DHCP server messages on untrusted ports to prevent rogue DHCP servers",
+      "C. Assigns IP addresses based on port security MAC entries",
+      "D. Limits the number of DHCP requests per port"
+    ],
+    "correct": "B",
+    "explanation": "DHCP snooping distinguishes trusted ports (uplinks to real DHCP servers) from untrusted ports (access ports). DHCPOFFER/ACK received on untrusted ports are dropped, preventing rogue DHCP attacks.",
+    "tags": [
+      "DHCP-snooping",
+      "security",
+      "rogue-DHCP",
+      "trusted"
+    ],
+    "reference": "Odom CCNA v2 Ch.4"
+  },
+  {
+    "id": "sf-040",
+    "domain": "security-fundamentals",
+    "objective": "5.5",
+    "difficulty": "medium",
+    "text": "What Layer 2 attack does Dynamic ARP Inspection (DAI) prevent?",
+    "options": [
+      "A. VLAN hopping",
+      "B. MAC flooding",
+      "C. ARP spoofing / ARP poisoning",
+      "D. STP manipulation"
+    ],
+    "correct": "C",
+    "explanation": "DAI validates ARP packets against the DHCP snooping binding table. If the IP-to-MAC mapping in an ARP packet doesn't match a trusted entry, it's dropped — preventing ARP poisoning/MitM attacks.",
+    "tags": [
+      "DAI",
+      "ARP-spoofing",
+      "Layer2-security",
+      "MitM"
+    ],
+    "reference": "Odom CCNA v2 Ch.4"
+  },
+  {
+    "id": "sf-041",
+    "domain": "security-fundamentals",
+    "objective": "5.1",
+    "difficulty": "hard",
+    "text": "What does the 'established' keyword in an extended ACL entry for TCP do?",
+    "options": [
+      "A. Allows only new TCP connections",
+      "B. Permits TCP segments with ACK or RST bits set (return traffic for established connections)",
+      "C. Matches UDP return traffic",
+      "D. Establishes a permanent NAT translation"
+    ],
+    "correct": "B",
+    "explanation": "'established' matches TCP segments with ACK=1 or RST=1, which are responses to initiated connections. It's used on inbound interfaces to allow return traffic without permitting new inbound connections.",
+    "tags": [
+      "ACL",
+      "extended",
+      "established",
+      "TCP",
+      "stateless"
+    ],
+    "reference": "Odom CCNA v2 Ch.3"
+  },
+  {
+    "id": "sf-042",
+    "domain": "security-fundamentals",
+    "objective": "5.6",
+    "difficulty": "medium",
+    "text": "Which 802.1X component acts as the intermediary between the client (supplicant) and the authentication server?",
+    "options": [
+      "A. Supplicant",
+      "B. Authenticator",
+      "C. RADIUS server",
+      "D. TACACS+ server"
+    ],
+    "correct": "B",
+    "explanation": "802.1X roles: Supplicant (client software), Authenticator (switch/AP — relays EAP), Authentication Server (RADIUS). The switch/authenticator controls port access based on the RADIUS server's decision.",
+    "tags": [
+      "802.1X",
+      "authenticator",
+      "supplicant",
+      "RADIUS"
+    ],
+    "reference": "Odom CCNA v2 Ch.4"
+  },
+  {
+    "id": "sf-043",
+    "domain": "security-fundamentals",
+    "objective": "5.3",
+    "difficulty": "medium",
+    "text": "Which IOS command sets the minimum SSH version to version 2?",
+    "options": [
+      "A. ip ssh version 2",
+      "B. ssh version 2",
+      "C. crypto ssh version 2",
+      "D. transport ssh version 2"
+    ],
+    "correct": "A",
+    "explanation": "'ip ssh version 2' disables SSHv1 and requires SSHv2. SSHv1 has known vulnerabilities. Also configure 'ip ssh time-out' and 'ip ssh authentication-retries' for hardening.",
+    "tags": [
+      "SSH",
+      "version2",
+      "security",
+      "IOS"
+    ],
+    "reference": "Odom CCNA v2 Ch.1"
+  },
+  {
+    "id": "sf-044",
+    "domain": "security-fundamentals",
+    "objective": "5.2",
+    "difficulty": "hard",
+    "text": "Which Cisco IOS command creates a local user 'admin' with a privilege level 15 and MD5-hashed password 'C1sco!'?",
+    "options": [
+      "A. username admin password 15 C1sco!",
+      "B. username admin privilege 15 secret C1sco!",
+      "C. username admin level 15 enable secret C1sco!",
+      "D. create user admin priv 15 pass C1sco!"
+    ],
+    "correct": "B",
+    "explanation": "'username [name] privilege [level] secret [password]' creates a local user with privilege level and MD5-hashed password. 'privilege 15' grants full access. 'secret' hashes with MD5; 'password' does not.",
+    "tags": [
+      "username",
+      "privilege",
+      "secret",
+      "local-auth"
+    ],
+    "reference": "Odom CCNA v2 Ch.1"
+  },
+  {
+    "id": "sf-045",
+    "domain": "security-fundamentals",
+    "objective": "5.1",
+    "difficulty": "medium",
+    "text": "Which ACL type filters packets based on both source and destination IP, protocol, and port numbers?",
+    "options": [
+      "A. Standard ACL",
+      "B. Named ACL",
+      "C. Extended ACL",
+      "D. Dynamic ACL"
+    ],
+    "correct": "C",
+    "explanation": "Extended ACLs can match on source IP, destination IP, protocol (TCP/UDP/ICMP), source port, and destination port — providing granular control. Standard ACLs only match source IP.",
+    "tags": [
+      "ACL",
+      "extended",
+      "destination",
+      "port"
+    ],
+    "reference": "Odom CCNA v2 Ch.3"
+  },
+  {
+    "id": "sf-046",
+    "domain": "security-fundamentals",
+    "objective": "5.4",
+    "difficulty": "hard",
+    "text": "What does the 'aaa new-model' command do on a Cisco device?",
+    "options": [
+      "A. Resets AAA to factory defaults",
+      "B. Enables AAA and overrides line-level authentication",
+      "C. Creates a new RADIUS server group",
+      "D. Forces authentication for console access"
+    ],
+    "correct": "B",
+    "explanation": "'aaa new-model' enables the AAA framework and immediately overrides all line-level authentication (login, password commands). Once enabled, all authentication must be configured through AAA methods.",
+    "tags": [
+      "AAA",
+      "aaa-new-model",
+      "authentication",
+      "RADIUS"
+    ],
+    "reference": "Odom CCNA v2 Ch.1"
+  },
+  {
+    "id": "sf-047",
+    "domain": "security-fundamentals",
+    "objective": "5.2",
+    "difficulty": "easy",
+    "text": "Which Cisco banner type is displayed before the login prompt and is legally important for warning unauthorized users?",
+    "options": [
+      "A. Banner MOTD",
+      "B. Banner login",
+      "C. Banner exec",
+      "D. Banner incoming"
+    ],
+    "correct": "B",
+    "explanation": "Banner login appears before the login prompt and is the legally relevant warning banner for unauthorized access disclaimers. Banner MOTD (Message of the Day) appears before the login banner.",
+    "tags": [
+      "banner",
+      "login",
+      "MOTD",
+      "security"
+    ],
+    "reference": "Odom CCNA v2 Ch.1"
+  },
+  {
+    "id": "sf-048",
+    "domain": "security-fundamentals",
+    "objective": "5.5",
+    "difficulty": "hard",
+    "text": "After enabling DHCP snooping on a switch, legitimate DHCP traffic is being blocked on the uplink port to the distribution switch. What is the fix?",
+    "options": [
+      "A. Disable DHCP snooping globally",
+      "B. Enable 'ip dhcp snooping trust' on the uplink interface",
+      "C. Add the uplink to a trusted VLAN",
+      "D. Configure 'no ip dhcp snooping verify mac-address'"
+    ],
+    "correct": "B",
+    "explanation": "DHCP snooping ports are untrusted by default. Uplinks toward the DHCP server must be explicitly set to trusted: 'ip dhcp snooping trust'. Without this, server responses on the uplink are dropped.",
+    "tags": [
+      "DHCP-snooping",
+      "trusted",
+      "uplink",
+      "troubleshooting"
+    ],
+    "reference": "Odom CCNA v2 Ch.4"
+  },
+  {
+    "id": "sf-049",
+    "domain": "security-fundamentals",
+    "objective": "5.7",
+    "difficulty": "medium",
+    "text": "A switch port goes into err-disabled state. Which port security violation mode caused this?",
+    "options": [
+      "A. Protect",
+      "B. Restrict",
+      "C. Shutdown",
+      "D. Log"
+    ],
+    "correct": "C",
+    "explanation": "The 'shutdown' violation mode (default) disables the port by placing it in err-disabled state when an unauthorized MAC is detected. To recover: 'shutdown' then 'no shutdown' (or configure errdisable recovery).",
+    "tags": [
+      "port-security",
+      "shutdown",
+      "err-disabled",
+      "violation"
+    ],
+    "reference": "Odom CCNA v2 Ch.4"
+  },
+  {
+    "id": "sf-050",
+    "domain": "security-fundamentals",
+    "objective": "5.1",
+    "difficulty": "hard",
+    "text": "A named ACL entry is: 'deny ip 172.16.0.0 0.0.255.255 10.0.0.0 0.0.0.255'. What traffic does this deny?",
+    "options": [
+      "A. All traffic from 172.16.0.0/16 to 10.0.0.0/24",
+      "B. All traffic from 10.0.0.0/24 to 172.16.0.0/16",
+      "C. ICMP traffic from 172.16.0.0/16",
+      "D. All IP traffic from 172.16.0.0/16 to anywhere"
+    ],
+    "correct": "A",
+    "explanation": "'deny ip [source] [wildcard] [destination] [wildcard]' — source is 172.16.0.0/0.0.255.255 (= /16), destination is 10.0.0.0/0.0.0.255 (= /24). Denies all IP from 172.16.x.x to 10.0.0.x.",
+    "tags": [
+      "ACL",
+      "named",
+      "wildcard",
+      "extended"
+    ],
+    "reference": "Odom CCNA v2 Ch.3"
+  }
+]

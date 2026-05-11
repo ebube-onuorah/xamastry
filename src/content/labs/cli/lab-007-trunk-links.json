@@ -1,0 +1,87 @@
+{
+  "id": "lab-007",
+  "title": "Trunk Links and Native VLAN",
+  "domain": "network-access",
+  "difficulty": "intermediate",
+  "estimatedMinutes": 20,
+  "topology": "single-switch",
+  "description": "Configure an 802.1Q trunk link on a switch port and understand how VLANs are carried across trunk links. Configure the native VLAN and add a description to document the uplink.",
+  "objectives": ["2.2"],
+  "initialState": {
+    "hostname": "SW1",
+    "mode": "user",
+    "vlans": {
+      "10": { "id": 10, "name": "SALES", "active": true },
+      "20": { "id": 20, "name": "ENGINEERING", "active": true },
+      "99": { "id": 99, "name": "MANAGEMENT", "active": true }
+    }
+  },
+  "scenario": "SW1 already has VLANs 10, 20, and 99 configured. GigabitEthernet0/1 connects to an upstream router. You need to configure it as a trunk so all VLANs can be routed. GigabitEthernet0/2 connects to another switch and must also be a trunk.",
+  "tasks": [
+    {
+      "id": "t1",
+      "description": "Configure GigabitEthernet0/1 as a trunk port",
+      "hint": "interface GigabitEthernet0/1 → switchport mode trunk",
+      "check": {
+        "type": "switchport_mode",
+        "description": "Gi0/1 must be in trunk mode",
+        "expected": { "interface": "GigabitEthernet0/1", "mode": "trunk" }
+      }
+    },
+    {
+      "id": "t2",
+      "description": "Add a description 'Uplink to Router' on GigabitEthernet0/1",
+      "hint": "interface GigabitEthernet0/1 → description Uplink to Router",
+      "check": {
+        "type": "interface_description",
+        "description": "Gi0/1 must have description 'Uplink to Router'",
+        "expected": { "interface": "GigabitEthernet0/1", "description": "Uplink to Router" }
+      }
+    },
+    {
+      "id": "t3",
+      "description": "Bring GigabitEthernet0/1 up",
+      "hint": "no shutdown",
+      "check": {
+        "type": "interface_status",
+        "description": "Gi0/1 must be up",
+        "expected": { "interface": "GigabitEthernet0/1", "status": "up" }
+      }
+    },
+    {
+      "id": "t4",
+      "description": "Configure GigabitEthernet0/2 as a trunk port",
+      "hint": "interface GigabitEthernet0/2 → switchport mode trunk",
+      "check": {
+        "type": "switchport_mode",
+        "description": "Gi0/2 must be in trunk mode",
+        "expected": { "interface": "GigabitEthernet0/2", "mode": "trunk" }
+      }
+    },
+    {
+      "id": "t5",
+      "description": "Add a description 'Uplink to SW2' on GigabitEthernet0/2",
+      "hint": "description Uplink to SW2",
+      "check": {
+        "type": "interface_description",
+        "description": "Gi0/2 must have description 'Uplink to SW2'",
+        "expected": { "interface": "GigabitEthernet0/2", "description": "Uplink to SW2" }
+      }
+    }
+  ],
+  "solutionWalkthrough": [
+    "enable",
+    "configure terminal",
+    "interface GigabitEthernet0/1",
+    "switchport mode trunk",
+    "description Uplink to Router",
+    "no shutdown",
+    "exit",
+    "interface GigabitEthernet0/2",
+    "switchport mode trunk",
+    "description Uplink to SW2",
+    "no shutdown",
+    "end",
+    "show interfaces trunk"
+  ]
+}

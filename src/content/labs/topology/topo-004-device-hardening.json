@@ -1,0 +1,103 @@
+{
+  "id": "topo-004",
+  "title": "Multi-Device Security Hardening",
+  "domain": "security-fundamentals",
+  "difficulty": "intermediate",
+  "estimatedMinutes": 30,
+  "description": "Harden both a router and a switch in the same topology. Apply enable secrets, local users, SSH v2, and VTY restrictions to both devices.",
+  "objectives": ["5.3", "5.6"],
+  "devices": [
+    {
+      "id": "R1",
+      "type": "router",
+      "label": "R1",
+      "position": { "x": 200, "y": 200 },
+      "initialState": {
+        "hostname": "Router",
+        "mode": "user",
+        "interfaces": {
+          "GigabitEthernet0/0": { "name": "GigabitEthernet0/0", "ip": "10.1.1.1", "mask": "255.255.255.0", "status": "up" }
+        }
+      }
+    },
+    {
+      "id": "SW1",
+      "type": "switch",
+      "label": "SW1",
+      "position": { "x": 600, "y": 200 },
+      "initialState": {
+        "hostname": "Switch",
+        "mode": "user"
+      }
+    }
+  ],
+  "links": [
+    { "id": "e1", "source": "R1", "target": "SW1", "label": "Management link" }
+  ],
+  "scenario": "Two devices need to be hardened before deployment. Set hostnames, enable secrets, local admin accounts, SSH v2, and lock VTY lines to SSH-only with local authentication on both R1 and SW1.",
+  "tasks": [
+    {
+      "deviceId": "R1",
+      "id": "t1",
+      "description": "Set R1 hostname to CORE-R1",
+      "hint": "configure terminal → hostname CORE-R1",
+      "check": { "type": "hostname", "description": "R1 hostname CORE-R1", "expected": { "hostname": "CORE-R1" } }
+    },
+    {
+      "deviceId": "R1",
+      "id": "t2",
+      "description": "Set R1 enable secret",
+      "hint": "enable secret Cisco@1234",
+      "check": { "type": "enable_secret", "description": "R1 enable secret", "expected": {} }
+    },
+    {
+      "deviceId": "R1",
+      "id": "t3",
+      "description": "Create local user 'admin' on R1",
+      "hint": "username admin secret Admin@Pass1",
+      "check": { "type": "username_exists", "description": "R1 admin user", "expected": { "username": "admin" } }
+    },
+    {
+      "deviceId": "R1",
+      "id": "t4",
+      "description": "Enable SSH version 2 on R1",
+      "hint": "ip ssh version 2",
+      "check": { "type": "ssh_version", "description": "R1 SSH version 2", "expected": { "version": 2 } }
+    },
+    {
+      "deviceId": "R1",
+      "id": "t5",
+      "description": "Configure R1 VTY 0 4 with local login",
+      "hint": "line vty 0 4 → login local → transport input ssh",
+      "check": { "type": "line_login", "description": "R1 VTY local auth", "expected": { "line": "vty 0 4", "method": "local" } }
+    },
+    {
+      "deviceId": "SW1",
+      "id": "t6",
+      "description": "Set SW1 hostname to ACCESS-SW1",
+      "hint": "configure terminal → hostname ACCESS-SW1",
+      "check": { "type": "hostname", "description": "SW1 hostname", "expected": { "hostname": "ACCESS-SW1" } }
+    },
+    {
+      "deviceId": "SW1",
+      "id": "t7",
+      "description": "Set SW1 enable secret",
+      "hint": "enable secret Cisco@1234",
+      "check": { "type": "enable_secret", "description": "SW1 enable secret", "expected": {} }
+    },
+    {
+      "deviceId": "SW1",
+      "id": "t8",
+      "description": "Enable service password-encryption on SW1",
+      "hint": "service password-encryption",
+      "check": { "type": "service_password_encryption", "description": "SW1 password encryption", "expected": {} }
+    },
+    {
+      "deviceId": "SW1",
+      "id": "t9",
+      "description": "Create local user 'admin' on SW1",
+      "hint": "username admin secret Admin@Pass1",
+      "check": { "type": "username_exists", "description": "SW1 admin user", "expected": { "username": "admin" } }
+    }
+  ]
+}

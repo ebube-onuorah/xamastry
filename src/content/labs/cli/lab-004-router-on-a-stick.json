@@ -1,0 +1,85 @@
+{
+  "id": "lab-004",
+  "title": "Router-on-a-Stick (Inter-VLAN Routing)",
+  "domain": "ip-connectivity",
+  "difficulty": "intermediate",
+  "estimatedMinutes": 25,
+  "topology": "router-switch",
+  "description": "Configure inter-VLAN routing using a router-on-a-stick topology. Create subinterfaces on the router's trunk-facing port and configure 802.1Q encapsulation so hosts in different VLANs can communicate.",
+  "objectives": ["3.5"],
+  "initialState": {
+    "hostname": "R1",
+    "mode": "user"
+  },
+  "scenario": "A switch already has VLANs 10 and 20 configured. The trunk link connects to R1's GigabitEthernet0/0. You must create subinterfaces Gi0/0.10 and Gi0/0.20 with 802.1Q encapsulation to enable inter-VLAN routing between the 192.168.10.0/24 and 192.168.20.0/24 networks.",
+  "tasks": [
+    {
+      "id": "t1",
+      "description": "Configure Gi0/0.10 with 802.1Q encapsulation for VLAN 10",
+      "hint": "interface GigabitEthernet0/0.10 → encapsulation dot1q 10",
+      "check": {
+        "type": "encapsulation_dot1q",
+        "description": "Gi0/0.10 must have dot1q VLAN 10 encapsulation",
+        "expected": { "interface": "GigabitEthernet0/0.10", "vlan": 10 }
+      }
+    },
+    {
+      "id": "t2",
+      "description": "Assign IP 192.168.10.1/24 to Gi0/0.10",
+      "hint": "After encapsulation: ip address 192.168.10.1 255.255.255.0",
+      "check": {
+        "type": "interface_ip",
+        "description": "Gi0/0.10 must have IP 192.168.10.1/24",
+        "expected": { "interface": "GigabitEthernet0/0.10", "ip": "192.168.10.1", "mask": "255.255.255.0" }
+      }
+    },
+    {
+      "id": "t3",
+      "description": "Configure Gi0/0.20 with 802.1Q encapsulation for VLAN 20",
+      "hint": "interface GigabitEthernet0/0.20 → encapsulation dot1q 20",
+      "check": {
+        "type": "encapsulation_dot1q",
+        "description": "Gi0/0.20 must have dot1q VLAN 20 encapsulation",
+        "expected": { "interface": "GigabitEthernet0/0.20", "vlan": 20 }
+      }
+    },
+    {
+      "id": "t4",
+      "description": "Assign IP 192.168.20.1/24 to Gi0/0.20",
+      "hint": "After encapsulation: ip address 192.168.20.1 255.255.255.0",
+      "check": {
+        "type": "interface_ip",
+        "description": "Gi0/0.20 must have IP 192.168.20.1/24",
+        "expected": { "interface": "GigabitEthernet0/0.20", "ip": "192.168.20.1", "mask": "255.255.255.0" }
+      }
+    },
+    {
+      "id": "t5",
+      "description": "Bring GigabitEthernet0/0 up (physical interface must be up for subinterfaces to work)",
+      "hint": "interface GigabitEthernet0/0 → no shutdown",
+      "check": {
+        "type": "interface_status",
+        "description": "Gi0/0 physical interface must be up",
+        "expected": { "interface": "GigabitEthernet0/0", "status": "up" }
+      }
+    }
+  ],
+  "solutionWalkthrough": [
+    "enable",
+    "configure terminal",
+    "interface GigabitEthernet0/0",
+    "no shutdown",
+    "exit",
+    "interface GigabitEthernet0/0.10",
+    "encapsulation dot1q 10",
+    "ip address 192.168.10.1 255.255.255.0",
+    "no shutdown",
+    "exit",
+    "interface GigabitEthernet0/0.20",
+    "encapsulation dot1q 20",
+    "ip address 192.168.20.1 255.255.255.0",
+    "no shutdown",
+    "end",
+    "show ip interface brief"
+  ]
+}

@@ -1,0 +1,69 @@
+{
+  "id": "lab-009",
+  "title": "Banner MOTD and Console Line Security",
+  "domain": "security-fundamentals",
+  "difficulty": "beginner",
+  "estimatedMinutes": 15,
+  "topology": "single-router",
+  "description": "Configure a legal warning banner and secure the console port with a password. Understanding banners and line security is essential for compliance with corporate security policies and the CCNA exam.",
+  "objectives": ["5.3"],
+  "initialState": {
+    "hostname": "R1",
+    "mode": "user"
+  },
+  "scenario": "Company policy requires all network devices to display a legal warning before login. You must configure a MOTD banner containing 'Authorized Access Only', then secure the console port with a password and require login.",
+  "tasks": [
+    {
+      "id": "t1",
+      "description": "Configure a banner MOTD that contains 'Authorized Access Only'",
+      "hint": "banner motd # Authorized Access Only # — use any delimiter character before and after the message",
+      "check": {
+        "type": "banner_motd_contains",
+        "description": "Banner MOTD must contain 'Authorized Access Only'",
+        "expected": { "contains": "Authorized Access Only" }
+      }
+    },
+    {
+      "id": "t2",
+      "description": "Set console line 0 password to 'ConsolePass'",
+      "hint": "line console 0 → password ConsolePass",
+      "check": {
+        "type": "line_password",
+        "description": "Console 0 must have a password configured",
+        "expected": { "line": "console 0" }
+      }
+    },
+    {
+      "id": "t3",
+      "description": "Enable login on console line 0",
+      "hint": "line console 0 → login",
+      "check": {
+        "type": "line_login",
+        "description": "Console 0 must require login",
+        "expected": { "line": "console 0", "method": "password" }
+      }
+    },
+    {
+      "id": "t4",
+      "description": "Enable service password-encryption to protect stored passwords",
+      "hint": "In global config mode: service password-encryption",
+      "check": {
+        "type": "service_password_encryption",
+        "description": "Service password-encryption must be enabled",
+        "expected": {}
+      }
+    }
+  ],
+  "solutionWalkthrough": [
+    "enable",
+    "configure terminal",
+    "banner motd # Authorized Access Only — Unauthorized access is prohibited #",
+    "line console 0",
+    "password ConsolePass",
+    "login",
+    "exit",
+    "service password-encryption",
+    "end",
+    "show running-config"
+  ]
+}

@@ -1,0 +1,28 @@
+@import "tailwindcss";
+@import "xterm/css/xterm.css";
+
+:root {
+  --background: #080b10;
+  --foreground: #f8fafc;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans, Geist, Arial, sans-serif);
+  --font-mono: var(--font-geist-mono, "Geist Mono", monospace);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+a {
+  text-decoration: none;
+}
