@@ -1,0 +1,114 @@
+{
+  "id": "lab-003",
+  "title": "VLAN Configuration on a Switch",
+  "domain": "network-access",
+  "difficulty": "beginner",
+  "estimatedMinutes": 20,
+  "topology": "single-switch",
+  "description": "Create VLANs on a Cisco switch, name them, and assign switch ports to the correct VLANs. This is the foundational skill for network segmentation covered in the CCNA Network Access domain.",
+  "objectives": ["2.1"],
+  "initialState": {
+    "hostname": "Switch",
+    "mode": "user"
+  },
+  "scenario": "You are configuring a Layer 2 switch for an office. Three departments need network isolation: Sales (VLAN 10), Engineering (VLAN 20), and Management (VLAN 99). FastEthernet0/1 through 0/5 will serve Sales, Fa0/6 through 0/10 for Engineering, and Fa0/24 for Management access.",
+  "tasks": [
+    {
+      "id": "t1",
+      "description": "Set the switch hostname to SW1",
+      "hint": "enable → configure terminal → hostname SW1",
+      "check": {
+        "type": "hostname",
+        "description": "Hostname must be SW1",
+        "expected": { "hostname": "SW1" }
+      }
+    },
+    {
+      "id": "t2",
+      "description": "Create VLAN 10 and name it SALES",
+      "hint": "In config mode: vlan 10 → name SALES",
+      "check": {
+        "type": "vlan_name",
+        "description": "VLAN 10 must be named SALES",
+        "expected": { "id": 10, "name": "SALES" }
+      }
+    },
+    {
+      "id": "t3",
+      "description": "Create VLAN 20 and name it ENGINEERING",
+      "hint": "In config mode: vlan 20 → name ENGINEERING",
+      "check": {
+        "type": "vlan_name",
+        "description": "VLAN 20 must be named ENGINEERING",
+        "expected": { "id": 20, "name": "ENGINEERING" }
+      }
+    },
+    {
+      "id": "t4",
+      "description": "Create VLAN 99 and name it MANAGEMENT",
+      "hint": "In config mode: vlan 99 → name MANAGEMENT",
+      "check": {
+        "type": "vlan_name",
+        "description": "VLAN 99 must be named MANAGEMENT",
+        "expected": { "id": 99, "name": "MANAGEMENT" }
+      }
+    },
+    {
+      "id": "t5",
+      "description": "Assign FastEthernet0/1 to VLAN 10 in access mode",
+      "hint": "interface FastEthernet0/1 → switchport mode access → switchport access vlan 10",
+      "check": {
+        "type": "switchport_access_vlan",
+        "description": "Fa0/1 must be in access VLAN 10",
+        "expected": { "interface": "FastEthernet0/1", "vlan": 10 }
+      }
+    },
+    {
+      "id": "t6",
+      "description": "Assign FastEthernet0/6 to VLAN 20 in access mode",
+      "hint": "interface FastEthernet0/6 → switchport mode access → switchport access vlan 20",
+      "check": {
+        "type": "switchport_access_vlan",
+        "description": "Fa0/6 must be in access VLAN 20",
+        "expected": { "interface": "FastEthernet0/6", "vlan": 20 }
+      }
+    },
+    {
+      "id": "t7",
+      "description": "Assign FastEthernet0/24 to VLAN 99 in access mode",
+      "hint": "interface FastEthernet0/24 → switchport mode access → switchport access vlan 99",
+      "check": {
+        "type": "switchport_access_vlan",
+        "description": "Fa0/24 must be in access VLAN 99",
+        "expected": { "interface": "FastEthernet0/24", "vlan": 99 }
+      }
+    }
+  ],
+  "solutionWalkthrough": [
+    "enable",
+    "configure terminal",
+    "hostname SW1",
+    "vlan 10",
+    "name SALES",
+    "exit",
+    "vlan 20",
+    "name ENGINEERING",
+    "exit",
+    "vlan 99",
+    "name MANAGEMENT",
+    "exit",
+    "interface FastEthernet0/1",
+    "switchport mode access",
+    "switchport access vlan 10",
+    "exit",
+    "interface FastEthernet0/6",
+    "switchport mode access",
+    "switchport access vlan 20",
+    "exit",
+    "interface FastEthernet0/24",
+    "switchport mode access",
+    "switchport access vlan 99",
+    "end",
+    "show vlan brief"
+  ]
+}

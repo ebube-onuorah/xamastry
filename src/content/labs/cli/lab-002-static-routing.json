@@ -1,0 +1,60 @@
+{
+  "id": "lab-002",
+  "title": "Static Routing",
+  "domain": "ip-connectivity",
+  "difficulty": "beginner",
+  "estimatedMinutes": 20,
+  "topology": "single-router",
+  "description": "Configure static routes on a router to enable connectivity between three networks. Understand how the routing table is populated and how to use the 'show ip route' command for verification.",
+  "objectives": ["3.3"],
+  "initialState": {
+    "hostname": "R1",
+    "mode": "user",
+    "interfaces": {
+      "GigabitEthernet0/0": { "name": "GigabitEthernet0/0", "ip": "10.0.0.1", "mask": "255.255.255.252", "status": "up" },
+      "GigabitEthernet0/1": { "name": "GigabitEthernet0/1", "ip": "192.168.1.1", "mask": "255.255.255.0", "status": "up" }
+    }
+  },
+  "scenario": "R1 already has its interfaces configured. You need to add static routes so that traffic destined for the 172.16.0.0/24 and 172.16.1.0/24 remote networks is forwarded through the 10.0.0.2 next-hop (your ISP gateway). Also add a default route for internet-bound traffic.",
+  "tasks": [
+    {
+      "id": "t1",
+      "description": "Add a static route to 172.16.0.0/24 via next-hop 10.0.0.2",
+      "hint": "In global config mode: ip route 172.16.0.0 255.255.255.0 10.0.0.2",
+      "check": {
+        "type": "static_route",
+        "description": "Static route to 172.16.0.0/24 via 10.0.0.2",
+        "expected": { "network": "172.16.0.0", "mask": "255.255.255.0", "nextHop": "10.0.0.2" }
+      }
+    },
+    {
+      "id": "t2",
+      "description": "Add a static route to 172.16.1.0/24 via next-hop 10.0.0.2",
+      "hint": "In global config mode: ip route 172.16.1.0 255.255.255.0 10.0.0.2",
+      "check": {
+        "type": "static_route",
+        "description": "Static route to 172.16.1.0/24 via 10.0.0.2",
+        "expected": { "network": "172.16.1.0", "mask": "255.255.255.0", "nextHop": "10.0.0.2" }
+      }
+    },
+    {
+      "id": "t3",
+      "description": "Add a default route (0.0.0.0/0) via next-hop 10.0.0.2",
+      "hint": "ip route 0.0.0.0 0.0.0.0 10.0.0.2 — the quad-zero network and mask matches any destination",
+      "check": {
+        "type": "static_route",
+        "description": "Default route 0.0.0.0/0 via 10.0.0.2",
+        "expected": { "network": "0.0.0.0", "mask": "0.0.0.0", "nextHop": "10.0.0.2" }
+      }
+    }
+  ],
+  "solutionWalkthrough": [
+    "enable",
+    "configure terminal",
+    "ip route 172.16.0.0 255.255.255.0 10.0.0.2",
+    "ip route 172.16.1.0 255.255.255.0 10.0.0.2",
+    "ip route 0.0.0.0 0.0.0.0 10.0.0.2",
+    "end",
+    "show ip route"
+  ]
+}

@@ -1,0 +1,74 @@
+{
+  "id": "lab-005",
+  "title": "OSPF Single-Area Configuration",
+  "domain": "ip-connectivity",
+  "difficulty": "intermediate",
+  "estimatedMinutes": 30,
+  "topology": "single-router",
+  "description": "Configure OSPFv2 in a single area on a router. Set the router-id, advertise directly connected networks, and verify OSPF operation using show commands.",
+  "objectives": ["3.4"],
+  "initialState": {
+    "hostname": "R1",
+    "mode": "user",
+    "interfaces": {
+      "GigabitEthernet0/0": { "name": "GigabitEthernet0/0", "ip": "10.1.1.1", "mask": "255.255.255.0", "status": "up" },
+      "GigabitEthernet0/1": { "name": "GigabitEthernet0/1", "ip": "192.168.1.1", "mask": "255.255.255.0", "status": "up" },
+      "Loopback0": { "name": "Loopback0", "ip": "1.1.1.1", "mask": "255.255.255.255", "status": "up" }
+    }
+  },
+  "scenario": "R1 has three interfaces already configured: Gi0/0 (10.1.1.1/24 — transit link), Gi0/1 (192.168.1.1/24 — LAN), and Loopback0 (1.1.1.1/32 — used as router-id). Configure OSPF process 1 in area 0 to advertise all networks.",
+  "tasks": [
+    {
+      "id": "t1",
+      "description": "Configure OSPF process 1 with router-id 1.1.1.1",
+      "hint": "router ospf 1 → router-id 1.1.1.1",
+      "check": {
+        "type": "ospf_router_id",
+        "description": "OSPF process 1 router-id must be 1.1.1.1",
+        "expected": { "pid": 1, "routerId": "1.1.1.1" }
+      }
+    },
+    {
+      "id": "t2",
+      "description": "Advertise 10.1.1.0/24 into OSPF area 0 (wildcard: 0.0.0.255)",
+      "hint": "network 10.1.1.0 0.0.0.255 area 0",
+      "check": {
+        "type": "ospf_network",
+        "description": "10.1.1.0 must be in OSPF area 0",
+        "expected": { "pid": 1, "network": "10.1.1.0", "area": 0 }
+      }
+    },
+    {
+      "id": "t3",
+      "description": "Advertise 192.168.1.0/24 into OSPF area 0",
+      "hint": "network 192.168.1.0 0.0.0.255 area 0",
+      "check": {
+        "type": "ospf_network",
+        "description": "192.168.1.0 must be in OSPF area 0",
+        "expected": { "pid": 1, "network": "192.168.1.0", "area": 0 }
+      }
+    },
+    {
+      "id": "t4",
+      "description": "Advertise the loopback 1.1.1.1/32 into OSPF area 0 (wildcard: 0.0.0.0)",
+      "hint": "network 1.1.1.1 0.0.0.0 area 0",
+      "check": {
+        "type": "ospf_network",
+        "description": "1.1.1.1/32 loopback must be in OSPF area 0",
+        "expected": { "pid": 1, "network": "1.1.1.1", "area": 0 }
+      }
+    }
+  ],
+  "solutionWalkthrough": [
+    "enable",
+    "configure terminal",
+    "router ospf 1",
+    "router-id 1.1.1.1",
+    "network 10.1.1.0 0.0.0.255 area 0",
+    "network 192.168.1.0 0.0.0.255 area 0",
+    "network 1.1.1.1 0.0.0.0 area 0",
+    "end",
+    "show ip route",
+    "show running-config"
+  ]
+}

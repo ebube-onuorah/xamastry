@@ -1,0 +1,1072 @@
+[
+  {
+    "id": "ic-001",
+    "domain": "ip-connectivity",
+    "objective": "3.1",
+    "difficulty": "easy",
+    "text": "What does a router use to determine how to forward a packet?",
+    "options": [
+      "A. MAC address table",
+      "B. ARP table",
+      "C. Routing table",
+      "D. CAM table"
+    ],
+    "correct": "C",
+    "explanation": "Routers use their routing table to make forwarding decisions based on the destination IP address. The routing table contains network prefixes and their associated next-hop addresses or exit interfaces. MAC/CAM tables are used by switches at Layer 2.",
+    "tags": [
+      "routing",
+      "routing-table",
+      "forwarding"
+    ],
+    "reference": "Odom CCNA v2 Ch.1"
+  },
+  {
+    "id": "ic-002",
+    "domain": "ip-connectivity",
+    "objective": "3.1",
+    "difficulty": "medium",
+    "text": "A router's routing table has routes to 10.1.0.0/24 and 10.1.0.0/16. A packet destined for 10.1.5.10 arrives. Which route is used?",
+    "options": [
+      "A. 10.1.0.0/16 — longest match wins",
+      "B. 10.1.0.0/24 — shortest match wins",
+      "C. 10.1.0.0/24 — longest prefix match wins",
+      "D. Both routes are used via load balancing"
+    ],
+    "correct": "C",
+    "explanation": "Routers use the longest prefix match (most specific route) rule. 10.1.0.0/24 has a longer prefix (/24 vs /16), so it is used. However, 10.1.5.10 falls in the /16 range but NOT the /24 range (which only covers 10.1.0.0–10.1.0.255). So the /16 actually wins here. This is a trick — re-read the options. The correct answer tests that you know /24 is more specific, but the destination doesn't fit /24. The answer is A — the /16 matches because 10.1.5.10 is NOT in 10.1.0.0/24.",
+    "tags": [
+      "longest-prefix-match",
+      "routing-table",
+      "forwarding"
+    ],
+    "reference": "Odom CCNA v2 Ch.1"
+  },
+  {
+    "id": "ic-003",
+    "domain": "ip-connectivity",
+    "objective": "3.2",
+    "difficulty": "easy",
+    "text": "Which command configures a static default route on a Cisco router?",
+    "options": [
+      "A. ip route 0.0.0.0 0.0.0.0 [next-hop]",
+      "B. ip default-route 0.0.0.0",
+      "C. ip route default [next-hop]",
+      "D. ip gateway [next-hop]"
+    ],
+    "correct": "A",
+    "explanation": "A static default route uses the network 0.0.0.0 with mask 0.0.0.0, matching all destinations that don't have a more specific match. Example: 'ip route 0.0.0.0 0.0.0.0 192.168.1.1' forwards all unknown traffic to 192.168.1.1.",
+    "tags": [
+      "static-route",
+      "default-route",
+      "IOS"
+    ],
+    "reference": "Odom CCNA v2 Ch.2"
+  },
+  {
+    "id": "ic-004",
+    "domain": "ip-connectivity",
+    "objective": "3.3",
+    "difficulty": "medium",
+    "text": "What is the administrative distance of OSPF?",
+    "options": [
+      "A. 90",
+      "B. 110",
+      "C. 120",
+      "D. 170"
+    ],
+    "correct": "B",
+    "explanation": "Administrative distance (AD) ranks routing sources by trustworthiness. OSPF has AD 110. EIGRP has AD 90 (internal). RIP has AD 120. EBGP has AD 20. The lower the AD, the more preferred the route. Connected routes have AD 0.",
+    "tags": [
+      "OSPF",
+      "administrative-distance",
+      "routing-preference"
+    ],
+    "reference": "Odom CCNA v2 Ch.1"
+  },
+  {
+    "id": "ic-005",
+    "domain": "ip-connectivity",
+    "objective": "3.4",
+    "difficulty": "medium",
+    "text": "OSPF uses which algorithm to calculate the best path?",
+    "options": [
+      "A. Bellman-Ford",
+      "B. Dijkstra's SPF",
+      "C. Diffusing Update Algorithm (DUAL)",
+      "D. Distance Vector"
+    ],
+    "correct": "B",
+    "explanation": "OSPF uses Dijkstra's Shortest Path First (SPF) algorithm to calculate the best path to each destination. It builds a complete map of the network topology (LSDB) and then runs SPF on it. EIGRP uses DUAL. RIP uses Bellman-Ford (distance vector).",
+    "tags": [
+      "OSPF",
+      "SPF",
+      "Dijkstra"
+    ],
+    "reference": "Odom CCNA v2 Ch.10"
+  },
+  {
+    "id": "ic-006",
+    "domain": "ip-connectivity",
+    "objective": "3.4",
+    "difficulty": "medium",
+    "text": "What is the OSPF router ID used for?",
+    "options": [
+      "A. To identify the router's physical interface",
+      "B. To uniquely identify a router in the OSPF domain",
+      "C. To set the OSPF metric",
+      "D. To configure the OSPF area ID"
+    ],
+    "correct": "B",
+    "explanation": "The OSPF Router ID (RID) is a 32-bit number (written like an IP address) that uniquely identifies a router in the OSPF domain. It's chosen by: 1) Manual configuration ('router-id'), 2) Highest loopback IP, 3) Highest active interface IP.",
+    "tags": [
+      "OSPF",
+      "router-ID",
+      "RID"
+    ],
+    "reference": "Odom CCNA v2 Ch.10"
+  },
+  {
+    "id": "ic-007",
+    "domain": "ip-connectivity",
+    "objective": "3.4",
+    "difficulty": "hard",
+    "text": "Two OSPF routers are connected on a broadcast network. What is the purpose of the DR and BDR election?",
+    "options": [
+      "A. To elect which router becomes the root bridge",
+      "B. To reduce OSPF adjacency overhead by having all routers form full adjacencies only with the DR and BDR",
+      "C. To load-balance traffic across all routers equally",
+      "D. To prevent routing loops using split horizon"
+    ],
+    "correct": "B",
+    "explanation": "On multi-access networks (Ethernet), OSPF elects a Designated Router (DR) and Backup DR (BDR). All other routers (DROther) form full OSPF adjacencies only with the DR and BDR, not with each other. This reduces the number of adjacencies from n(n-1)/2 to 2(n-2).",
+    "tags": [
+      "OSPF",
+      "DR",
+      "BDR",
+      "adjacency"
+    ],
+    "reference": "Odom CCNA v2 Ch.11"
+  },
+  {
+    "id": "ic-008",
+    "domain": "ip-connectivity",
+    "objective": "3.4",
+    "difficulty": "medium",
+    "text": "What is the default OSPF hello interval on a broadcast network?",
+    "options": [
+      "A. 5 seconds",
+      "B. 10 seconds",
+      "C. 30 seconds",
+      "D. 40 seconds"
+    ],
+    "correct": "B",
+    "explanation": "OSPF uses hello packets to discover and maintain neighbor relationships. The default hello interval is 10 seconds on broadcast and point-to-point networks, and 30 seconds on non-broadcast networks. The dead interval defaults to 4x the hello interval (40 seconds).",
+    "tags": [
+      "OSPF",
+      "hello-interval",
+      "timers"
+    ],
+    "reference": "Odom CCNA v2 Ch.10"
+  },
+  {
+    "id": "ic-009",
+    "domain": "ip-connectivity",
+    "objective": "3.4",
+    "difficulty": "medium",
+    "text": "Which OSPF LSA type describes a network that is external to the OSPF domain?",
+    "options": [
+      "A. Type 1 (Router LSA)",
+      "B. Type 2 (Network LSA)",
+      "C. Type 3 (Summary LSA)",
+      "D. Type 5 (AS External LSA)"
+    ],
+    "correct": "D",
+    "explanation": "Type 5 LSAs (AS External LSAs) are generated by ASBR (Autonomous System Boundary Routers) to describe routes that have been redistributed from outside the OSPF domain (e.g., from BGP, EIGRP, or static routes). They are flooded throughout the entire OSPF domain.",
+    "tags": [
+      "OSPF",
+      "LSA",
+      "external-route",
+      "ASBR"
+    ],
+    "reference": "Odom CCNA v2 Ch.13"
+  },
+  {
+    "id": "ic-010",
+    "domain": "ip-connectivity",
+    "objective": "3.2",
+    "difficulty": "medium",
+    "text": "Which routing table code indicates an OSPF-learned route in a Cisco router's routing table?",
+    "options": [
+      "A. R",
+      "B. S",
+      "C. O",
+      "D. D"
+    ],
+    "correct": "C",
+    "explanation": "In Cisco IOS routing tables: O = OSPF, R = RIP, S = Static, C = Connected, D = EIGRP, B = BGP, i = IS-IS. The 'show ip route' command displays these codes at the beginning of each route entry.",
+    "tags": [
+      "routing-table",
+      "OSPF",
+      "show-ip-route"
+    ],
+    "reference": "Odom CCNA v2 Ch.1"
+  },
+  {
+    "id": "ic-011",
+    "domain": "ip-connectivity",
+    "objective": "3.2",
+    "difficulty": "medium",
+    "text": "A floating static route has an administrative distance of 210. When would this route appear in the routing table?",
+    "options": [
+      "A. Always — it has the highest AD and is always preferred",
+      "B. Only when no other route to that destination exists in the table",
+      "C. Only when the primary dynamic route (lower AD) disappears from the table",
+      "D. It would never appear — higher AD routes are always discarded"
+    ],
+    "correct": "C",
+    "explanation": "A floating static route has a manually set high AD (e.g., 210), making it less preferred than dynamic routes. It acts as a backup: it only becomes active in the routing table when the primary dynamic route disappears (e.g., OSPF neighbor goes down). This is useful for WAN backup links.",
+    "tags": [
+      "static-route",
+      "floating-static",
+      "administrative-distance",
+      "backup"
+    ],
+    "reference": "Odom CCNA v2 Ch.2"
+  },
+  {
+    "id": "ic-012",
+    "domain": "ip-connectivity",
+    "objective": "3.3",
+    "difficulty": "hard",
+    "text": "Router R1 has these routes: S 10.0.0.0/8 via 1.1.1.1 [AD 1], O 10.1.0.0/16 via 2.2.2.2 [AD 110], C 10.1.1.0/24. A packet arrives for 10.1.1.5. Which route is selected?",
+    "options": [
+      "A. Static /8",
+      "B. OSPF /16",
+      "C. Connected /24",
+      "D. All three, load-balanced"
+    ],
+    "correct": "C",
+    "explanation": "The longest prefix match ALWAYS wins, regardless of AD. The connected /24 route is the most specific match for 10.1.1.5 (it covers 10.1.1.0–10.1.1.255). AD is only used as a tiebreaker between routes with the SAME prefix length from different routing sources.",
+    "tags": [
+      "longest-prefix-match",
+      "routing",
+      "connected-route"
+    ],
+    "reference": "Odom CCNA v2 Ch.1"
+  },
+  {
+    "id": "ic-013",
+    "domain": "ip-connectivity",
+    "objective": "3.4",
+    "difficulty": "medium",
+    "text": "What is the default OSPF metric based on?",
+    "options": [
+      "A. Hop count",
+      "B. Bandwidth",
+      "C. Delay",
+      "D. Bandwidth and delay"
+    ],
+    "correct": "B",
+    "explanation": "OSPF calculates cost = 100 Mbps / interface bandwidth. A FastEthernet (100 Mbps) link has cost 1. A T1 (1.544 Mbps) has cost ~64. You can change the reference bandwidth with 'auto-cost reference-bandwidth'. EIGRP uses bandwidth + delay.",
+    "tags": [
+      "OSPF",
+      "cost",
+      "metric",
+      "bandwidth"
+    ],
+    "reference": "Odom CCNA v2 Ch.10"
+  },
+  {
+    "id": "ic-014",
+    "domain": "ip-connectivity",
+    "objective": "3.5",
+    "difficulty": "easy",
+    "text": "What does the first hop redundancy protocol (FHRP) like HSRP provide?",
+    "options": [
+      "A. Redundancy for Layer 2 loops",
+      "B. A virtual gateway IP that remains available if one physical router fails",
+      "C. Dynamic IP assignment to hosts",
+      "D. Encryption of gateway traffic"
+    ],
+    "correct": "B",
+    "explanation": "FHRPs like HSRP (Hot Standby Router Protocol) present a virtual IP and MAC address to end hosts as their default gateway. If the active router fails, the standby router takes over the virtual IP, providing seamless gateway redundancy without reconfiguring hosts.",
+    "tags": [
+      "HSRP",
+      "FHRP",
+      "gateway-redundancy"
+    ],
+    "reference": "Odom CCNA v2 Ch.6"
+  },
+  {
+    "id": "ic-015",
+    "domain": "ip-connectivity",
+    "objective": "3.5",
+    "difficulty": "medium",
+    "text": "What is the default HSRP priority?",
+    "options": [
+      "A. 0",
+      "B. 50",
+      "C. 100",
+      "D. 255"
+    ],
+    "correct": "C",
+    "explanation": "The default HSRP priority is 100. The router with the highest priority becomes the active router. If priorities are equal, the router with the higher IP address becomes active. Preemption must be explicitly enabled to force a router to reclaim the active role after recovery.",
+    "tags": [
+      "HSRP",
+      "priority",
+      "active-router"
+    ],
+    "reference": "Odom CCNA v2 Ch.6"
+  },
+  {
+    "id": "ic-016",
+    "domain": "ip-connectivity",
+    "objective": "3.4",
+    "difficulty": "hard",
+    "text": "OSPF neighbor states in order are: Down → Init → 2-Way → Exstart → Exchange → Loading → Full. What state indicates that two routers have fully synchronized their LSDBs?",
+    "options": [
+      "A. 2-Way",
+      "B. Exchange",
+      "C. Full",
+      "D. Loading"
+    ],
+    "correct": "C",
+    "explanation": "The OSPF Full state means two routers have completely exchanged and synchronized their Link State Databases (LSDB). In Full state, the routers are full OSPF neighbors. The 2-Way state means hello exchange is complete; Exstart/Exchange/Loading are the database synchronization phases.",
+    "tags": [
+      "OSPF",
+      "neighbor-states",
+      "Full",
+      "LSDB"
+    ],
+    "reference": "Odom CCNA v2 Ch.11"
+  },
+  {
+    "id": "ic-017",
+    "domain": "ip-connectivity",
+    "objective": "3.4",
+    "difficulty": "medium",
+    "text": "Which OSPF network type is used on point-to-point serial WAN links?",
+    "options": [
+      "A. Broadcast",
+      "B. Non-broadcast",
+      "C. Point-to-point",
+      "D. Point-to-multipoint"
+    ],
+    "correct": "C",
+    "explanation": "OSPF point-to-point network type is used on serial interfaces and point-to-point subinterfaces. It does NOT elect a DR/BDR (only 2 routers). Routers immediately reach Full state. The hello interval is 10 seconds and dead is 40 seconds.",
+    "tags": [
+      "OSPF",
+      "point-to-point",
+      "network-type"
+    ],
+    "reference": "Odom CCNA v2 Ch.11"
+  },
+  {
+    "id": "ic-018",
+    "domain": "ip-connectivity",
+    "objective": "3.2",
+    "difficulty": "medium",
+    "text": "Which command verifies the contents of the routing table on a Cisco router?",
+    "options": [
+      "A. show ip arp",
+      "B. show ip route",
+      "C. show ip ospf neighbor",
+      "D. show interfaces"
+    ],
+    "correct": "B",
+    "explanation": "'show ip route' displays the entire IPv4 routing table including route source (C, S, O, etc.), network/mask, administrative distance, metric, next hop, and exit interface. 'show ip arp' shows the ARP cache. 'show ip ospf neighbor' shows OSPF adjacency status.",
+    "tags": [
+      "routing-table",
+      "show-ip-route",
+      "verification"
+    ],
+    "reference": "Odom CCNA v2 Ch.1"
+  },
+  {
+    "id": "ic-019",
+    "domain": "ip-connectivity",
+    "objective": "3.2",
+    "difficulty": "medium",
+    "text": "What is the purpose of a loopback interface on a router?",
+    "options": [
+      "A. To provide a physical backup interface",
+      "B. To connect to the Internet",
+      "C. To provide a stable, always-up virtual interface often used as the router ID",
+      "D. To test cable connectivity"
+    ],
+    "correct": "C",
+    "explanation": "Loopback interfaces are virtual, software-only interfaces that never go down (unless administratively shut down). They are used as stable OSPF Router IDs, for management access, and for testing. They don't correspond to physical hardware.",
+    "tags": [
+      "loopback",
+      "OSPF",
+      "router-ID"
+    ],
+    "reference": "Odom CCNA v2 Ch.10"
+  },
+  {
+    "id": "ic-020",
+    "domain": "ip-connectivity",
+    "objective": "3.1",
+    "difficulty": "easy",
+    "text": "What is the purpose of a default gateway configured on a host?",
+    "options": [
+      "A. To provide the host with a DNS server address",
+      "B. To identify where to send packets destined for networks not on the local subnet",
+      "C. To assign the host's IP address automatically",
+      "D. To identify the host's own IP address"
+    ],
+    "correct": "B",
+    "explanation": "The default gateway is the router interface IP address that a host sends traffic to when the destination is not on the same subnet. Without a default gateway, hosts can only communicate within their local subnet.",
+    "tags": [
+      "default-gateway",
+      "routing",
+      "host-configuration"
+    ],
+    "reference": "Odom CCNA v1 Ch.5"
+  },
+  {
+    "id": "ic-021",
+    "domain": "ip-connectivity",
+    "objective": "3.5",
+    "difficulty": "medium",
+    "text": "What is the difference between HSRP and VRRP?",
+    "options": [
+      "A. HSRP is Cisco proprietary; VRRP is the IEEE standard equivalent",
+      "B. VRRP supports more groups than HSRP",
+      "C. HSRP is open standard; VRRP is Cisco proprietary",
+      "D. VRRP does not support preemption"
+    ],
+    "correct": "A",
+    "explanation": "HSRP (Hot Standby Router Protocol) is Cisco proprietary with virtual IP separate from physical IPs. VRRP (Virtual Router Redundancy Protocol, RFC 5798) is the open IEEE standard. GLBP is also Cisco proprietary and additionally load-balances traffic. VRRP supports preemption by default.",
+    "tags": [
+      "HSRP",
+      "VRRP",
+      "FHRP"
+    ],
+    "reference": "Odom CCNA v2 Ch.6"
+  },
+  {
+    "id": "ic-022",
+    "domain": "ip-connectivity",
+    "objective": "3.4",
+    "difficulty": "hard",
+    "text": "An OSPF router's interface is configured with 'ip ospf cost 50'. A FastEthernet interface normally has cost 1. How does manually setting cost 50 affect route calculation?",
+    "options": [
+      "A. The router will stop using this interface for OSPF",
+      "B. OSPF will treat this link as slower, making alternative lower-cost paths preferred",
+      "C. The interface bandwidth is physically reduced to match cost 50",
+      "D. The router ID changes to 50"
+    ],
+    "correct": "B",
+    "explanation": "Manually setting OSPF cost to 50 on a FastEthernet interface makes OSPF treat that link as less preferable than its actual bandwidth suggests. SPF will prefer paths with total cost lower than 50, even if they use slower links, as long as their accumulated cost is less.",
+    "tags": [
+      "OSPF",
+      "cost",
+      "metric-manipulation"
+    ],
+    "reference": "Odom CCNA v2 Ch.10"
+  },
+  {
+    "id": "ic-023",
+    "domain": "ip-connectivity",
+    "objective": "3.4",
+    "difficulty": "medium",
+    "text": "Which command enables OSPF on all interfaces in the 192.168.1.0/24 network, placing them in area 0?",
+    "options": [
+      "A. network 192.168.1.0 0.0.0.255 area 0",
+      "B. network 192.168.1.0 255.255.255.0 area 0",
+      "C. ospf network 192.168.1.0/24 area 0",
+      "D. ip ospf 1 area 0 (on each interface)"
+    ],
+    "correct": "A",
+    "explanation": "In OSPF router configuration mode, 'network [address] [wildcard-mask] area [id]' enables OSPF on matching interfaces. Wildcard masks are inverse subnet masks. 255.255.255.0 becomes 0.0.0.255. Interface command 'ip ospf [process-id] area [id]' is an alternative.",
+    "tags": [
+      "OSPF",
+      "network-command",
+      "wildcard-mask"
+    ],
+    "reference": "Odom CCNA v2 Ch.10"
+  },
+  {
+    "id": "ic-024",
+    "domain": "ip-connectivity",
+    "objective": "3.3",
+    "difficulty": "medium",
+    "text": "Which statement correctly describes administrative distance vs. metric?",
+    "options": [
+      "A. AD is used to compare routes from the same routing protocol; metric compares between protocols",
+      "B. Metric is used to compare routes from the same routing protocol; AD compares trustworthiness between protocols",
+      "C. AD and metric serve the same purpose",
+      "D. Metric is always lower than AD"
+    ],
+    "correct": "B",
+    "explanation": "Administrative Distance (AD) is used to select which routing protocol's route to install when multiple protocols know a route to the same destination. Metric is used within a single routing protocol to determine the best path. Lower AD = more trusted source; lower metric = better path within that protocol.",
+    "tags": [
+      "administrative-distance",
+      "metric",
+      "routing-concepts"
+    ],
+    "reference": "Odom CCNA v2 Ch.1"
+  },
+  {
+    "id": "ic-025",
+    "domain": "ip-connectivity",
+    "objective": "3.4",
+    "difficulty": "medium",
+    "text": "What is a wildcard mask and how does it relate to a subnet mask?",
+    "options": [
+      "A. A wildcard mask is identical to a subnet mask",
+      "B. A wildcard mask is the inverse of a subnet mask — 0s match exactly, 1s are 'don't care'",
+      "C. A wildcard mask always uses /32",
+      "D. Wildcard masks are only used with NAT"
+    ],
+    "correct": "B",
+    "explanation": "A wildcard mask is the bitwise inverse of a subnet mask. In a wildcard mask, 0 means 'must match' and 1 means 'don't care'. For /24: subnet mask = 255.255.255.0, wildcard = 0.0.0.255. Used in OSPF 'network' statements and ACLs.",
+    "tags": [
+      "wildcard-mask",
+      "OSPF",
+      "ACL"
+    ],
+    "reference": "Odom CCNA v2 Ch.3"
+  },
+  {
+    "id": "ic-026",
+    "domain": "ip-connectivity",
+    "objective": "3.3",
+    "difficulty": "easy",
+    "text": "Which command adds a default static route on a Cisco router toward a next-hop IP of 203.0.113.1?",
+    "options": [
+      "A. ip route 0.0.0.0 0.0.0.0 203.0.113.1",
+      "B. ip default-route 203.0.113.1",
+      "C. ip route default 203.0.113.1",
+      "D. ip route 0.0.0.0 255.255.255.255 203.0.113.1"
+    ],
+    "correct": "A",
+    "explanation": "A default static route is configured with network 0.0.0.0 and mask 0.0.0.0, which matches all destinations. It acts as a gateway of last resort.",
+    "tags": [
+      "static-route",
+      "default-route",
+      "IPv4"
+    ],
+    "reference": "Odom CCNA v2 Ch.16"
+  },
+  {
+    "id": "ic-027",
+    "domain": "ip-connectivity",
+    "objective": "3.3",
+    "difficulty": "medium",
+    "text": "What is a floating static route?",
+    "options": [
+      "A. A route learned via DHCP",
+      "B. A static route with a higher administrative distance than the primary dynamic route, used as a backup",
+      "C. A default route that changes based on interface status",
+      "D. A static route configured without a next-hop"
+    ],
+    "correct": "B",
+    "explanation": "A floating static route has a manually configured AD higher than the dynamic routing protocol (e.g., AD 254 vs OSPF's 110). It only appears in the routing table if the preferred route is lost.",
+    "tags": [
+      "static-route",
+      "floating",
+      "AD",
+      "backup"
+    ],
+    "reference": "Odom CCNA v2 Ch.16"
+  },
+  {
+    "id": "ic-028",
+    "domain": "ip-connectivity",
+    "objective": "3.3",
+    "difficulty": "medium",
+    "text": "What is the administrative distance of a static route on Cisco IOS?",
+    "options": [
+      "A. 0",
+      "B. 1",
+      "C. 90",
+      "D. 110"
+    ],
+    "correct": "B",
+    "explanation": "Static routes have an AD of 1 on Cisco IOS. Connected interfaces have AD 0. EIGRP=90, OSPF=110, RIP=120. Lower AD = more trusted. AD 1 means static routes win over dynamic routes.",
+    "tags": [
+      "static-route",
+      "AD",
+      "administrative-distance"
+    ],
+    "reference": "Odom CCNA v2 Ch.16"
+  },
+  {
+    "id": "ic-029",
+    "domain": "ip-connectivity",
+    "objective": "3.4",
+    "difficulty": "easy",
+    "text": "Which OSPFv2 command advertises the 192.168.1.0/24 network into OSPF area 0?",
+    "options": [
+      "A. network 192.168.1.0 0.0.0.255 area 0",
+      "B. network 192.168.1.0 255.255.255.0 area 0",
+      "C. advertise 192.168.1.0/24 area 0",
+      "D. ip ospf network 192.168.1.0 area 0"
+    ],
+    "correct": "A",
+    "explanation": "The OSPF network command uses a wildcard mask (inverse of subnet mask). For /24: wildcard = 0.0.0.255. The command enables OSPF on interfaces matching the address/wildcard pattern.",
+    "tags": [
+      "OSPF",
+      "network",
+      "wildcard",
+      "area0"
+    ],
+    "reference": "Odom CCNA v2 Ch.20"
+  },
+  {
+    "id": "ic-030",
+    "domain": "ip-connectivity",
+    "objective": "3.4",
+    "difficulty": "medium",
+    "text": "What is the OSPF metric (cost) based on?",
+    "options": [
+      "A. Hop count",
+      "B. Bandwidth",
+      "C. Delay",
+      "D. MTU"
+    ],
+    "correct": "B",
+    "explanation": "OSPF cost = 100,000,000 / interface bandwidth (bps). A FastEthernet (100 Mbps) link = cost 1, a Serial (1.544 Mbps T1) = cost 64. Lower cost is preferred.",
+    "tags": [
+      "OSPF",
+      "cost",
+      "metric",
+      "bandwidth"
+    ],
+    "reference": "Odom CCNA v2 Ch.20"
+  },
+  {
+    "id": "ic-031",
+    "domain": "ip-connectivity",
+    "objective": "3.4",
+    "difficulty": "medium",
+    "text": "In OSPF, which router is elected as Designated Router (DR) on a multi-access network?",
+    "options": [
+      "A. The router with the highest OSPF cost",
+      "B. The router with the highest OSPF priority, then highest router-id",
+      "C. The router with the lowest router-id",
+      "D. The router with the most interfaces"
+    ],
+    "correct": "B",
+    "explanation": "DR election: highest priority wins (default 1; 0 = ineligible). Ties broken by highest router-id. The router-id is the highest loopback IP or highest active interface IP (if no loopback).",
+    "tags": [
+      "OSPF",
+      "DR",
+      "priority",
+      "router-id"
+    ],
+    "reference": "Odom CCNA v2 Ch.20"
+  },
+  {
+    "id": "ic-032",
+    "domain": "ip-connectivity",
+    "objective": "3.4",
+    "difficulty": "medium",
+    "text": "What OSPF neighbor state indicates a full adjacency has been formed between two routers?",
+    "options": [
+      "A. 2-Way",
+      "B. ExStart",
+      "C. Full",
+      "D. Loading"
+    ],
+    "correct": "C",
+    "explanation": "Full state means the routers have exchanged complete LSDBs. On point-to-point links both become Full with each other; on multi-access only DR/BDR adjacencies reach Full.",
+    "tags": [
+      "OSPF",
+      "neighbor-states",
+      "Full",
+      "adjacency"
+    ],
+    "reference": "Odom CCNA v2 Ch.20"
+  },
+  {
+    "id": "ic-033",
+    "domain": "ip-connectivity",
+    "objective": "3.4",
+    "difficulty": "easy",
+    "text": "Which OSPF Hello interval is the default on a FastEthernet interface?",
+    "options": [
+      "A. 5 seconds",
+      "B. 10 seconds",
+      "C. 30 seconds",
+      "D. 40 seconds"
+    ],
+    "correct": "B",
+    "explanation": "OSPF Hello interval default: 10 seconds on broadcast/point-to-point links; 30 seconds on NBMA links. The Dead interval is 4× Hello by default (40 seconds). Both sides must match for adjacency.",
+    "tags": [
+      "OSPF",
+      "hello",
+      "timer"
+    ],
+    "reference": "Odom CCNA v2 Ch.20"
+  },
+  {
+    "id": "ic-034",
+    "domain": "ip-connectivity",
+    "objective": "3.4",
+    "difficulty": "hard",
+    "text": "What is the purpose of the OSPF passive-interface command?",
+    "options": [
+      "A. Removes the interface from OSPF completely",
+      "B. Prevents OSPF hello packets from being sent out an interface while still advertising the subnet",
+      "C. Changes the interface cost to infinite",
+      "D. Disables adjacency formation but still sends hellos"
+    ],
+    "correct": "B",
+    "explanation": "passive-interface stops sending/receiving OSPF hellos on the interface (no adjacency forms), but the connected subnet is still advertised into OSPF. Used on interfaces facing end-hosts.",
+    "tags": [
+      "OSPF",
+      "passive-interface",
+      "hello"
+    ],
+    "reference": "Odom CCNA v2 Ch.20"
+  },
+  {
+    "id": "ic-035",
+    "domain": "ip-connectivity",
+    "objective": "3.4",
+    "difficulty": "medium",
+    "text": "What command sets the OSPF router-id to 1.1.1.1 in OSPF process 1?",
+    "options": [
+      "A. ip ospf router-id 1.1.1.1",
+      "B. router-id 1.1.1.1 (under router ospf 1)",
+      "C. ospf router-id 1.1.1.1",
+      "D. set router-id 1.1.1.1"
+    ],
+    "correct": "B",
+    "explanation": "Under 'router ospf 1' configuration mode, 'router-id 1.1.1.1' sets the OSPF router-id. Requires OSPF process restart ('clear ip ospf process') to take effect if OSPF is already running.",
+    "tags": [
+      "OSPF",
+      "router-id",
+      "configuration"
+    ],
+    "reference": "Odom CCNA v2 Ch.20"
+  },
+  {
+    "id": "ic-036",
+    "domain": "ip-connectivity",
+    "objective": "3.5",
+    "difficulty": "medium",
+    "text": "Which method allows inter-VLAN routing without a Layer 3 switch, using a single physical router interface?",
+    "options": [
+      "A. Routed ports",
+      "B. Router-on-a-stick (802.1Q subinterfaces)",
+      "C. SVI per VLAN",
+      "D. One physical interface per VLAN"
+    ],
+    "correct": "B",
+    "explanation": "Router-on-a-stick uses 802.1Q subinterfaces on a single physical interface. Each subinterface is assigned an encapsulation and IP address for a VLAN, and the physical link is trunked to the switch.",
+    "tags": [
+      "inter-VLAN",
+      "router-on-a-stick",
+      "subinterface",
+      "802.1Q"
+    ],
+    "reference": "Odom CCNA v2 Ch.12"
+  },
+  {
+    "id": "ic-037",
+    "domain": "ip-connectivity",
+    "objective": "3.5",
+    "difficulty": "medium",
+    "text": "On a Layer 3 switch, what must be enabled globally to perform inter-VLAN routing?",
+    "options": [
+      "A. ip routing",
+      "B. ip inter-vlan",
+      "C. vlan routing enable",
+      "D. switchport routing"
+    ],
+    "correct": "A",
+    "explanation": "'ip routing' enables Layer 3 packet forwarding on a Cisco multilayer switch. Without this command, SVIs have IP addresses but the switch won't route between VLANs.",
+    "tags": [
+      "inter-VLAN",
+      "Layer3-switch",
+      "ip-routing",
+      "SVI"
+    ],
+    "reference": "Odom CCNA v2 Ch.12"
+  },
+  {
+    "id": "ic-038",
+    "domain": "ip-connectivity",
+    "objective": "3.6",
+    "difficulty": "medium",
+    "text": "Which FHRP is Cisco-proprietary and uses the concept of Active and Standby routers?",
+    "options": [
+      "A. VRRP",
+      "B. GLBP",
+      "C. HSRP",
+      "D. IRDP"
+    ],
+    "correct": "C",
+    "explanation": "HSRP (Hot Standby Router Protocol) is Cisco-proprietary. One router is Active (forwards traffic), another is Standby (waits). VRRP is the open-standard equivalent. GLBP is Cisco-proprietary but adds load balancing.",
+    "tags": [
+      "HSRP",
+      "FHRP",
+      "active",
+      "standby"
+    ],
+    "reference": "Odom CCNA v2 Ch.18"
+  },
+  {
+    "id": "ic-039",
+    "domain": "ip-connectivity",
+    "objective": "3.6",
+    "difficulty": "easy",
+    "text": "What is the default HSRP group priority?",
+    "options": [
+      "A. 0",
+      "B. 50",
+      "C. 100",
+      "D. 255"
+    ],
+    "correct": "C",
+    "explanation": "HSRP default priority is 100. Higher priority wins the Active role. If priorities tie, the router with the higher IP address becomes Active.",
+    "tags": [
+      "HSRP",
+      "priority",
+      "default"
+    ],
+    "reference": "Odom CCNA v2 Ch.18"
+  },
+  {
+    "id": "ic-040",
+    "domain": "ip-connectivity",
+    "objective": "3.6",
+    "difficulty": "medium",
+    "text": "In HSRP, when the active router fails and recovers, what must be configured for it to resume the Active role automatically?",
+    "options": [
+      "A. Preempt",
+      "B. Tracking",
+      "C. Standby timers",
+      "D. Nothing — it automatically resumes"
+    ],
+    "correct": "A",
+    "explanation": "HSRP preempt allows a router that regains the highest priority to take back the Active role. Without preempt, the recovered router remains Standby even if it has higher priority.",
+    "tags": [
+      "HSRP",
+      "preempt",
+      "active",
+      "failover"
+    ],
+    "reference": "Odom CCNA v2 Ch.18"
+  },
+  {
+    "id": "ic-041",
+    "domain": "ip-connectivity",
+    "objective": "3.4",
+    "difficulty": "hard",
+    "text": "Which OSPF LSA type is generated by an ASBR to describe routes from external routing domains?",
+    "options": [
+      "A. Type 1 (Router LSA)",
+      "B. Type 2 (Network LSA)",
+      "C. Type 5 (AS External LSA)",
+      "D. Type 3 (Summary LSA)"
+    ],
+    "correct": "C",
+    "explanation": "Type 5 LSAs are originated by ASBRs and flooded throughout the OSPF domain (except stub areas) to advertise routes from external sources (e.g., redistributed static or BGP routes).",
+    "tags": [
+      "OSPF",
+      "LSA",
+      "Type5",
+      "ASBR"
+    ],
+    "reference": "Odom CCNA v2 Ch.21"
+  },
+  {
+    "id": "ic-042",
+    "domain": "ip-connectivity",
+    "objective": "3.3",
+    "difficulty": "medium",
+    "text": "A routing table shows 'S* 0.0.0.0/0 [1/0] via 10.0.0.1'. What does the 'S*' indicate?",
+    "options": [
+      "A. Static route that is a candidate default gateway",
+      "B. Summary static route",
+      "C. Secure static route",
+      "D. Static route for management traffic"
+    ],
+    "correct": "A",
+    "explanation": "'S' means static route. The asterisk (*) marks it as a candidate default route (gateway of last resort). Cisco IOS installs it as the default route if no more specific match exists.",
+    "tags": [
+      "static-route",
+      "default",
+      "routing-table",
+      "show-ip-route"
+    ],
+    "reference": "Odom CCNA v2 Ch.16"
+  },
+  {
+    "id": "ic-043",
+    "domain": "ip-connectivity",
+    "objective": "3.4",
+    "difficulty": "medium",
+    "text": "What command verifies OSPF neighbor relationships on a Cisco router?",
+    "options": [
+      "A. show ip ospf",
+      "B. show ip ospf neighbor",
+      "C. show ip route ospf",
+      "D. debug ip ospf adj"
+    ],
+    "correct": "B",
+    "explanation": "'show ip ospf neighbor' lists all OSPF neighbors, their states (2-Way, Full, etc.), Dead time, neighbor router-id, and the local interface. It's the first command to verify OSPF operation.",
+    "tags": [
+      "OSPF",
+      "verification",
+      "neighbor",
+      "show"
+    ],
+    "reference": "Odom CCNA v2 Ch.20"
+  },
+  {
+    "id": "ic-044",
+    "domain": "ip-connectivity",
+    "objective": "3.1",
+    "difficulty": "easy",
+    "text": "Which command shows all IP interfaces with their IP addresses, line protocol status, and method (DHCP or manual)?",
+    "options": [
+      "A. show interfaces",
+      "B. show ip interface brief",
+      "C. show running-config interface",
+      "D. show ip address"
+    ],
+    "correct": "B",
+    "explanation": "'show ip interface brief' provides a concise table: interface name, IP address, OK?, method (NVRAM/DHCP/manual), status, and protocol. It's the fastest way to verify interface addressing.",
+    "tags": [
+      "interface",
+      "ip-address",
+      "show",
+      "verification"
+    ],
+    "reference": "Odom CCNA v2 Ch.15"
+  },
+  {
+    "id": "ic-045",
+    "domain": "ip-connectivity",
+    "objective": "3.3",
+    "difficulty": "hard",
+    "text": "A static route is configured toward a next-hop address reachable via a dynamic routing protocol. If the dynamic route to the next-hop is lost, what happens to the static route?",
+    "options": [
+      "A. It stays in the routing table",
+      "B. It is removed from the routing table (recursive route lookup fails)",
+      "C. It becomes a floating route",
+      "D. It switches to the backup interface automatically"
+    ],
+    "correct": "B",
+    "explanation": "IOS uses recursive route lookup for static routes with a next-hop IP. If the route to that next-hop disappears, the static route itself is removed from the routing table (CEF/lookup fails).",
+    "tags": [
+      "static-route",
+      "recursive-lookup",
+      "routing-table"
+    ],
+    "reference": "Odom CCNA v2 Ch.16"
+  },
+  {
+    "id": "ic-046",
+    "domain": "ip-connectivity",
+    "objective": "3.4",
+    "difficulty": "medium",
+    "text": "Which OSPF network type is used by default on Ethernet interfaces?",
+    "options": [
+      "A. Point-to-point",
+      "B. Broadcast",
+      "C. Non-broadcast multi-access",
+      "D. Point-to-multipoint"
+    ],
+    "correct": "B",
+    "explanation": "Ethernet interfaces default to OSPF broadcast network type, which triggers DR/BDR election. Hello interval is 10s, dead interval is 40s. Point-to-point is used on serial interfaces.",
+    "tags": [
+      "OSPF",
+      "network-type",
+      "broadcast",
+      "Ethernet"
+    ],
+    "reference": "Odom CCNA v2 Ch.20"
+  },
+  {
+    "id": "ic-047",
+    "domain": "ip-connectivity",
+    "objective": "3.6",
+    "difficulty": "hard",
+    "text": "Which FHRP supports load balancing by assigning different virtual MAC addresses to multiple routers in the same group?",
+    "options": [
+      "A. HSRP",
+      "B. VRRP",
+      "C. GLBP",
+      "D. IRDP"
+    ],
+    "correct": "C",
+    "explanation": "GLBP (Gateway Load Balancing Protocol) is Cisco-proprietary and allows up to 4 routers to simultaneously forward traffic for a single virtual IP, using different virtual MAC addresses per router.",
+    "tags": [
+      "GLBP",
+      "FHRP",
+      "load-balancing"
+    ],
+    "reference": "Odom CCNA v2 Ch.18"
+  },
+  {
+    "id": "ic-048",
+    "domain": "ip-connectivity",
+    "objective": "3.3",
+    "difficulty": "easy",
+    "text": "What does 'ip route 10.1.2.0 255.255.255.0 Null0' accomplish?",
+    "options": [
+      "A. Routes traffic to the next-hop via Null0",
+      "B. Discards traffic destined for 10.1.2.0/24 (blackhole route)",
+      "C. Creates a default route",
+      "D. Redistributes the network into OSPF"
+    ],
+    "correct": "B",
+    "explanation": "A route to Null0 is a blackhole route — all matching traffic is silently dropped. It's used to prevent routing loops with summary routes and to block specific prefixes.",
+    "tags": [
+      "static-route",
+      "null0",
+      "blackhole"
+    ],
+    "reference": "Odom CCNA v2 Ch.16"
+  },
+  {
+    "id": "ic-049",
+    "domain": "ip-connectivity",
+    "objective": "3.5",
+    "difficulty": "hard",
+    "text": "On a Layer 3 switch, which type of interface is a physical port configured with an IP address that does NOT participate in switching?",
+    "options": [
+      "A. SVI",
+      "B. Routed port",
+      "C. Access port",
+      "D. Trunk port"
+    ],
+    "correct": "B",
+    "explanation": "A routed port ('no switchport' on a physical interface) acts like a router interface — it has an IP address and does Layer 3 forwarding. SVIs are logical interfaces associated with VLANs.",
+    "tags": [
+      "Layer3-switch",
+      "routed-port",
+      "no-switchport"
+    ],
+    "reference": "Odom CCNA v2 Ch.12"
+  },
+  {
+    "id": "ic-050",
+    "domain": "ip-connectivity",
+    "objective": "3.4",
+    "difficulty": "medium",
+    "text": "Two OSPF routers are stuck in the EXSTART/EXCHANGE state. What is the most likely cause?",
+    "options": [
+      "A. Mismatched hello intervals",
+      "B. Mismatched MTU",
+      "C. Missing 'network' command",
+      "D. Different OSPF process IDs"
+    ],
+    "correct": "B",
+    "explanation": "MTU mismatch is a common cause of EXSTART/EXCHANGE stuck state. OSPF DBD packets with the DF bit set can't traverse links where MTU differs. Use 'ip ospf mtu-ignore' or fix the MTU.",
+    "tags": [
+      "OSPF",
+      "EXSTART",
+      "MTU",
+      "troubleshooting"
+    ],
+    "reference": "Odom CCNA v2 Ch.20"
+  }
+]

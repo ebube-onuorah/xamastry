@@ -1,0 +1,1085 @@
+[
+  {
+    "id": "au-001",
+    "domain": "automation",
+    "objective": "6.1",
+    "difficulty": "easy",
+    "text": "What is the primary benefit of network automation?",
+    "options": [
+      "A. It eliminates the need for network hardware",
+      "B. It reduces manual configuration errors and enables consistent, scalable network management",
+      "C. It replaces all network protocols with a single standard",
+      "D. It provides automatic hardware upgrades"
+    ],
+    "correct": "B",
+    "explanation": "Network automation reduces human error in repetitive configuration tasks, speeds up deployments, and enables consistent policy enforcement at scale. Tools like Ansible, Python scripts, and APIs allow thousands of devices to be configured identically in minutes instead of hours.",
+    "tags": [
+      "automation",
+      "benefits",
+      "network-management"
+    ],
+    "reference": "Odom CCNA v2 Ch.18"
+  },
+  {
+    "id": "au-002",
+    "domain": "automation",
+    "objective": "6.2",
+    "difficulty": "medium",
+    "text": "What does SDN (Software-Defined Networking) separate?",
+    "options": [
+      "A. The data plane from the physical hardware",
+      "B. The control plane from the data plane, centralizing network control in a controller",
+      "C. The management plane from the control plane",
+      "D. Layer 2 from Layer 3 functions"
+    ],
+    "correct": "B",
+    "explanation": "SDN separates the control plane (routing decisions, protocol processing) from the data plane (packet forwarding). The control plane is centralized in an SDN controller, which programs the data planes of network devices via southbound APIs (OpenFlow, NETCONF). This enables centralized, programmable network management.",
+    "tags": [
+      "SDN",
+      "control-plane",
+      "data-plane",
+      "controller"
+    ],
+    "reference": "Odom CCNA v2 Ch.15"
+  },
+  {
+    "id": "au-003",
+    "domain": "automation",
+    "objective": "6.2",
+    "difficulty": "medium",
+    "text": "What is the Cisco SD-WAN (Viptela) controller that manages the data plane?",
+    "options": [
+      "A. vManage",
+      "B. vSmart",
+      "C. vBond",
+      "D. DNA Center"
+    ],
+    "correct": "B",
+    "explanation": "Cisco SD-WAN components: vManage (management/GUI plane), vSmart (control plane — distributes routing policies to WAN edges), vBond (orchestration — helps WAN edges find vSmart/vManage), vEdge/cEdge (data plane routers). DNA Center is for campus/enterprise (Catalyst Center).",
+    "tags": [
+      "SD-WAN",
+      "vSmart",
+      "Cisco",
+      "SDN"
+    ],
+    "reference": "Odom CCNA v2 Ch.16"
+  },
+  {
+    "id": "au-004",
+    "domain": "automation",
+    "objective": "6.3",
+    "difficulty": "medium",
+    "text": "Which data format uses key-value pairs and curly braces, and is commonly used in REST APIs?",
+    "options": [
+      "A. XML",
+      "B. YAML",
+      "C. JSON",
+      "D. CSV"
+    ],
+    "correct": "C",
+    "explanation": "JSON (JavaScript Object Notation) uses key-value pairs (\"key\": \"value\"), curly braces for objects, and square brackets for arrays. It is the most common format for REST API data exchange. YANG models describe network configuration; NETCONF uses XML; Ansible playbooks use YAML.",
+    "tags": [
+      "JSON",
+      "REST-API",
+      "data-formats"
+    ],
+    "reference": "Odom CCNA v2 Ch.18"
+  },
+  {
+    "id": "au-005",
+    "domain": "automation",
+    "objective": "6.3",
+    "difficulty": "medium",
+    "text": "Which HTTP method is used to retrieve data from a REST API without modifying it?",
+    "options": [
+      "A. POST",
+      "B. PUT",
+      "C. GET",
+      "D. DELETE"
+    ],
+    "correct": "C",
+    "explanation": "REST API HTTP methods: GET (read/retrieve data), POST (create new resource), PUT (replace entire resource), PATCH (partial update), DELETE (remove resource). GET is idempotent — calling it multiple times doesn't change the resource. REST APIs for network devices use JSON bodies.",
+    "tags": [
+      "REST-API",
+      "HTTP-methods",
+      "GET"
+    ],
+    "reference": "Odom CCNA v2 Ch.18"
+  },
+  {
+    "id": "au-006",
+    "domain": "automation",
+    "objective": "6.3",
+    "difficulty": "medium",
+    "text": "What does a REST API use to authenticate requests securely?",
+    "options": [
+      "A. Username/password in the URL",
+      "B. API tokens or OAuth in HTTP headers",
+      "C. SNMP community strings",
+      "D. Telnet sessions"
+    ],
+    "correct": "B",
+    "explanation": "REST APIs use tokens (Bearer tokens, API keys) in HTTP Authorization headers or OAuth 2.0 for authentication. Embedding credentials in URLs is insecure because URLs are logged. Cisco DNA Center and Meraki APIs use token-based authentication over HTTPS.",
+    "tags": [
+      "REST-API",
+      "authentication",
+      "tokens",
+      "OAuth"
+    ],
+    "reference": "Odom CCNA v2 Ch.18"
+  },
+  {
+    "id": "au-007",
+    "domain": "automation",
+    "objective": "6.4",
+    "difficulty": "medium",
+    "text": "What is NETCONF used for?",
+    "options": [
+      "A. To encrypt network traffic between routers",
+      "B. To programmatically configure and retrieve network device configuration using XML over SSH",
+      "C. To monitor network performance with SNMP",
+      "D. To exchange routing information between devices"
+    ],
+    "correct": "B",
+    "explanation": "NETCONF (Network Configuration Protocol, RFC 6241) is a network management protocol that uses XML-encoded data over SSH (TCP port 830). It supports get-config, edit-config, and commit operations. RESTCONF is the HTTP/REST equivalent. Both use YANG data models to describe configuration.",
+    "tags": [
+      "NETCONF",
+      "XML",
+      "SSH",
+      "configuration-management"
+    ],
+    "reference": "Odom CCNA v2 Ch.18"
+  },
+  {
+    "id": "au-008",
+    "domain": "automation",
+    "objective": "6.4",
+    "difficulty": "hard",
+    "text": "What is a YANG model?",
+    "options": [
+      "A. A Python library for network automation",
+      "B. A data modeling language used to describe the structure of network configuration and state data",
+      "C. A Cisco GUI tool for network management",
+      "D. A wireless network controller"
+    ],
+    "correct": "B",
+    "explanation": "YANG (Yet Another Next Generation, RFC 6020) is a data modeling language for network configuration. YANG models define the structure, data types, and constraints of configuration data. NETCONF and RESTCONF use YANG models to validate configuration. Cisco devices publish their YANG models, enabling API-driven configuration.",
+    "tags": [
+      "YANG",
+      "data-modeling",
+      "NETCONF"
+    ],
+    "reference": "Odom CCNA v2 Ch.18"
+  },
+  {
+    "id": "au-009",
+    "domain": "automation",
+    "objective": "6.5",
+    "difficulty": "medium",
+    "text": "What is Ansible used for in network automation?",
+    "options": [
+      "A. A Cisco proprietary SDN controller",
+      "B. An agentless configuration management and automation tool that uses YAML playbooks",
+      "C. A database for storing network configurations",
+      "D. A protocol for router-to-router communication"
+    ],
+    "correct": "B",
+    "explanation": "Ansible is an open-source, agentless automation tool that uses YAML playbooks to define automation tasks. It connects to network devices via SSH or APIs. Network modules (cisco.ios.ios_config, etc.) enable Cisco IOS configuration. It doesn't require software installed on managed devices.",
+    "tags": [
+      "Ansible",
+      "automation-tools",
+      "YAML-playbooks"
+    ],
+    "reference": "Odom CCNA v2 Ch.18"
+  },
+  {
+    "id": "au-010",
+    "domain": "automation",
+    "objective": "6.6",
+    "difficulty": "medium",
+    "text": "Cisco DNA Center (now Catalyst Center) uses which API type for northbound integration?",
+    "options": [
+      "A. SNMP only",
+      "B. REST API using JSON over HTTPS",
+      "C. NETCONF only",
+      "D. OpenFlow"
+    ],
+    "correct": "B",
+    "explanation": "Cisco DNA Center (Catalyst Center) exposes a REST API (northbound) using JSON over HTTPS. External systems (ITSM, custom apps) interact with DNA Center via REST calls to provision devices, run assurance, and manage policies. Southbound, DNA Center uses NETCONF/YANG and SSH to program devices.",
+    "tags": [
+      "DNA-Center",
+      "REST-API",
+      "northbound",
+      "Cisco"
+    ],
+    "reference": "Odom CCNA v2 Ch.16"
+  },
+  {
+    "id": "au-011",
+    "domain": "automation",
+    "objective": "6.3",
+    "difficulty": "hard",
+    "text": "A REST API returns HTTP status code 404. What does this indicate?",
+    "options": [
+      "A. The request was successful",
+      "B. The server encountered an error processing the request",
+      "C. The requested resource was not found",
+      "D. The client is not authenticated"
+    ],
+    "correct": "C",
+    "explanation": "HTTP status codes: 2xx (success: 200 OK, 201 Created), 3xx (redirection), 4xx (client error: 400 Bad Request, 401 Unauthorized, 403 Forbidden, 404 Not Found), 5xx (server error: 500 Internal Server Error). 404 means the requested URL/resource doesn't exist on the server.",
+    "tags": [
+      "REST-API",
+      "HTTP-status-codes",
+      "404"
+    ],
+    "reference": "Odom CCNA v2 Ch.18"
+  },
+  {
+    "id": "au-012",
+    "domain": "automation",
+    "objective": "6.1",
+    "difficulty": "medium",
+    "text": "What is the difference between a traditional network device and a controller-based (SDN) network architecture?",
+    "options": [
+      "A. Traditional networks have no control plane; SDN adds one",
+      "B. Traditional networks have distributed control planes in each device; SDN centralizes control in a controller",
+      "C. SDN removes the data plane from network devices",
+      "D. Traditional networks use YANG; SDN uses SNMP"
+    ],
+    "correct": "B",
+    "explanation": "In traditional networking, each device independently runs routing/switching protocols and makes forwarding decisions (distributed control plane). In SDN, a centralized controller has a global network view and programs all devices' data planes via southbound APIs. This enables consistent policy, programmability, and automation.",
+    "tags": [
+      "SDN",
+      "traditional-networking",
+      "control-plane",
+      "distributed"
+    ],
+    "reference": "Odom CCNA v2 Ch.15"
+  },
+  {
+    "id": "au-013",
+    "domain": "automation",
+    "objective": "6.2",
+    "difficulty": "medium",
+    "text": "What is the southbound API in an SDN architecture?",
+    "options": [
+      "A. The API between the SDN controller and applications",
+      "B. The API between the SDN controller and network devices it manages",
+      "C. The management GUI interface",
+      "D. The protocol between two SDN controllers"
+    ],
+    "correct": "B",
+    "explanation": "In SDN, the northbound API allows applications to communicate with the controller. The southbound API allows the controller to communicate with and program network devices. OpenFlow is a classic southbound API example. NETCONF/YANG is used as a southbound API in modern SDN implementations.",
+    "tags": [
+      "SDN",
+      "southbound-API",
+      "northbound-API",
+      "OpenFlow"
+    ],
+    "reference": "Odom CCNA v2 Ch.15"
+  },
+  {
+    "id": "au-014",
+    "domain": "automation",
+    "objective": "6.3",
+    "difficulty": "medium",
+    "text": "Which statement about JSON is correct?",
+    "options": [
+      "A. JSON uses indentation to define structure (like Python)",
+      "B. JSON arrays are enclosed in square brackets []",
+      "C. JSON requires a schema file to be valid",
+      "D. JSON cannot represent nested objects"
+    ],
+    "correct": "B",
+    "explanation": "JSON syntax: Objects use {} with key-value pairs. Arrays use []. Values can be strings, numbers, booleans, null, objects, or arrays. Keys must be quoted strings. JSON can represent deeply nested structures. YAML uses indentation; JSON uses braces/brackets.",
+    "tags": [
+      "JSON",
+      "syntax",
+      "data-formats"
+    ],
+    "reference": "Odom CCNA v2 Ch.18"
+  },
+  {
+    "id": "au-015",
+    "domain": "automation",
+    "objective": "6.4",
+    "difficulty": "hard",
+    "text": "What is the key difference between NETCONF and RESTCONF?",
+    "options": [
+      "A. NETCONF uses JSON; RESTCONF uses XML",
+      "B. NETCONF uses SSH/XML; RESTCONF uses HTTP/HTTPS with JSON or XML",
+      "C. RESTCONF is older and deprecated",
+      "D. NETCONF is for data retrieval only; RESTCONF supports configuration"
+    ],
+    "correct": "B",
+    "explanation": "NETCONF: SSH transport (port 830), XML encoding, RPC-style operations (get-config, edit-config). RESTCONF: HTTP/HTTPS transport, JSON or XML encoding, RESTful operations (GET, POST, PUT, PATCH, DELETE). RESTCONF is defined in RFC 8040 and is easier to use with standard REST tools.",
+    "tags": [
+      "NETCONF",
+      "RESTCONF",
+      "comparison"
+    ],
+    "reference": "Odom CCNA v2 Ch.18"
+  },
+  {
+    "id": "au-016",
+    "domain": "automation",
+    "objective": "6.5",
+    "difficulty": "medium",
+    "text": "What is a Python library commonly used for network automation that connects to Cisco devices via SSH?",
+    "options": [
+      "A. Django",
+      "B. Flask",
+      "C. Netmiko",
+      "D. Requests"
+    ],
+    "correct": "C",
+    "explanation": "Netmiko is a Python library that simplifies SSH connections to network devices, supporting Cisco IOS, IOS-XE, NX-OS, and many other vendors. It handles the SSH session, device prompts, and command sending. The 'requests' library is for HTTP/REST APIs.",
+    "tags": [
+      "Python",
+      "Netmiko",
+      "SSH",
+      "automation"
+    ],
+    "reference": "Odom CCNA v2 Ch.18"
+  },
+  {
+    "id": "au-017",
+    "domain": "automation",
+    "objective": "6.6",
+    "difficulty": "medium",
+    "text": "What is Cisco Meraki's management model?",
+    "options": [
+      "A. On-premise controller deployed in the data center",
+      "B. Cloud-managed — all management done through the Meraki cloud dashboard",
+      "C. CLI-only management via SSH",
+      "D. Distributed control plane with no central management"
+    ],
+    "correct": "B",
+    "explanation": "Cisco Meraki uses a cloud-managed model — all devices are managed through the Meraki cloud dashboard (dashboard.meraki.com). Devices 'phone home' to the cloud for configuration and reporting. The management plane is cloud-based; the data plane runs locally on the devices. No on-premise controller needed.",
+    "tags": [
+      "Meraki",
+      "cloud-managed",
+      "dashboard"
+    ],
+    "reference": "Odom CCNA v2 Ch.16"
+  },
+  {
+    "id": "au-018",
+    "domain": "automation",
+    "objective": "6.1",
+    "difficulty": "easy",
+    "text": "What is the main limitation of traditional CLI-based network management at scale?",
+    "options": [
+      "A. CLI is too slow for large data transfers",
+      "B. CLI is not encrypted",
+      "C. Manual CLI configuration is error-prone, time-consuming, and inconsistent across thousands of devices",
+      "D. CLI doesn't support IPv6"
+    ],
+    "correct": "C",
+    "explanation": "Manual CLI configuration doesn't scale well: it's slow, error-prone (typos, missed commands), difficult to audit, and produces inconsistent configurations across large fleets. Automation tools (Ansible, Python, REST APIs) enable consistent, repeatable, version-controlled configurations.",
+    "tags": [
+      "automation",
+      "CLI-limitations",
+      "scalability"
+    ],
+    "reference": "Odom CCNA v2 Ch.18"
+  },
+  {
+    "id": "au-019",
+    "domain": "automation",
+    "objective": "6.3",
+    "difficulty": "medium",
+    "text": "An API call uses the URL: GET /network/devices?limit=10. What does the '?limit=10' part represent?",
+    "options": [
+      "A. A path parameter identifying a specific device",
+      "B. A query parameter that filters or modifies the request",
+      "C. An HTTP header",
+      "D. The API authentication token"
+    ],
+    "correct": "B",
+    "explanation": "In REST APIs: Path parameters (/devices/{deviceId}) identify specific resources. Query parameters (?key=value) filter, sort, or paginate results. Headers pass authentication tokens and content-type. Request body (POST/PUT/PATCH) contains the resource data. ?limit=10 means 'return at most 10 results'.",
+    "tags": [
+      "REST-API",
+      "query-parameters",
+      "URL-structure"
+    ],
+    "reference": "Odom CCNA v2 Ch.18"
+  },
+  {
+    "id": "au-020",
+    "domain": "automation",
+    "objective": "6.2",
+    "difficulty": "medium",
+    "text": "In the context of network programmability, what does 'intent-based networking' (IBN) mean?",
+    "options": [
+      "A. The network engineer writes low-level CLI commands for each device",
+      "B. The administrator specifies desired business outcomes and the system translates them to device configurations automatically",
+      "C. Network devices negotiate configurations with each other without human input",
+      "D. A protocol that automatically discovers all network devices"
+    ],
+    "correct": "B",
+    "explanation": "Intent-Based Networking (IBN) allows administrators to define 'what' they want the network to do (intent/policy), and the system automatically figures out 'how' to configure devices to achieve that outcome. Cisco DNA Center/Catalyst Center is an IBN platform. It uses AI/ML to verify the network is achieving the stated intent.",
+    "tags": [
+      "IBN",
+      "intent-based-networking",
+      "DNA-Center"
+    ],
+    "reference": "Odom CCNA v2 Ch.16"
+  },
+  {
+    "id": "au-021",
+    "domain": "automation",
+    "objective": "6.5",
+    "difficulty": "medium",
+    "text": "What does the following Python snippet do with a Cisco device? `net_connect.send_command('show ip route')`",
+    "options": [
+      "A. Configures the routing table",
+      "B. Sends the 'show ip route' command and returns the output as a string",
+      "C. Reloads the router",
+      "D. Saves the running configuration"
+    ],
+    "correct": "B",
+    "explanation": "In Netmiko (and similar libraries), send_command() sends a show command to the device and returns the output as a string that can be parsed or printed. To configure devices, use send_config_set(). The connection (net_connect) is established using ConnectHandler with device type, IP, username, and password.",
+    "tags": [
+      "Python",
+      "Netmiko",
+      "send_command",
+      "automation"
+    ],
+    "reference": "Odom CCNA v2 Ch.18"
+  },
+  {
+    "id": "au-022",
+    "domain": "automation",
+    "objective": "6.6",
+    "difficulty": "medium",
+    "text": "Which Cisco platform provides network assurance by continuously monitoring that the network is operating as intended?",
+    "options": [
+      "A. Cisco vManage",
+      "B. Cisco DNA Center (Catalyst Center)",
+      "C. Cisco ISE",
+      "D. Cisco FMC"
+    ],
+    "correct": "B",
+    "explanation": "Cisco DNA Center (now Catalyst Center) provides Network Assurance: it monitors network health, uses ML to detect anomalies, correlates events with application performance, and verifies the network achieves the stated business intent. vManage is for SD-WAN, ISE is for identity/NAC, FMC is for firewalls.",
+    "tags": [
+      "DNA-Center",
+      "network-assurance",
+      "Cisco"
+    ],
+    "reference": "Odom CCNA v2 Ch.16"
+  },
+  {
+    "id": "au-023",
+    "domain": "automation",
+    "objective": "6.3",
+    "difficulty": "hard",
+    "text": "Which is a valid JSON representation of an interface with IP 10.1.1.1/24?",
+    "options": [
+      "A. interface: { ip: 10.1.1.1, mask: 255.255.255.0 }",
+      "B. {\"interface\": {\"ip\": \"10.1.1.1\", \"mask\": \"255.255.255.0\"}}",
+      "C. <interface><ip>10.1.1.1</ip><mask>255.255.255.0</mask></interface>",
+      "D. interface:\n  ip: 10.1.1.1\n  mask: 255.255.255.0"
+    ],
+    "correct": "B",
+    "explanation": "Valid JSON requires: all keys quoted with double quotes, string values quoted, numbers unquoted, proper braces/brackets. Option A has unquoted keys (JavaScript object literal, not JSON). Option C is XML. Option D is YAML. Only Option B is valid JSON.",
+    "tags": [
+      "JSON",
+      "syntax",
+      "validation"
+    ],
+    "reference": "Odom CCNA v2 Ch.18"
+  },
+  {
+    "id": "au-024",
+    "domain": "automation",
+    "objective": "6.1",
+    "difficulty": "medium",
+    "text": "What is configuration drift?",
+    "options": [
+      "A. The gradual degradation of network hardware over time",
+      "B. Unintended, undocumented changes to device configurations that deviate from the desired state",
+      "C. The automatic update of configuration files by NETCONF",
+      "D. The process of migrating configurations from old to new hardware"
+    ],
+    "correct": "B",
+    "explanation": "Configuration drift occurs when manual changes are made to devices over time that deviate from the documented, desired configuration baseline. This creates inconsistency, security gaps, and troubleshooting difficulty. Automation tools like Ansible address drift by enforcing desired state (idempotent configuration).",
+    "tags": [
+      "configuration-drift",
+      "automation",
+      "desired-state"
+    ],
+    "reference": "Odom CCNA v2 Ch.18"
+  },
+  {
+    "id": "au-025",
+    "domain": "automation",
+    "objective": "6.4",
+    "difficulty": "hard",
+    "text": "What is the difference between SNMP and NETCONF for network device management?",
+    "options": [
+      "A. SNMP is newer; NETCONF is legacy",
+      "B. NETCONF is configuration-focused with transactional commits and rollback; SNMP is primarily for monitoring",
+      "C. SNMP uses JSON; NETCONF uses CSV",
+      "D. They are functionally identical"
+    ],
+    "correct": "B",
+    "explanation": "SNMP: polling-based monitoring, read/write via MIB OIDs, UDP, weak security (v2c). NETCONF: programmatic configuration AND monitoring, XML over SSH, transactional (commit/rollback), supports YANG data models, stronger security. NETCONF is preferred for modern automated configuration; SNMP for legacy monitoring.",
+    "tags": [
+      "NETCONF",
+      "SNMP",
+      "comparison",
+      "configuration-management"
+    ],
+    "reference": "Odom CCNA v2 Ch.18"
+  },
+  {
+    "id": "au-026",
+    "domain": "automation",
+    "objective": "6.1",
+    "difficulty": "easy",
+    "text": "What does REST stand for in the context of network APIs?",
+    "options": [
+      "A. Reliable Extensible State Transfer",
+      "B. Representational State Transfer",
+      "C. Remote Execution and State Tunneling",
+      "D. Resource Exchange Standard Token"
+    ],
+    "correct": "B",
+    "explanation": "REST (Representational State Transfer) is an architectural style for APIs using HTTP methods (GET, POST, PUT, DELETE). RESTful APIs are stateless and use URLs to identify resources.",
+    "tags": [
+      "REST",
+      "API",
+      "HTTP",
+      "automation"
+    ],
+    "reference": "Odom CCNA v2 Ch.19"
+  },
+  {
+    "id": "au-027",
+    "domain": "automation",
+    "objective": "6.1",
+    "difficulty": "medium",
+    "text": "Which HTTP method is used to retrieve data from a REST API?",
+    "options": [
+      "A. POST",
+      "B. PUT",
+      "C. GET",
+      "D. DELETE"
+    ],
+    "correct": "C",
+    "explanation": "GET retrieves resource data (read-only). POST creates a new resource. PUT updates an existing resource. DELETE removes a resource. PATCH partially modifies a resource.",
+    "tags": [
+      "REST",
+      "HTTP",
+      "GET",
+      "CRUD"
+    ],
+    "reference": "Odom CCNA v2 Ch.19"
+  },
+  {
+    "id": "au-028",
+    "domain": "automation",
+    "objective": "6.1",
+    "difficulty": "medium",
+    "text": "What data format is most commonly used in REST API requests and responses?",
+    "options": [
+      "A. XML",
+      "B. YAML",
+      "C. JSON",
+      "D. CSV"
+    ],
+    "correct": "C",
+    "explanation": "JSON (JavaScript Object Notation) is the dominant REST API format due to its human-readable syntax, compact size, and native support in most programming languages. XML is also used but less common.",
+    "tags": [
+      "JSON",
+      "REST",
+      "API",
+      "data-format"
+    ],
+    "reference": "Odom CCNA v2 Ch.19"
+  },
+  {
+    "id": "au-029",
+    "domain": "automation",
+    "objective": "6.1",
+    "difficulty": "easy",
+    "text": "Which JSON structure represents a key-value mapping?",
+    "options": [
+      "A. An array: [value1, value2]",
+      "B. An object: {\"key\": \"value\"}",
+      "C. A string: \"key=value\"",
+      "D. A tuple: (key, value)"
+    ],
+    "correct": "B",
+    "explanation": "JSON objects use curly braces with key-value pairs: {\"hostname\": \"R1\"}. Arrays use square brackets: [\"Gi0/0\", \"Gi0/1\"]. Keys must be strings.",
+    "tags": [
+      "JSON",
+      "object",
+      "key-value",
+      "syntax"
+    ],
+    "reference": "Odom CCNA v2 Ch.19"
+  },
+  {
+    "id": "au-030",
+    "domain": "automation",
+    "objective": "6.2",
+    "difficulty": "medium",
+    "text": "In SDN architecture, what is the function of the southbound interface (SBI)?",
+    "options": [
+      "A. Provides APIs for applications to communicate with the controller",
+      "B. Enables the controller to communicate with and program network devices",
+      "C. Connects controllers in a multi-controller deployment",
+      "D. Provides the GUI for network operators"
+    ],
+    "correct": "B",
+    "explanation": "The SDN southbound interface connects the controller to network devices (data plane). Common SBI protocols: OpenFlow, NETCONF, RESTCONF, gRPC. The northbound interface (NBI) connects to applications.",
+    "tags": [
+      "SDN",
+      "southbound",
+      "controller",
+      "OpenFlow"
+    ],
+    "reference": "Odom CCNA v2 Ch.18"
+  },
+  {
+    "id": "au-031",
+    "domain": "automation",
+    "objective": "6.2",
+    "difficulty": "easy",
+    "text": "What is the primary role of an SDN controller?",
+    "options": [
+      "A. Store configuration backups for all devices",
+      "B. Centralize control plane decision-making and program the data plane",
+      "C. Provide DHCP and DNS services to network devices",
+      "D. Monitor bandwidth utilization only"
+    ],
+    "correct": "B",
+    "explanation": "An SDN controller centralizes the control plane (routing decisions, policies) and uses southbound APIs to program forwarding tables in network devices. Devices become simple packet-forwarding engines.",
+    "tags": [
+      "SDN",
+      "controller",
+      "control-plane",
+      "data-plane"
+    ],
+    "reference": "Odom CCNA v2 Ch.18"
+  },
+  {
+    "id": "au-032",
+    "domain": "automation",
+    "objective": "6.3",
+    "difficulty": "medium",
+    "text": "Which configuration management tool is agentless and uses SSH/HTTPS with YAML-based playbooks?",
+    "options": [
+      "A. Puppet",
+      "B. Chef",
+      "C. Ansible",
+      "D. SaltStack"
+    ],
+    "correct": "C",
+    "explanation": "Ansible is agentless — it connects via SSH or HTTPS without requiring software on managed devices. Playbooks use YAML syntax. Puppet and Chef require agent software on managed nodes.",
+    "tags": [
+      "Ansible",
+      "agentless",
+      "YAML",
+      "automation"
+    ],
+    "reference": "Odom CCNA v2 Ch.19"
+  },
+  {
+    "id": "au-033",
+    "domain": "automation",
+    "objective": "6.3",
+    "difficulty": "medium",
+    "text": "Which configuration management tool uses a 'master-agent' model with a proprietary DSL?",
+    "options": [
+      "A. Ansible",
+      "B. Puppet",
+      "C. Terraform",
+      "D. NETCONF"
+    ],
+    "correct": "B",
+    "explanation": "Puppet uses a master-agent model: the Puppet master holds the catalog; agents on managed nodes pull and apply configurations. It uses its own DSL (Puppet language) for manifests.",
+    "tags": [
+      "Puppet",
+      "master-agent",
+      "configuration",
+      "DSL"
+    ],
+    "reference": "Odom CCNA v2 Ch.19"
+  },
+  {
+    "id": "au-034",
+    "domain": "automation",
+    "objective": "6.3",
+    "difficulty": "medium",
+    "text": "What is the key advantage of configuration management tools over manual CLI configuration?",
+    "options": [
+      "A. Faster CLI response time",
+      "B. Idempotency — applying the same configuration multiple times produces the same result",
+      "C. Automatic hardware upgrades",
+      "D. Elimination of human operators"
+    ],
+    "correct": "B",
+    "explanation": "Idempotency ensures consistent state — running a playbook/manifest multiple times doesn't create duplicates or errors. This enables automated, repeatable, drift-free configuration.",
+    "tags": [
+      "idempotency",
+      "automation",
+      "config-management"
+    ],
+    "reference": "Odom CCNA v2 Ch.19"
+  },
+  {
+    "id": "au-035",
+    "domain": "automation",
+    "objective": "6.1",
+    "difficulty": "hard",
+    "text": "Which protocol uses YANG models and XML encoding to manage network devices over SSH?",
+    "options": [
+      "A. RESTCONF",
+      "B. SNMP",
+      "C. NETCONF",
+      "D. gRPC"
+    ],
+    "correct": "C",
+    "explanation": "NETCONF (RFC 6241) uses YANG data models, XML encoding, and SSH (TCP 830) for configuration management. It supports transactions with commit/rollback. RESTCONF uses HTTP with JSON/XML.",
+    "tags": [
+      "NETCONF",
+      "YANG",
+      "XML",
+      "SSH"
+    ],
+    "reference": "Odom CCNA v2 Ch.19"
+  },
+  {
+    "id": "au-036",
+    "domain": "automation",
+    "objective": "6.1",
+    "difficulty": "medium",
+    "text": "What does YANG stand for in network automation?",
+    "options": [
+      "A. Yet Another Next-generation GUI",
+      "B. Yet Another Next-generation data modeling language",
+      "C. YANG Automation Node Group",
+      "D. Your Automated Network Generator"
+    ],
+    "correct": "B",
+    "explanation": "YANG (Yet Another Next Generation, RFC 6020) is a data modeling language used with NETCONF and RESTCONF. It defines the structure and constraints of configuration and operational data.",
+    "tags": [
+      "YANG",
+      "data-model",
+      "NETCONF",
+      "RFC6020"
+    ],
+    "reference": "Odom CCNA v2 Ch.19"
+  },
+  {
+    "id": "au-037",
+    "domain": "automation",
+    "objective": "6.2",
+    "difficulty": "medium",
+    "text": "Cisco DNA Center is an example of which type of SDN controller?",
+    "options": [
+      "A. Open SDN controller",
+      "B. NFV orchestrator",
+      "C. Intent-based networking controller for enterprise campus/branch",
+      "D. Cloud-only WAN controller"
+    ],
+    "correct": "C",
+    "explanation": "Cisco DNA Center (now Cisco Catalyst Center) is Cisco's intent-based networking platform for enterprise campus and branch. It uses RESTCONF/gRPC to manage Catalyst devices and provides analytics.",
+    "tags": [
+      "Cisco-DNA-Center",
+      "SDN",
+      "intent-based",
+      "enterprise"
+    ],
+    "reference": "Odom CCNA v2 Ch.18"
+  },
+  {
+    "id": "au-038",
+    "domain": "automation",
+    "objective": "6.1",
+    "difficulty": "medium",
+    "text": "Which HTTP status code indicates a successful REST API request that returned data?",
+    "options": [
+      "A. 200 OK",
+      "B. 201 Created",
+      "C. 404 Not Found",
+      "D. 500 Internal Server Error"
+    ],
+    "correct": "A",
+    "explanation": "200 OK is returned for successful GET requests. 201 Created is returned after a successful POST. 400 is Bad Request, 401 is Unauthorized, 404 is Not Found, 500 is server error.",
+    "tags": [
+      "REST",
+      "HTTP",
+      "status-code",
+      "200"
+    ],
+    "reference": "Odom CCNA v2 Ch.19"
+  },
+  {
+    "id": "au-039",
+    "domain": "automation",
+    "objective": "6.3",
+    "difficulty": "hard",
+    "text": "What is the difference between an Ansible playbook and an Ansible role?",
+    "options": [
+      "A. Playbooks are for Linux; roles are for network devices",
+      "B. A playbook is a YAML file defining tasks; a role is a reusable, structured collection of tasks/variables/handlers",
+      "C. Roles require an Ansible Tower license",
+      "D. Playbooks run once; roles run continuously"
+    ],
+    "correct": "B",
+    "explanation": "An Ansible playbook is a YAML file with plays and tasks. A role is a standardized directory structure (tasks/, vars/, handlers/, templates/) that packages related automation for reuse.",
+    "tags": [
+      "Ansible",
+      "playbook",
+      "role",
+      "reusability"
+    ],
+    "reference": "Odom CCNA v2 Ch.19"
+  },
+  {
+    "id": "au-040",
+    "domain": "automation",
+    "objective": "6.2",
+    "difficulty": "medium",
+    "text": "What is an API northbound interface (NBI) in SDN used for?",
+    "options": [
+      "A. Programming the forwarding tables in switches",
+      "B. Connecting the SDN controller to network applications and orchestration systems",
+      "C. Collecting telemetry from network devices",
+      "D. Establishing tunnels between network segments"
+    ],
+    "correct": "B",
+    "explanation": "The northbound interface allows applications (OSS/BSS, orchestrators, analytics platforms) to interact with the SDN controller via REST APIs. Applications express intent; the controller translates to device configurations.",
+    "tags": [
+      "SDN",
+      "northbound",
+      "NBI",
+      "API"
+    ],
+    "reference": "Odom CCNA v2 Ch.18"
+  },
+  {
+    "id": "au-041",
+    "domain": "automation",
+    "objective": "6.1",
+    "difficulty": "easy",
+    "text": "What is the purpose of version control (e.g., Git) in network automation?",
+    "options": [
+      "A. Monitor network device uptime",
+      "B. Track changes to configuration files and automation scripts over time",
+      "C. Distribute configurations via TFTP",
+      "D. Authenticate API requests to network controllers"
+    ],
+    "correct": "B",
+    "explanation": "Version control systems like Git track changes to configuration templates, playbooks, and scripts. This enables rollback, collaboration, change auditing, and CI/CD pipelines for network changes.",
+    "tags": [
+      "git",
+      "version-control",
+      "automation",
+      "IaC"
+    ],
+    "reference": "Odom CCNA v2 Ch.19"
+  },
+  {
+    "id": "au-042",
+    "domain": "automation",
+    "objective": "6.3",
+    "difficulty": "medium",
+    "text": "What is Infrastructure as Code (IaC)?",
+    "options": [
+      "A. Using Python scripts to monitor devices",
+      "B. Managing and provisioning infrastructure through machine-readable definition files",
+      "C. Converting network diagrams to configurations automatically",
+      "D. Storing device configurations in SNMP MIBs"
+    ],
+    "correct": "B",
+    "explanation": "IaC treats infrastructure configuration like software code — stored in version control, peer-reviewed, tested, and deployed automatically. Tools: Ansible, Terraform, Puppet, Chef.",
+    "tags": [
+      "IaC",
+      "infrastructure-as-code",
+      "automation"
+    ],
+    "reference": "Odom CCNA v2 Ch.19"
+  },
+  {
+    "id": "au-043",
+    "domain": "automation",
+    "objective": "6.1",
+    "difficulty": "medium",
+    "text": "Which RESTCONF operation creates or replaces a resource at a specific URI?",
+    "options": [
+      "A. GET",
+      "B. POST",
+      "C. PUT",
+      "D. PATCH"
+    ],
+    "correct": "C",
+    "explanation": "In RESTCONF: GET retrieves, POST creates a subordinate, PUT creates or replaces a complete resource, PATCH partially modifies, DELETE removes. RESTCONF runs over HTTP/HTTPS with JSON or XML.",
+    "tags": [
+      "RESTCONF",
+      "PUT",
+      "HTTP",
+      "operations"
+    ],
+    "reference": "Odom CCNA v2 Ch.19"
+  },
+  {
+    "id": "au-044",
+    "domain": "automation",
+    "objective": "6.2",
+    "difficulty": "hard",
+    "text": "Which type of SDN architecture has each device run its own control plane, but a controller augments decisions without full centralization?",
+    "options": [
+      "A. Centralized SDN",
+      "B. Hybrid SDN",
+      "C. Pure OpenFlow SDN",
+      "D. Reactive SDN"
+    ],
+    "correct": "B",
+    "explanation": "Hybrid SDN keeps distributed control planes on devices for basic operation while a controller provides overlay policies, analytics, or automation. This eases migration from traditional networking.",
+    "tags": [
+      "SDN",
+      "hybrid",
+      "control-plane",
+      "architecture"
+    ],
+    "reference": "Odom CCNA v2 Ch.18"
+  },
+  {
+    "id": "au-045",
+    "domain": "automation",
+    "objective": "6.1",
+    "difficulty": "easy",
+    "text": "What is a Python dictionary equivalent to in JSON?",
+    "options": [
+      "A. A JSON array",
+      "B. A JSON object",
+      "C. A JSON string",
+      "D. A JSON number"
+    ],
+    "correct": "B",
+    "explanation": "A Python dict {\"key\": value} maps directly to a JSON object {\"key\": value}. A Python list maps to a JSON array. Python's json module converts between them with json.loads() and json.dumps().",
+    "tags": [
+      "Python",
+      "JSON",
+      "dictionary",
+      "mapping"
+    ],
+    "reference": "Odom CCNA v2 Ch.19"
+  },
+  {
+    "id": "au-046",
+    "domain": "automation",
+    "objective": "6.3",
+    "difficulty": "medium",
+    "text": "What does the 'idempotent' property mean for a NETCONF edit-config operation?",
+    "options": [
+      "A. The operation is encrypted with AES",
+      "B. Running the same configuration multiple times produces the same end state without errors",
+      "C. The operation requires admin approval",
+      "D. Changes take effect only at the next device reload"
+    ],
+    "correct": "B",
+    "explanation": "Idempotency in NETCONF means applying the same configuration again doesn't create duplicate entries or throw errors. This is essential for automation where playbooks may run repeatedly.",
+    "tags": [
+      "NETCONF",
+      "idempotency",
+      "automation",
+      "config"
+    ],
+    "reference": "Odom CCNA v2 Ch.19"
+  },
+  {
+    "id": "au-047",
+    "domain": "automation",
+    "objective": "6.2",
+    "difficulty": "medium",
+    "text": "What is the purpose of OpenFlow in SDN?",
+    "options": [
+      "A. Provide a REST API between applications and the controller",
+      "B. Define the protocol for a centralized controller to program flow tables in switches",
+      "C. Enable encrypted control-plane communication",
+      "D. Replace BGP in data center fabrics"
+    ],
+    "correct": "B",
+    "explanation": "OpenFlow is a southbound protocol that allows an SDN controller to add, modify, and delete flow entries in the flow tables of OpenFlow-enabled switches, separating the control and data planes.",
+    "tags": [
+      "OpenFlow",
+      "SDN",
+      "southbound",
+      "flow-table"
+    ],
+    "reference": "Odom CCNA v2 Ch.18"
+  },
+  {
+    "id": "au-048",
+    "domain": "automation",
+    "objective": "6.1",
+    "difficulty": "hard",
+    "text": "Which encoding format does NETCONF use for its messages?",
+    "options": [
+      "A. JSON",
+      "B. CSV",
+      "C. XML",
+      "D. YAML"
+    ],
+    "correct": "C",
+    "explanation": "NETCONF uses XML encoding for its RPC messages (get, get-config, edit-config, etc.) over SSH (port 830). RESTCONF, by contrast, supports both JSON and XML over HTTP/HTTPS.",
+    "tags": [
+      "NETCONF",
+      "XML",
+      "encoding",
+      "RFC6241"
+    ],
+    "reference": "Odom CCNA v2 Ch.19"
+  },
+  {
+    "id": "au-049",
+    "domain": "automation",
+    "objective": "6.3",
+    "difficulty": "easy",
+    "text": "Which configuration management tool from HashiCorp focuses on provisioning infrastructure rather than configuration management?",
+    "options": [
+      "A. Ansible",
+      "B. Puppet",
+      "C. Terraform",
+      "D. Chef"
+    ],
+    "correct": "C",
+    "explanation": "Terraform is an IaC tool for provisioning infrastructure (VMs, cloud resources, networks) using declarative HCL files. Ansible/Puppet/Chef focus on configuring existing systems.",
+    "tags": [
+      "Terraform",
+      "IaC",
+      "provisioning",
+      "HashiCorp"
+    ],
+    "reference": "Odom CCNA v2 Ch.19"
+  },
+  {
+    "id": "au-050",
+    "domain": "automation",
+    "objective": "6.2",
+    "difficulty": "medium",
+    "text": "What does Cisco SD-WAN (formerly Viptela) use as its centralized management component?",
+    "options": [
+      "A. Cisco APIC",
+      "B. Cisco DNA Center",
+      "C. vManage",
+      "D. OpenDaylight"
+    ],
+    "correct": "C",
+    "explanation": "Cisco SD-WAN's architecture: vManage (management NBI), vSmart (control plane/policies), vBond (orchestrator/ZTP), and vEdge/cEdge (data plane WAN routers). vManage provides centralized GUI and REST API.",
+    "tags": [
+      "SD-WAN",
+      "vManage",
+      "Cisco",
+      "WAN"
+    ],
+    "reference": "Odom CCNA v2 Ch.18"
+  }
+]

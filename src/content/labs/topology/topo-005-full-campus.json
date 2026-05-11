@@ -1,0 +1,146 @@
+{
+  "id": "topo-005",
+  "title": "Campus Network: VLANs + OSPF Capstone",
+  "domain": "ip-connectivity",
+  "difficulty": "advanced",
+  "estimatedMinutes": 50,
+  "description": "A full campus network scenario: configure VLANs on the access switch, trunking to the core switch, inter-VLAN routing on the router, and OSPF to the WAN router.",
+  "objectives": ["2.1", "2.2", "3.4", "3.5", "5.3"],
+  "devices": [
+    {
+      "id": "WAN-R",
+      "type": "router",
+      "label": "WAN\nRouter",
+      "position": { "x": 400, "y": 50 },
+      "initialState": {
+        "hostname": "WAN-R",
+        "mode": "user",
+        "interfaces": {
+          "GigabitEthernet0/0": { "name": "GigabitEthernet0/0", "ip": "10.0.0.2", "mask": "255.255.255.252", "status": "up" },
+          "Loopback0": { "name": "Loopback0", "ip": "8.8.8.1", "mask": "255.255.255.255", "status": "up" }
+        }
+      }
+    },
+    {
+      "id": "CORE-R",
+      "type": "router",
+      "label": "CORE-R1",
+      "position": { "x": 400, "y": 220 },
+      "initialState": {
+        "hostname": "Router",
+        "mode": "user",
+        "interfaces": {
+          "GigabitEthernet0/0": { "name": "GigabitEthernet0/0", "ip": "10.0.0.1", "mask": "255.255.255.252", "status": "up" }
+        }
+      }
+    },
+    {
+      "id": "SW1",
+      "type": "switch",
+      "label": "SW1",
+      "position": { "x": 400, "y": 390 },
+      "initialState": {
+        "hostname": "Switch",
+        "mode": "user"
+      }
+    },
+    {
+      "id": "PC-SALES",
+      "type": "pc",
+      "label": "Sales PC\nVLAN 10",
+      "position": { "x": 150, "y": 530 }
+    },
+    {
+      "id": "PC-ENG",
+      "type": "pc",
+      "label": "Eng PC\nVLAN 20",
+      "position": { "x": 650, "y": 530 }
+    }
+  ],
+  "links": [
+    { "id": "e1", "source": "WAN-R", "target": "CORE-R", "label": "10.0.0.0/30 WAN" },
+    { "id": "e2", "source": "CORE-R", "target": "SW1", "label": "Trunk Gi0/1" },
+    { "id": "e3", "source": "SW1", "target": "PC-SALES", "label": "Fa0/1 VLAN10" },
+    { "id": "e4", "source": "SW1", "target": "PC-ENG", "label": "Fa0/6 VLAN20" }
+  ],
+  "scenario": "Campus network: WAN-R has a loopback (8.8.8.1/32) simulating the internet. CORE-R1 routes between campus VLANs and the WAN. SW1 provides access for Sales (VLAN 10) and Engineering (VLAN 20). Configure: SW1 VLANs and ports, CORE-R1 subinterfaces and OSPF, security on CORE-R1.",
+  "tasks": [
+    {
+      "deviceId": "SW1",
+      "id": "t1",
+      "description": "Set SW1 hostname to ACCESS-SW1",
+      "hint": "hostname ACCESS-SW1",
+      "check": { "type": "hostname", "description": "SW1 hostname", "expected": { "hostname": "ACCESS-SW1" } }
+    },
+    {
+      "deviceId": "SW1",
+      "id": "t2",
+      "description": "Create VLAN 10 named SALES on SW1",
+      "hint": "vlan 10 → name SALES",
+      "check": { "type": "vlan_name", "description": "VLAN 10 SALES", "expected": { "id": 10, "name": "SALES" } }
+    },
+    {
+      "deviceId": "SW1",
+      "id": "t3",
+      "description": "Create VLAN 20 named ENGINEERING on SW1",
+      "hint": "vlan 20 → name ENGINEERING",
+      "check": { "type": "vlan_name", "description": "VLAN 20 ENGINEERING", "expected": { "id": 20, "name": "ENGINEERING" } }
+    },
+    {
+      "deviceId": "SW1",
+      "id": "t4",
+      "description": "Set Gi0/1 (uplink to CORE-R1) as trunk",
+      "hint": "interface GigabitEthernet0/1 → switchport mode trunk → no shutdown",
+      "check": { "type": "switchport_mode", "description": "SW1 Gi0/1 trunk", "expected": { "interface": "GigabitEthernet0/1", "mode": "trunk" } }
+    },
+    {
+      "deviceId": "SW1",
+      "id": "t5",
+      "description": "Assign Fa0/1 to VLAN 10 (Sales)",
+      "hint": "interface FastEthernet0/1 → switchport mode access → switchport access vlan 10",
+      "check": { "type": "switchport_access_vlan", "description": "Fa0/1 VLAN 10", "expected": { "interface": "FastEthernet0/1", "vlan": 10 } }
+    },
+    {
+      "deviceId": "SW1",
+      "id": "t6",
+      "description": "Assign Fa0/6 to VLAN 20 (Engineering)",
+      "hint": "interface FastEthernet0/6 → switchport mode access → switchport access vlan 20",
+      "check": { "type": "switchport_access_vlan", "description": "Fa0/6 VLAN 20", "expected": { "interface": "FastEthernet0/6", "vlan": 20 } }
+    },
+    {
+      "deviceId": "CORE-R",
+      "id": "t7",
+      "description": "Set CORE-R1 hostname to CORE-R1",
+      "hint": "hostname CORE-R1",
+      "check": { "type": "hostname", "description": "Router hostname CORE-R1", "expected": { "hostname": "CORE-R1" } }
+    },
+    {
+      "deviceId": "CORE-R",
+      "id": "t8",
+      "description": "Configure Gi0/1.10 with dot1q 10 and IP 192.168.10.1/24",
+      "hint": "interface Gi0/1.10 → encapsulation dot1q 10 → ip address 192.168.10.1 255.255.255.0",
+      "check": { "type": "interface_ip", "description": "CORE-R1 Gi0/1.10 IP", "expected": { "interface": "GigabitEthernet0/1.10", "ip": "192.168.10.1", "mask": "255.255.255.0" } }
+    },
+    {
+      "deviceId": "CORE-R",
+      "id": "t9",
+      "description": "Configure Gi0/1.20 with dot1q 20 and IP 192.168.20.1/24",
+      "hint": "interface Gi0/1.20 → encapsulation dot1q 20 → ip address 192.168.20.1 255.255.255.0",
+      "check": { "type": "interface_ip", "description": "CORE-R1 Gi0/1.20 IP", "expected": { "interface": "GigabitEthernet0/1.20", "ip": "192.168.20.1", "mask": "255.255.255.0" } }
+    },
+    {
+      "deviceId": "CORE-R",
+      "id": "t10",
+      "description": "Configure OSPF 1 on CORE-R1: advertise 10.0.0.0/30 and 192.168.0.0/16 summary in area 0",
+      "hint": "router ospf 1 → network 10.0.0.0 0.0.0.3 area 0 → network 192.168.0.0 0.0.255.255 area 0",
+      "check": { "type": "ospf_network", "description": "CORE-R1 OSPF 10.0.0.0", "expected": { "pid": 1, "network": "10.0.0.0", "area": 0 } }
+    },
+    {
+      "deviceId": "CORE-R",
+      "id": "t11",
+      "description": "Set CORE-R1 enable secret",
+      "hint": "enable secret Campus@Sec1",
+      "check": { "type": "enable_secret", "description": "CORE-R1 enable secret", "expected": {} }
+    }
+  ]
+}

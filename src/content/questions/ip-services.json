@@ -1,0 +1,1078 @@
+[
+  {
+    "id": "is-001",
+    "domain": "ip-services",
+    "objective": "4.1",
+    "difficulty": "easy",
+    "text": "What is the primary function of NAT?",
+    "options": [
+      "A. To assign private IP addresses to hosts",
+      "B. To translate private IP addresses to public IP addresses for Internet access",
+      "C. To encrypt traffic between internal hosts",
+      "D. To route traffic between VLANs"
+    ],
+    "correct": "B",
+    "explanation": "NAT (Network Address Translation) translates private (RFC 1918) IP addresses to public IP addresses, allowing multiple internal hosts to share a single public IP. This conserves IPv4 address space and provides a degree of security by hiding internal addressing.",
+    "tags": [
+      "NAT",
+      "private-addressing",
+      "RFC1918"
+    ],
+    "reference": "Odom CCNA v2 Ch.7"
+  },
+  {
+    "id": "is-002",
+    "domain": "ip-services",
+    "objective": "4.1",
+    "difficulty": "medium",
+    "text": "What is PAT (Port Address Translation)?",
+    "options": [
+      "A. A form of NAT that maps multiple private IPs to multiple public IPs",
+      "B. A form of NAT that maps multiple private IPs to a single public IP using different source port numbers",
+      "C. A protocol that changes the destination port in a packet",
+      "D. A Cisco-proprietary NAT implementation"
+    ],
+    "correct": "B",
+    "explanation": "PAT (also called NAT overload) maps multiple internal private IP addresses to a single public IP address by tracking unique source port numbers for each session. This allows hundreds of hosts to share one public IP. Most home routers use PAT.",
+    "tags": [
+      "PAT",
+      "NAT-overload",
+      "port-translation"
+    ],
+    "reference": "Odom CCNA v2 Ch.7"
+  },
+  {
+    "id": "is-003",
+    "domain": "ip-services",
+    "objective": "4.2",
+    "difficulty": "easy",
+    "text": "What does DHCP provide to clients?",
+    "options": [
+      "A. Domain name resolution",
+      "B. Automatic IP address, subnet mask, default gateway, and DNS server assignment",
+      "C. Encrypted tunnels for VPN access",
+      "D. Physical MAC address assignment"
+    ],
+    "correct": "B",
+    "explanation": "DHCP (Dynamic Host Configuration Protocol) automatically provides clients with: IP address, subnet mask, default gateway, DNS server(s), and lease time. The DORA process (Discover, Offer, Request, Acknowledge) is used to assign addresses.",
+    "tags": [
+      "DHCP",
+      "DORA",
+      "automatic-addressing"
+    ],
+    "reference": "Odom CCNA v2 Ch.7"
+  },
+  {
+    "id": "is-004",
+    "domain": "ip-services",
+    "objective": "4.2",
+    "difficulty": "medium",
+    "text": "A host is in a different subnet than the DHCP server. Which feature allows DHCP to work across routers?",
+    "options": [
+      "A. DHCP Snooping",
+      "B. DHCP Relay Agent (ip helper-address)",
+      "C. DHCP Proxy",
+      "D. DHCP Broadcast Forward"
+    ],
+    "correct": "B",
+    "explanation": "A DHCP Relay Agent (configured with 'ip helper-address [DHCP-server-IP]' on the router interface facing the client) forwards DHCP broadcast messages as unicast to the DHCP server. Without this, DHCP broadcasts cannot cross router boundaries.",
+    "tags": [
+      "DHCP",
+      "relay-agent",
+      "ip-helper-address"
+    ],
+    "reference": "Odom CCNA v2 Ch.7"
+  },
+  {
+    "id": "is-005",
+    "domain": "ip-services",
+    "objective": "4.3",
+    "difficulty": "easy",
+    "text": "What does DNS resolve?",
+    "options": [
+      "A. IP addresses to MAC addresses",
+      "B. Domain names to IP addresses",
+      "C. VLAN IDs to subnet addresses",
+      "D. Router IDs to interface addresses"
+    ],
+    "correct": "B",
+    "explanation": "DNS (Domain Name System) translates human-readable domain names (e.g., www.cisco.com) to IP addresses (e.g., 72.163.4.161). It uses UDP port 53 for queries and TCP port 53 for zone transfers. Without DNS, users would need to memorize IP addresses.",
+    "tags": [
+      "DNS",
+      "name-resolution",
+      "UDP-53"
+    ],
+    "reference": "Odom CCNA v2 Ch.7"
+  },
+  {
+    "id": "is-006",
+    "domain": "ip-services",
+    "objective": "4.4",
+    "difficulty": "medium",
+    "text": "What is SNMP used for?",
+    "options": [
+      "A. Sending emails between network devices",
+      "B. Monitoring and managing network devices by collecting statistics and sending alerts",
+      "C. Synchronizing time across network devices",
+      "D. Encrypting management traffic to network devices"
+    ],
+    "correct": "B",
+    "explanation": "SNMP (Simple Network Management Protocol) enables centralized monitoring and management of network devices. An NMS (Network Management System) polls SNMP agents on devices to collect MIB data (CPU, bandwidth, errors). Devices can also send unsolicited SNMP traps to the NMS for alerts.",
+    "tags": [
+      "SNMP",
+      "NMS",
+      "network-management"
+    ],
+    "reference": "Odom CCNA v2 Ch.8"
+  },
+  {
+    "id": "is-007",
+    "domain": "ip-services",
+    "objective": "4.4",
+    "difficulty": "medium",
+    "text": "What is the difference between SNMP v2c and SNMPv3?",
+    "options": [
+      "A. v2c supports IPv6; v3 does not",
+      "B. SNMPv3 adds authentication and encryption; v2c uses community strings for weak security",
+      "C. v2c uses UDP; v3 uses TCP",
+      "D. SNMPv3 removed trap support"
+    ],
+    "correct": "B",
+    "explanation": "SNMPv2c uses community strings (essentially plain-text passwords like 'public' or 'private') with no encryption. SNMPv3 adds three security levels: noAuthNoPriv, authNoPriv (MD5/SHA authentication), and authPriv (AES/DES encryption + authentication). SNMPv3 is the recommended version for production.",
+    "tags": [
+      "SNMP",
+      "SNMPv3",
+      "security",
+      "encryption"
+    ],
+    "reference": "Odom CCNA v2 Ch.8"
+  },
+  {
+    "id": "is-008",
+    "domain": "ip-services",
+    "objective": "4.5",
+    "difficulty": "easy",
+    "text": "What is Syslog used for?",
+    "options": [
+      "A. Synchronizing time between devices",
+      "B. Sending real-time log messages from network devices to a centralized server",
+      "C. Monitoring SNMP traps",
+      "D. Configuring devices remotely"
+    ],
+    "correct": "B",
+    "explanation": "Syslog is a standard protocol for sending log messages from network devices to a centralized Syslog server. It uses UDP port 514. Logs have severity levels 0 (Emergency) to 7 (Debug). 'logging [server-ip]' configures the syslog destination in Cisco IOS.",
+    "tags": [
+      "Syslog",
+      "logging",
+      "UDP-514"
+    ],
+    "reference": "Odom CCNA v2 Ch.8"
+  },
+  {
+    "id": "is-009",
+    "domain": "ip-services",
+    "objective": "4.5",
+    "difficulty": "medium",
+    "text": "What Syslog severity level number corresponds to 'Error' messages?",
+    "options": [
+      "A. 0",
+      "B. 2",
+      "C. 3",
+      "D. 6"
+    ],
+    "correct": "C",
+    "explanation": "Syslog severity levels: 0=Emergency, 1=Alert, 2=Critical, 3=Error, 4=Warning, 5=Notice, 6=Informational, 7=Debug. Memory aid: 'Every Awful Cisco Engineer Will Need Daily Doses' (levels 0-7). Lower numbers = more severe.",
+    "tags": [
+      "Syslog",
+      "severity-levels",
+      "logging"
+    ],
+    "reference": "Odom CCNA v2 Ch.8"
+  },
+  {
+    "id": "is-010",
+    "domain": "ip-services",
+    "objective": "4.6",
+    "difficulty": "easy",
+    "text": "What is NTP used for?",
+    "options": [
+      "A. Network topology mapping",
+      "B. Synchronizing clocks across network devices",
+      "C. Transferring files between routers",
+      "D. Providing network address translation"
+    ],
+    "correct": "B",
+    "explanation": "NTP (Network Time Protocol) synchronizes clocks on network devices. Accurate time is critical for log correlation, certificate validation, and security event correlation. NTP uses UDP port 123 and operates in a hierarchical stratum system (stratum 0 = atomic clock, stratum 1 = directly connected to stratum 0, etc.).",
+    "tags": [
+      "NTP",
+      "time-synchronization",
+      "UDP-123"
+    ],
+    "reference": "Odom CCNA v2 Ch.8"
+  },
+  {
+    "id": "is-011",
+    "domain": "ip-services",
+    "objective": "4.7",
+    "difficulty": "medium",
+    "text": "Which type of NAT maps one private IP address to one specific public IP address?",
+    "options": [
+      "A. Dynamic NAT",
+      "B. PAT",
+      "C. Static NAT",
+      "D. NAT Overload"
+    ],
+    "correct": "C",
+    "explanation": "Static NAT creates a permanent one-to-one mapping between a private IP and a public IP. It is used when internal servers (web, mail) must be reachable from the Internet at a consistent public IP. Dynamic NAT uses a pool of public IPs assigned temporarily. PAT/Overload uses one public IP with port tracking.",
+    "tags": [
+      "static-NAT",
+      "one-to-one",
+      "server-publishing"
+    ],
+    "reference": "Odom CCNA v2 Ch.7"
+  },
+  {
+    "id": "is-012",
+    "domain": "ip-services",
+    "objective": "4.1",
+    "difficulty": "hard",
+    "text": "On a Cisco router, which command defines the inside NAT interface?",
+    "options": [
+      "A. ip nat inside (on the interface facing internal hosts)",
+      "B. ip nat outside (on the interface facing internal hosts)",
+      "C. nat inside enable",
+      "D. ip nat pool inside"
+    ],
+    "correct": "A",
+    "explanation": "'ip nat inside' is configured on the router interface facing the internal (private) network. 'ip nat outside' is configured on the interface facing the external (public) network (e.g., toward the ISP). NAT requires both inside and outside designations to function.",
+    "tags": [
+      "NAT",
+      "inside",
+      "outside",
+      "IOS-configuration"
+    ],
+    "reference": "Odom CCNA v2 Ch.7"
+  },
+  {
+    "id": "is-013",
+    "domain": "ip-services",
+    "objective": "4.8",
+    "difficulty": "medium",
+    "text": "TFTP is used on Cisco devices for which common purpose?",
+    "options": [
+      "A. Sending email alerts from the router",
+      "B. Transferring IOS images and configuration files to/from a TFTP server",
+      "C. Synchronizing router clocks",
+      "D. Authenticating management users"
+    ],
+    "correct": "B",
+    "explanation": "TFTP (Trivial File Transfer Protocol, UDP port 69) is used on Cisco devices to back up and restore IOS images and configuration files. FTP (TCP 20/21) is also supported and adds authentication. TFTP has no authentication — suitable only for trusted networks.",
+    "tags": [
+      "TFTP",
+      "IOS-upgrade",
+      "file-transfer"
+    ],
+    "reference": "Odom CCNA v2 Ch.8"
+  },
+  {
+    "id": "is-014",
+    "domain": "ip-services",
+    "objective": "4.9",
+    "difficulty": "medium",
+    "text": "What is the purpose of QoS?",
+    "options": [
+      "A. To encrypt sensitive traffic",
+      "B. To prioritize traffic types so critical applications get bandwidth when the network is congested",
+      "C. To balance traffic evenly between all applications",
+      "D. To block unwanted traffic types"
+    ],
+    "correct": "B",
+    "explanation": "QoS (Quality of Service) mechanisms classify, mark, and prioritize network traffic. Voice and video traffic are delay-sensitive and get higher priority queues. Best-effort data gets lower priority. QoS prevents VoIP calls from dropping due to bulk file transfers consuming all bandwidth.",
+    "tags": [
+      "QoS",
+      "traffic-prioritization",
+      "voice"
+    ],
+    "reference": "Odom CCNA v2 Ch.17"
+  },
+  {
+    "id": "is-015",
+    "domain": "ip-services",
+    "objective": "4.2",
+    "difficulty": "hard",
+    "text": "A host receives the IP address 169.254.10.5. What does this indicate?",
+    "options": [
+      "A. The host received a valid DHCP address",
+      "B. The host is configured with a static IP",
+      "C. The DHCP process failed and the host assigned itself an APIPA address",
+      "D. The host is in the 169.254.0.0/16 corporate network"
+    ],
+    "correct": "C",
+    "explanation": "APIPA (Automatic Private IP Addressing, RFC 3927) is used when a host fails to get a DHCP address. Windows automatically assigns itself an address in the 169.254.0.0/16 range. This allows local link communication but no Internet or cross-subnet access. It indicates a DHCP failure.",
+    "tags": [
+      "APIPA",
+      "DHCP-failure",
+      "169.254.0.0"
+    ],
+    "reference": "Odom CCNA v2 Ch.7"
+  },
+  {
+    "id": "is-016",
+    "domain": "ip-services",
+    "objective": "4.6",
+    "difficulty": "medium",
+    "text": "Which NTP stratum level does a Cisco router become when synchronized to an NTP server at stratum 2?",
+    "options": [
+      "A. Stratum 1",
+      "B. Stratum 2",
+      "C. Stratum 3",
+      "D. Stratum 4"
+    ],
+    "correct": "C",
+    "explanation": "In NTP hierarchy, a device always operates one stratum below its reference source. If a router syncs to a stratum 2 server, it becomes stratum 3. Stratum 0 = reference clock (atomic). Stratum 16 = unsynchronized. Lower stratum = more accurate.",
+    "tags": [
+      "NTP",
+      "stratum",
+      "hierarchy"
+    ],
+    "reference": "Odom CCNA v2 Ch.8"
+  },
+  {
+    "id": "is-017",
+    "domain": "ip-services",
+    "objective": "4.3",
+    "difficulty": "medium",
+    "text": "Which DNS record type maps a hostname to an IPv4 address?",
+    "options": [
+      "A. AAAA",
+      "B. MX",
+      "C. A",
+      "D. CNAME"
+    ],
+    "correct": "C",
+    "explanation": "DNS A records map hostnames to IPv4 addresses. AAAA records map hostnames to IPv6 addresses. MX records specify mail servers. CNAME records create aliases. PTR records map IPs to hostnames (reverse DNS).",
+    "tags": [
+      "DNS",
+      "A-record",
+      "record-types"
+    ],
+    "reference": "Odom CCNA v2 Ch.7"
+  },
+  {
+    "id": "is-018",
+    "domain": "ip-services",
+    "objective": "4.4",
+    "difficulty": "hard",
+    "text": "What is an SNMP trap?",
+    "options": [
+      "A. A periodic poll from the NMS to an agent to collect MIB data",
+      "B. An unsolicited notification sent from an agent to the NMS when a significant event occurs",
+      "C. A security feature that blocks unauthorized SNMP access",
+      "D. A community string used for read-write access"
+    ],
+    "correct": "B",
+    "explanation": "SNMP traps are unsolicited (push) notifications sent from SNMP agents to the NMS when specific events occur (e.g., interface going down, CPU threshold exceeded). Unlike regular polls, the NMS doesn't need to ask — the agent reports automatically. Informs are similar but require acknowledgment.",
+    "tags": [
+      "SNMP",
+      "traps",
+      "informs",
+      "NMS"
+    ],
+    "reference": "Odom CCNA v2 Ch.8"
+  },
+  {
+    "id": "is-019",
+    "domain": "ip-services",
+    "objective": "4.1",
+    "difficulty": "medium",
+    "text": "In NAT terminology, what is 'inside global'?",
+    "options": [
+      "A. The private IP of an internal host as seen from outside",
+      "B. The public IP address that external devices see for an internal host",
+      "C. The IP of the internal router interface",
+      "D. The IP of the external router interface"
+    ],
+    "correct": "B",
+    "explanation": "NAT terminology: Inside Local = private IP of internal host (e.g., 10.0.0.1). Inside Global = public IP that represents the internal host to outside networks (e.g., 203.0.113.5). Outside Global = public IP of external server. Outside Local = how the external server's IP appears to internal hosts.",
+    "tags": [
+      "NAT",
+      "inside-global",
+      "inside-local",
+      "terminology"
+    ],
+    "reference": "Odom CCNA v2 Ch.7"
+  },
+  {
+    "id": "is-020",
+    "domain": "ip-services",
+    "objective": "4.9",
+    "difficulty": "medium",
+    "text": "Which QoS marking is used at Layer 3 to classify traffic priority in an IP packet?",
+    "options": [
+      "A. CoS (802.1p)",
+      "B. DSCP (DSCP field in IP header)",
+      "C. MAC address",
+      "D. VLAN ID"
+    ],
+    "correct": "B",
+    "explanation": "DSCP (Differentiated Services Code Point) is a 6-bit field in the IP header used to mark and classify traffic for QoS. It allows routers to prioritize traffic end-to-end. CoS (Class of Service / 802.1p) is the Layer 2 equivalent in Ethernet 802.1Q headers.",
+    "tags": [
+      "QoS",
+      "DSCP",
+      "traffic-marking"
+    ],
+    "reference": "Odom CCNA v2 Ch.17"
+  },
+  {
+    "id": "is-021",
+    "domain": "ip-services",
+    "objective": "4.2",
+    "difficulty": "medium",
+    "text": "Which DHCP message is a broadcast sent by a client to find available DHCP servers?",
+    "options": [
+      "A. DHCP Offer",
+      "B. DHCP Discover",
+      "C. DHCP Request",
+      "D. DHCP Acknowledge"
+    ],
+    "correct": "B",
+    "explanation": "The DHCP DORA process: 1) Discover (client broadcasts to find servers), 2) Offer (server offers an IP), 3) Request (client requests the offered IP), 4) Acknowledge (server confirms the lease). Discover and Request are broadcast; Offer and Acknowledge can be unicast or broadcast.",
+    "tags": [
+      "DHCP",
+      "DORA",
+      "Discover"
+    ],
+    "reference": "Odom CCNA v2 Ch.7"
+  },
+  {
+    "id": "is-022",
+    "domain": "ip-services",
+    "objective": "4.8",
+    "difficulty": "easy",
+    "text": "What port does SSH use?",
+    "options": [
+      "A. 21",
+      "B. 22",
+      "C. 23",
+      "D. 443"
+    ],
+    "correct": "B",
+    "explanation": "SSH (Secure Shell) uses TCP port 22. It provides encrypted remote access to network devices, replacing Telnet (port 23) which sends data in plain text. Cisco recommends using SSH v2 for all management access.",
+    "tags": [
+      "SSH",
+      "port-22",
+      "management"
+    ],
+    "reference": "Odom CCNA v1 Ch.5"
+  },
+  {
+    "id": "is-023",
+    "domain": "ip-services",
+    "objective": "4.8",
+    "difficulty": "medium",
+    "text": "Which command enables SSHv2 on a Cisco router?",
+    "options": [
+      "A. ip ssh version 2",
+      "B. ssh-server version 2",
+      "C. transport input ssh version 2",
+      "D. crypto ssh version 2"
+    ],
+    "correct": "A",
+    "explanation": "'ip ssh version 2' configures the router to use SSHv2 only. Prerequisites for SSH: hostname (not default 'Router'), domain name ('ip domain-name'), RSA key pair ('crypto key generate rsa'). Then configure VTY lines with 'transport input ssh' and 'login local'.",
+    "tags": [
+      "SSH",
+      "SSHv2",
+      "IOS-configuration"
+    ],
+    "reference": "Odom CCNA v1 Ch.5"
+  },
+  {
+    "id": "is-024",
+    "domain": "ip-services",
+    "objective": "4.5",
+    "difficulty": "medium",
+    "text": "What Syslog severity level should be set to capture only critical issues and above (levels 0-2)?",
+    "options": [
+      "A. logging trap debugging",
+      "B. logging trap warnings",
+      "C. logging trap critical",
+      "D. logging trap informational"
+    ],
+    "correct": "C",
+    "explanation": "'logging trap critical' sets the syslog severity threshold to level 2 (Critical), capturing Emergency (0), Alert (1), and Critical (2) messages. Messages at level 3 and higher are suppressed. 'logging trap debugging' captures ALL messages (0-7).",
+    "tags": [
+      "Syslog",
+      "logging-trap",
+      "severity"
+    ],
+    "reference": "Odom CCNA v2 Ch.8"
+  },
+  {
+    "id": "is-025",
+    "domain": "ip-services",
+    "objective": "4.6",
+    "difficulty": "medium",
+    "text": "Which command configures a Cisco router to synchronize its clock with NTP server 10.0.0.1?",
+    "options": [
+      "A. clock ntp-server 10.0.0.1",
+      "B. ntp server 10.0.0.1",
+      "C. ip ntp source 10.0.0.1",
+      "D. service ntp 10.0.0.1"
+    ],
+    "correct": "B",
+    "explanation": "'ntp server [ip-address]' configures the router as an NTP client, synchronizing to the specified server. You can add 'prefer' to designate a preferred server. 'show ntp status' and 'show ntp associations' verify synchronization state and stratum.",
+    "tags": [
+      "NTP",
+      "ntp-server",
+      "IOS-configuration"
+    ],
+    "reference": "Odom CCNA v2 Ch.8"
+  },
+  {
+    "id": "is-026",
+    "domain": "ip-services",
+    "objective": "4.1",
+    "difficulty": "easy",
+    "text": "What is the primary purpose of NAT (Network Address Translation)?",
+    "options": [
+      "A. Encrypt packets before forwarding",
+      "B. Translate private IPv4 addresses to public addresses for internet access",
+      "C. Assign IP addresses to hosts via DHCP",
+      "D. Distribute routing information between routers"
+    ],
+    "correct": "B",
+    "explanation": "NAT translates private (RFC 1918) source IP addresses to public addresses so that internal hosts can communicate over the internet without requiring public IPs for each device.",
+    "tags": [
+      "NAT",
+      "private",
+      "public",
+      "RFC1918"
+    ],
+    "reference": "Odom CCNA v2 Ch.10"
+  },
+  {
+    "id": "is-027",
+    "domain": "ip-services",
+    "objective": "4.1",
+    "difficulty": "medium",
+    "text": "Which NAT type maps multiple inside hosts to a single public IP using different source port numbers?",
+    "options": [
+      "A. Static NAT",
+      "B. Dynamic NAT",
+      "C. PAT (NAT overload)",
+      "D. Twice NAT"
+    ],
+    "correct": "C",
+    "explanation": "PAT (Port Address Translation), also called NAT overload, uses a single public IP and unique source port numbers to track sessions for many internal hosts simultaneously.",
+    "tags": [
+      "PAT",
+      "NAT",
+      "overload",
+      "port"
+    ],
+    "reference": "Odom CCNA v2 Ch.10"
+  },
+  {
+    "id": "is-028",
+    "domain": "ip-services",
+    "objective": "4.1",
+    "difficulty": "medium",
+    "text": "On a Cisco router, which NAT command identifies the interface connected to the private (internal) network?",
+    "options": [
+      "A. ip nat inside",
+      "B. ip nat outside",
+      "C. ip nat pool",
+      "D. ip nat enable"
+    ],
+    "correct": "A",
+    "explanation": "'ip nat inside' marks the interface as the private/internal side. 'ip nat outside' marks the public/external side. NAT translates packets flowing between inside and outside interfaces.",
+    "tags": [
+      "NAT",
+      "inside",
+      "outside",
+      "interface"
+    ],
+    "reference": "Odom CCNA v2 Ch.10"
+  },
+  {
+    "id": "is-029",
+    "domain": "ip-services",
+    "objective": "4.2",
+    "difficulty": "easy",
+    "text": "What is the default NTP stratum level of a router configured as an NTP master with no external time source?",
+    "options": [
+      "A. 1",
+      "B. 4",
+      "C. 8",
+      "D. 15"
+    ],
+    "correct": "C",
+    "explanation": "When 'ntp master' is configured without a stratum argument, Cisco IOS defaults to stratum 8. A stratum 1 server is connected to an atomic clock. Lower stratum = more accurate.",
+    "tags": [
+      "NTP",
+      "stratum",
+      "master"
+    ],
+    "reference": "Odom CCNA v2 Ch.8"
+  },
+  {
+    "id": "is-030",
+    "domain": "ip-services",
+    "objective": "4.2",
+    "difficulty": "medium",
+    "text": "Which NTP command configures a router to synchronize its clock to 192.168.1.1?",
+    "options": [
+      "A. ntp server 192.168.1.1",
+      "B. ntp peer 192.168.1.1",
+      "C. ntp source 192.168.1.1",
+      "D. clock synchronize 192.168.1.1"
+    ],
+    "correct": "A",
+    "explanation": "'ntp server' configures the device as an NTP client that synchronizes to the specified server. 'ntp peer' creates a symmetric peer relationship. 'ntp source' sets the source interface for NTP packets.",
+    "tags": [
+      "NTP",
+      "server",
+      "client",
+      "synchronize"
+    ],
+    "reference": "Odom CCNA v2 Ch.8"
+  },
+  {
+    "id": "is-031",
+    "domain": "ip-services",
+    "objective": "4.3",
+    "difficulty": "easy",
+    "text": "Which DHCP message is sent by a client to request an offered IP address from a DHCP server?",
+    "options": [
+      "A. DHCPDISCOVER",
+      "B. DHCPOFFER",
+      "C. DHCPREQUEST",
+      "D. DHCPACK"
+    ],
+    "correct": "C",
+    "explanation": "DHCP exchange: DISCOVER (client broadcast) → OFFER (server) → REQUEST (client selects offer) → ACK (server confirms). DHCPREQUEST also used for lease renewal.",
+    "tags": [
+      "DHCP",
+      "DORA",
+      "REQUEST",
+      "lease"
+    ],
+    "reference": "Odom CCNA v2 Ch.7"
+  },
+  {
+    "id": "is-032",
+    "domain": "ip-services",
+    "objective": "4.3",
+    "difficulty": "medium",
+    "text": "Which Cisco IOS command excludes an IP address from the DHCP pool so it won't be assigned to clients?",
+    "options": [
+      "A. ip dhcp exclude-address 10.0.0.1",
+      "B. no ip dhcp address 10.0.0.1",
+      "C. ip dhcp pool exclude 10.0.0.1",
+      "D. ip dhcp reserve 10.0.0.1"
+    ],
+    "correct": "A",
+    "explanation": "'ip dhcp excluded-address [start] [end]' prevents those addresses from being assigned. Typically used to reserve the router's IP, other static devices, printers, etc.",
+    "tags": [
+      "DHCP",
+      "excluded-address",
+      "IOS"
+    ],
+    "reference": "Odom CCNA v2 Ch.7"
+  },
+  {
+    "id": "is-033",
+    "domain": "ip-services",
+    "objective": "4.3",
+    "difficulty": "medium",
+    "text": "What is the purpose of 'ip helper-address' on a Cisco router interface?",
+    "options": [
+      "A. Assigns a secondary IP to an interface",
+      "B. Forwards DHCP broadcast requests to a unicast DHCP server on another subnet",
+      "C. Restricts DHCP to specific VLANs",
+      "D. Enables DHCP snooping on a routed interface"
+    ],
+    "correct": "B",
+    "explanation": "'ip helper-address' converts DHCP broadcasts to unicast and forwards them to the configured DHCP server, enabling clients on remote subnets to use a centralized DHCP server.",
+    "tags": [
+      "DHCP",
+      "helper-address",
+      "relay",
+      "broadcast"
+    ],
+    "reference": "Odom CCNA v2 Ch.7"
+  },
+  {
+    "id": "is-034",
+    "domain": "ip-services",
+    "objective": "4.4",
+    "difficulty": "easy",
+    "text": "Which DNS record type maps a hostname to an IPv4 address?",
+    "options": [
+      "A. AAAA",
+      "B. MX",
+      "C. CNAME",
+      "D. A"
+    ],
+    "correct": "D",
+    "explanation": "An 'A' record (Address record) maps a hostname to an IPv4 address. 'AAAA' maps to IPv6. 'CNAME' is an alias. 'MX' identifies mail servers.",
+    "tags": [
+      "DNS",
+      "A-record",
+      "hostname",
+      "IPv4"
+    ],
+    "reference": "Odom CCNA v2 Ch.7"
+  },
+  {
+    "id": "is-035",
+    "domain": "ip-services",
+    "objective": "4.4",
+    "difficulty": "medium",
+    "text": "On a Cisco IOS device, which command configures a DNS server for name resolution?",
+    "options": [
+      "A. ip name-server 8.8.8.8",
+      "B. dns-server 8.8.8.8",
+      "C. ip domain-server 8.8.8.8",
+      "D. ip dns-resolver 8.8.8.8"
+    ],
+    "correct": "A",
+    "explanation": "'ip name-server [address]' configures up to 6 DNS servers for IOS name resolution. Also requires 'ip domain-lookup' (enabled by default) to perform DNS queries.",
+    "tags": [
+      "DNS",
+      "name-server",
+      "IOS",
+      "resolution"
+    ],
+    "reference": "Odom CCNA v2 Ch.7"
+  },
+  {
+    "id": "is-036",
+    "domain": "ip-services",
+    "objective": "4.5",
+    "difficulty": "medium",
+    "text": "What are the three SNMP operations available in SNMPv2c?",
+    "options": [
+      "A. Get, Set, Trap",
+      "B. Get, GetNext, Set",
+      "C. Get, GetBulk, Inform",
+      "D. Get, Set, Walk"
+    ],
+    "correct": "A",
+    "explanation": "Core SNMP operations: GET (manager reads a variable), SET (manager writes a variable), TRAP (agent sends unsolicited notification). GetNext and GetBulk are also used but the core trio is Get/Set/Trap.",
+    "tags": [
+      "SNMP",
+      "Get",
+      "Set",
+      "Trap"
+    ],
+    "reference": "Odom CCNA v2 Ch.8"
+  },
+  {
+    "id": "is-037",
+    "domain": "ip-services",
+    "objective": "4.5",
+    "difficulty": "medium",
+    "text": "Which SNMP version provides encryption and authentication, addressing the plaintext community string weakness of SNMPv1/v2c?",
+    "options": [
+      "A. SNMPv2u",
+      "B. SNMPv3",
+      "C. SNMPv2s",
+      "D. RMON"
+    ],
+    "correct": "B",
+    "explanation": "SNMPv3 introduced three security levels: noAuthNoPriv, authNoPriv, authPriv. authPriv provides authentication (HMAC-MD5/SHA) and encryption (DES/AES), eliminating plaintext community strings.",
+    "tags": [
+      "SNMPv3",
+      "security",
+      "authentication",
+      "encryption"
+    ],
+    "reference": "Odom CCNA v2 Ch.8"
+  },
+  {
+    "id": "is-038",
+    "domain": "ip-services",
+    "objective": "4.6",
+    "difficulty": "easy",
+    "text": "Which syslog severity level number represents 'Critical' conditions?",
+    "options": [
+      "A. 0",
+      "B. 2",
+      "C. 4",
+      "D. 6"
+    ],
+    "correct": "B",
+    "explanation": "Syslog levels 0-7: 0=Emergency, 1=Alert, 2=Critical, 3=Error, 4=Warning, 5=Notice, 6=Informational, 7=Debug. Remember: 'Every Awful Cisco Engineer Will Need Ice Daily'.",
+    "tags": [
+      "syslog",
+      "severity",
+      "critical",
+      "logging"
+    ],
+    "reference": "Odom CCNA v2 Ch.8"
+  },
+  {
+    "id": "is-039",
+    "domain": "ip-services",
+    "objective": "4.6",
+    "difficulty": "medium",
+    "text": "Which IOS command sends syslog messages to a remote server at 10.0.0.5?",
+    "options": [
+      "A. logging 10.0.0.5",
+      "B. syslog server 10.0.0.5",
+      "C. logging host 10.0.0.5",
+      "D. logging remote 10.0.0.5"
+    ],
+    "correct": "A",
+    "explanation": "'logging [ip-address]' (or 'logging host [ip-address]') sends syslog messages to a remote syslog server. UDP port 514 is used by default.",
+    "tags": [
+      "syslog",
+      "logging",
+      "remote",
+      "IOS"
+    ],
+    "reference": "Odom CCNA v2 Ch.8"
+  },
+  {
+    "id": "is-040",
+    "domain": "ip-services",
+    "objective": "4.7",
+    "difficulty": "medium",
+    "text": "Which QoS mechanism classifies and marks traffic at the ingress point, closest to the source?",
+    "options": [
+      "A. Queuing",
+      "B. Traffic policing",
+      "C. Classification and marking",
+      "D. Congestion avoidance"
+    ],
+    "correct": "C",
+    "explanation": "Classification identifies traffic types; marking (DSCP, CoS) labels them for downstream QoS treatment. Best practice is to classify and mark traffic at the network edge, closest to the source.",
+    "tags": [
+      "QoS",
+      "classification",
+      "marking",
+      "DSCP"
+    ],
+    "reference": "Odom CCNA v2 Ch.11"
+  },
+  {
+    "id": "is-041",
+    "domain": "ip-services",
+    "objective": "4.7",
+    "difficulty": "medium",
+    "text": "What does DSCP EF (Expedited Forwarding) represent in QoS?",
+    "options": [
+      "A. Best-effort traffic",
+      "B. Traffic with highest delay/jitter requirements (voice)",
+      "C. Network control traffic",
+      "D. Bulk data transfers"
+    ],
+    "correct": "B",
+    "explanation": "DSCP EF (DSCP 46) is used for voice/real-time traffic requiring low latency, low jitter, and guaranteed bandwidth. It's the highest-priority forwarding class.",
+    "tags": [
+      "QoS",
+      "DSCP",
+      "EF",
+      "voice"
+    ],
+    "reference": "Odom CCNA v2 Ch.11"
+  },
+  {
+    "id": "is-042",
+    "domain": "ip-services",
+    "objective": "4.1",
+    "difficulty": "hard",
+    "text": "A router has 'ip nat inside source list 1 interface Gi0/1 overload'. What does 'overload' mean here?",
+    "options": [
+      "A. NAT will fail if more than 100 sessions exist",
+      "B. Multiple inside hosts share the Gi0/1 IP using PAT (port-based multiplexing)",
+      "C. The NAT pool will overflow to a secondary address",
+      "D. NAT inspects payload for embedded addresses"
+    ],
+    "correct": "B",
+    "explanation": "'overload' enables PAT — many inside hosts map to the single IP of Gi0/1, differentiated by unique source port numbers. This is the most common home/enterprise internet NAT configuration.",
+    "tags": [
+      "NAT",
+      "PAT",
+      "overload",
+      "inside-source"
+    ],
+    "reference": "Odom CCNA v2 Ch.10"
+  },
+  {
+    "id": "is-043",
+    "domain": "ip-services",
+    "objective": "4.3",
+    "difficulty": "hard",
+    "text": "What lease time does Cisco IOS DHCP use by default?",
+    "options": [
+      "A. 1 hour",
+      "B. 12 hours",
+      "C. 1 day",
+      "D. 8 days"
+    ],
+    "correct": "C",
+    "explanation": "Cisco IOS DHCP default lease is 1 day (24 hours). Configure with 'lease [days] [hours] [minutes]' or 'lease infinite' in the DHCP pool.",
+    "tags": [
+      "DHCP",
+      "lease",
+      "default",
+      "IOS"
+    ],
+    "reference": "Odom CCNA v2 Ch.7"
+  },
+  {
+    "id": "is-044",
+    "domain": "ip-services",
+    "objective": "4.5",
+    "difficulty": "easy",
+    "text": "What is the function of an SNMP OID (Object Identifier)?",
+    "options": [
+      "A. Identify the community string",
+      "B. Uniquely identify a managed object in the MIB",
+      "C. Authenticate SNMP v3 messages",
+      "D. Specify the syslog server address"
+    ],
+    "correct": "B",
+    "explanation": "OIDs are hierarchical numeric identifiers in the MIB (Management Information Base) that uniquely identify each manageable variable (e.g., 1.3.6.1.2.1.1.1 = sysDescr).",
+    "tags": [
+      "SNMP",
+      "OID",
+      "MIB",
+      "management"
+    ],
+    "reference": "Odom CCNA v2 Ch.8"
+  },
+  {
+    "id": "is-045",
+    "domain": "ip-services",
+    "objective": "4.7",
+    "difficulty": "hard",
+    "text": "Which QoS scheduling mechanism gives voice traffic strict priority service before all other queues?",
+    "options": [
+      "A. WFQ",
+      "B. CBWFQ",
+      "C. LLQ (Low Latency Queuing)",
+      "D. FIFO"
+    ],
+    "correct": "C",
+    "explanation": "LLQ (Low Latency Queuing) adds a priority queue to CBWFQ. Traffic in the priority queue (typically voice) is always serviced before other queues, ensuring minimal delay and jitter.",
+    "tags": [
+      "QoS",
+      "LLQ",
+      "priority-queue",
+      "voice"
+    ],
+    "reference": "Odom CCNA v2 Ch.11"
+  },
+  {
+    "id": "is-046",
+    "domain": "ip-services",
+    "objective": "4.2",
+    "difficulty": "hard",
+    "text": "Which NTP stratum value indicates an unreachable or unsynchronized clock?",
+    "options": [
+      "A. 0",
+      "B. 8",
+      "C. 16",
+      "D. 255"
+    ],
+    "correct": "C",
+    "explanation": "NTP stratum 16 means the clock is unsynchronized or unreachable. Stratum 0 is a reference clock (GPS/atomic), stratum 1 is directly connected to stratum 0. Values ≥ 16 are invalid.",
+    "tags": [
+      "NTP",
+      "stratum",
+      "unsynchronized"
+    ],
+    "reference": "Odom CCNA v2 Ch.8"
+  },
+  {
+    "id": "is-047",
+    "domain": "ip-services",
+    "objective": "4.4",
+    "difficulty": "medium",
+    "text": "What is the purpose of a reverse DNS (PTR) record?",
+    "options": [
+      "A. Maps hostname to IPv6 address",
+      "B. Maps an IP address back to a hostname",
+      "C. Identifies authoritative name servers",
+      "D. Specifies the mail exchange server"
+    ],
+    "correct": "B",
+    "explanation": "A PTR (pointer) record provides reverse DNS — mapping an IP address to a hostname. Used for logging, spam filtering, and network diagnostics. Stored in the in-addr.arpa zone.",
+    "tags": [
+      "DNS",
+      "PTR",
+      "reverse-DNS",
+      "in-addr.arpa"
+    ],
+    "reference": "Odom CCNA v2 Ch.7"
+  },
+  {
+    "id": "is-048",
+    "domain": "ip-services",
+    "objective": "4.1",
+    "difficulty": "medium",
+    "text": "What does 'show ip nat translations' display on a Cisco router?",
+    "options": [
+      "A. All NAT-capable interfaces and their direction",
+      "B. Active NAT/PAT mappings showing inside local, inside global, outside local, outside global addresses",
+      "C. NAT access control list configuration",
+      "D. The NAT pool and remaining addresses"
+    ],
+    "correct": "B",
+    "explanation": "'show ip nat translations' displays the NAT table with four address columns: Inside Local (private source), Inside Global (public source after NAT), Outside Local, Outside Global — showing all active sessions.",
+    "tags": [
+      "NAT",
+      "show",
+      "translations",
+      "verification"
+    ],
+    "reference": "Odom CCNA v2 Ch.10"
+  },
+  {
+    "id": "is-049",
+    "domain": "ip-services",
+    "objective": "4.6",
+    "difficulty": "medium",
+    "text": "Which syslog level captures all messages including debug output?",
+    "options": [
+      "A. Level 4 (Warning)",
+      "B. Level 6 (Informational)",
+      "C. Level 7 (Debug)",
+      "D. Level 0 (Emergency)"
+    ],
+    "correct": "C",
+    "explanation": "Setting logging to level 7 (debug) captures everything — levels 0-7. Production networks should use level 6 or lower; level 7 generates excessive output and can impact performance.",
+    "tags": [
+      "syslog",
+      "debug",
+      "level7",
+      "logging"
+    ],
+    "reference": "Odom CCNA v2 Ch.8"
+  },
+  {
+    "id": "is-050",
+    "domain": "ip-services",
+    "objective": "4.7",
+    "difficulty": "medium",
+    "text": "Which field in the IP header is used to set DSCP markings for QoS?",
+    "options": [
+      "A. TTL",
+      "B. Protocol",
+      "C. Type of Service (ToS) / DSCP field",
+      "D. Fragment Offset"
+    ],
+    "correct": "C",
+    "explanation": "The ToS byte (now called Differentiated Services field) contains the 6-bit DSCP value and 2-bit ECN. DSCP markings allow per-hop behaviors to be applied by routers along the path.",
+    "tags": [
+      "QoS",
+      "DSCP",
+      "ToS",
+      "IP-header"
+    ],
+    "reference": "Odom CCNA v2 Ch.11"
+  }
+]

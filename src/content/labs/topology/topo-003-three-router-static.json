@@ -1,0 +1,102 @@
+{
+  "id": "topo-003",
+  "title": "Three-Router Static Routing",
+  "domain": "ip-connectivity",
+  "difficulty": "beginner",
+  "estimatedMinutes": 30,
+  "description": "Build a three-router chain (R1—R2—R3) using static routes. Each router needs routes to the networks it cannot directly reach.",
+  "objectives": ["3.3"],
+  "devices": [
+    {
+      "id": "R1",
+      "type": "router",
+      "label": "R1",
+      "position": { "x": 100, "y": 250 },
+      "initialState": {
+        "hostname": "R1",
+        "mode": "user",
+        "interfaces": {
+          "GigabitEthernet0/0": { "name": "GigabitEthernet0/0", "ip": "192.168.1.1", "mask": "255.255.255.0", "status": "up" },
+          "GigabitEthernet0/1": { "name": "GigabitEthernet0/1", "ip": "10.0.12.1", "mask": "255.255.255.252", "status": "up" }
+        }
+      }
+    },
+    {
+      "id": "R2",
+      "type": "router",
+      "label": "R2",
+      "position": { "x": 400, "y": 250 },
+      "initialState": {
+        "hostname": "R2",
+        "mode": "user",
+        "interfaces": {
+          "GigabitEthernet0/0": { "name": "GigabitEthernet0/0", "ip": "10.0.12.2", "mask": "255.255.255.252", "status": "up" },
+          "GigabitEthernet0/1": { "name": "GigabitEthernet0/1", "ip": "10.0.23.1", "mask": "255.255.255.252", "status": "up" }
+        }
+      }
+    },
+    {
+      "id": "R3",
+      "type": "router",
+      "label": "R3",
+      "position": { "x": 700, "y": 250 },
+      "initialState": {
+        "hostname": "R3",
+        "mode": "user",
+        "interfaces": {
+          "GigabitEthernet0/0": { "name": "GigabitEthernet0/0", "ip": "10.0.23.2", "mask": "255.255.255.252", "status": "up" },
+          "GigabitEthernet0/1": { "name": "GigabitEthernet0/1", "ip": "172.16.1.1", "mask": "255.255.255.0", "status": "up" }
+        }
+      }
+    }
+  ],
+  "links": [
+    { "id": "e1", "source": "R1", "target": "R2", "label": "10.0.12.0/30" },
+    { "id": "e2", "source": "R2", "target": "R3", "label": "10.0.23.0/30" }
+  ],
+  "scenario": "R1 (LAN 192.168.1.0/24) — R2 (transit) — R3 (LAN 172.16.1.0/24). Interfaces are pre-configured. Add static routes so R1 can reach 172.16.1.0/24 via R2, and R3 can reach 192.168.1.0/24 via R2. R2 needs routes to both end networks.",
+  "tasks": [
+    {
+      "deviceId": "R1",
+      "id": "t1",
+      "description": "Add static route on R1 to 172.16.1.0/24 via 10.0.12.2",
+      "hint": "ip route 172.16.1.0 255.255.255.0 10.0.12.2",
+      "check": { "type": "static_route", "description": "R1 → 172.16.1.0 via R2", "expected": { "network": "172.16.1.0", "mask": "255.255.255.0", "nextHop": "10.0.12.2" } }
+    },
+    {
+      "deviceId": "R1",
+      "id": "t2",
+      "description": "Add static route on R1 to 10.0.23.0/30 via 10.0.12.2",
+      "hint": "ip route 10.0.23.0 255.255.255.252 10.0.12.2",
+      "check": { "type": "static_route", "description": "R1 → 10.0.23.0 via R2", "expected": { "network": "10.0.23.0", "mask": "255.255.255.252", "nextHop": "10.0.12.2" } }
+    },
+    {
+      "deviceId": "R2",
+      "id": "t3",
+      "description": "Add static route on R2 to 192.168.1.0/24 via 10.0.12.1",
+      "hint": "ip route 192.168.1.0 255.255.255.0 10.0.12.1",
+      "check": { "type": "static_route", "description": "R2 → 192.168.1.0 via R1", "expected": { "network": "192.168.1.0", "mask": "255.255.255.0", "nextHop": "10.0.12.1" } }
+    },
+    {
+      "deviceId": "R2",
+      "id": "t4",
+      "description": "Add static route on R2 to 172.16.1.0/24 via 10.0.23.2",
+      "hint": "ip route 172.16.1.0 255.255.255.0 10.0.23.2",
+      "check": { "type": "static_route", "description": "R2 → 172.16.1.0 via R3", "expected": { "network": "172.16.1.0", "mask": "255.255.255.0", "nextHop": "10.0.23.2" } }
+    },
+    {
+      "deviceId": "R3",
+      "id": "t5",
+      "description": "Add static route on R3 to 192.168.1.0/24 via 10.0.23.1",
+      "hint": "ip route 192.168.1.0 255.255.255.0 10.0.23.1",
+      "check": { "type": "static_route", "description": "R3 → 192.168.1.0 via R2", "expected": { "network": "192.168.1.0", "mask": "255.255.255.0", "nextHop": "10.0.23.1" } }
+    },
+    {
+      "deviceId": "R3",
+      "id": "t6",
+      "description": "Add static route on R3 to 10.0.12.0/30 via 10.0.23.1",
+      "hint": "ip route 10.0.12.0 255.255.255.252 10.0.23.1",
+      "check": { "type": "static_route", "description": "R3 → 10.0.12.0 via R2", "expected": { "network": "10.0.12.0", "mask": "255.255.255.252", "nextHop": "10.0.23.1" } }
+    }
+  ]
+}

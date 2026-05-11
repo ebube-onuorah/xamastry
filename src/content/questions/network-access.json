@@ -1,0 +1,2152 @@
+[
+  {
+    "id": "na-001",
+    "domain": "network-access",
+    "objective": "2.1",
+    "difficulty": "easy",
+    "text": "What does a VLAN provide?",
+    "options": [
+      "A. Physical separation of devices into different buildings",
+      "B. Logical segmentation of a LAN into separate broadcast domains",
+      "C. Encryption of traffic between switches",
+      "D. Increased cable bandwidth"
+    ],
+    "correct": "B",
+    "explanation": "A VLAN (Virtual LAN) logically segments a physical switch into multiple broadcast domains. Devices in different VLANs cannot communicate without a Layer 3 device (router or Layer 3 switch), even if they are physically connected to the same switch.",
+    "tags": [
+      "VLAN",
+      "broadcast-domain",
+      "segmentation"
+    ],
+    "reference": "Odom CCNA v1 Ch.8"
+  },
+  {
+    "id": "na-002",
+    "domain": "network-access",
+    "objective": "2.1",
+    "difficulty": "medium",
+    "text": "Which VLAN is the default management VLAN on Cisco switches?",
+    "options": [
+      "A. VLAN 0",
+      "B. VLAN 1",
+      "C. VLAN 100",
+      "D. VLAN 1002"
+    ],
+    "correct": "B",
+    "explanation": "VLAN 1 is the default VLAN on all Cisco switches. It is the default native VLAN on trunk ports and the default management VLAN. Best practice is to change the management VLAN away from VLAN 1 for security.",
+    "tags": [
+      "VLAN",
+      "VLAN1",
+      "management-VLAN"
+    ],
+    "reference": "Odom CCNA v1 Ch.8"
+  },
+  {
+    "id": "na-003",
+    "domain": "network-access",
+    "objective": "2.1",
+    "difficulty": "medium",
+    "text": "Which command assigns a switch port to VLAN 20?",
+    "options": [
+      "A. switchport vlan 20",
+      "B. vlan 20",
+      "C. switchport access vlan 20",
+      "D. set port vlan 20"
+    ],
+    "correct": "C",
+    "explanation": "The correct IOS command to assign an access port to a VLAN is 'switchport access vlan 20', entered in interface configuration mode after 'switchport mode access'. 'vlan 20' is used to create a VLAN in global config, not to assign ports.",
+    "tags": [
+      "VLAN",
+      "switchport",
+      "access-port"
+    ],
+    "reference": "Odom CCNA v1 Ch.8"
+  },
+  {
+    "id": "na-004",
+    "domain": "network-access",
+    "objective": "2.2",
+    "difficulty": "medium",
+    "text": "What is the purpose of a trunk port?",
+    "options": [
+      "A. To connect a switch to a PC",
+      "B. To carry traffic for multiple VLANs between switches",
+      "C. To block specific VLANs from passing",
+      "D. To provide redundant uplinks only"
+    ],
+    "correct": "B",
+    "explanation": "A trunk port carries traffic for multiple VLANs between switches (or between a switch and a router). It uses 802.1Q tagging to identify which VLAN each frame belongs to. Access ports carry only one VLAN and connect to end devices.",
+    "tags": [
+      "trunk",
+      "802.1Q",
+      "VLAN-tagging"
+    ],
+    "reference": "Odom CCNA v1 Ch.8"
+  },
+  {
+    "id": "na-005",
+    "domain": "network-access",
+    "objective": "2.2",
+    "difficulty": "hard",
+    "text": "What happens to frames from the native VLAN when they traverse an 802.1Q trunk?",
+    "options": [
+      "A. They are tagged with VLAN 1",
+      "B. They are dropped",
+      "C. They are sent untagged",
+      "D. They are encapsulated with ISL"
+    ],
+    "correct": "C",
+    "explanation": "Frames belonging to the native VLAN are sent untagged across an 802.1Q trunk. The receiving switch assumes untagged frames belong to the native VLAN. If both sides have mismatched native VLANs, a VLAN mismatch occurs — a security risk and connectivity issue.",
+    "tags": [
+      "trunk",
+      "native-VLAN",
+      "802.1Q",
+      "tagging"
+    ],
+    "reference": "Odom CCNA v1 Ch.8"
+  },
+  {
+    "id": "na-006",
+    "domain": "network-access",
+    "objective": "2.3",
+    "difficulty": "medium",
+    "text": "What is the purpose of Spanning Tree Protocol (STP)?",
+    "options": [
+      "A. To increase bandwidth by using multiple active paths",
+      "B. To prevent Layer 2 loops in switched networks",
+      "C. To encrypt VLAN traffic on trunk links",
+      "D. To load-balance traffic across redundant switches"
+    ],
+    "correct": "B",
+    "explanation": "STP (802.1D) prevents broadcast storms and MAC table instability caused by Layer 2 loops in networks with redundant switch connections. It elects a root bridge and blocks redundant ports to create a loop-free topology.",
+    "tags": [
+      "STP",
+      "loop-prevention",
+      "802.1D"
+    ],
+    "reference": "Odom CCNA v1 Ch.9"
+  },
+  {
+    "id": "na-007",
+    "domain": "network-access",
+    "objective": "2.3",
+    "difficulty": "medium",
+    "text": "Which switch becomes the STP root bridge?",
+    "options": [
+      "A. The switch with the highest bridge priority",
+      "B. The switch with the lowest bridge ID (priority + MAC)",
+      "C. The switch with the most ports",
+      "D. The switch with the highest MAC address"
+    ],
+    "correct": "B",
+    "explanation": "The STP root bridge is elected based on the lowest Bridge ID (BID). The BID is a combination of the bridge priority (default 32768) and the switch's MAC address. Lower priority wins; ties are broken by the lowest MAC address.",
+    "tags": [
+      "STP",
+      "root-bridge",
+      "BID",
+      "bridge-priority"
+    ],
+    "reference": "Odom CCNA v1 Ch.9"
+  },
+  {
+    "id": "na-008",
+    "domain": "network-access",
+    "objective": "2.3",
+    "difficulty": "hard",
+    "text": "A non-root switch has two paths to the root bridge. One path has a cost of 19 and another has a cost of 38. Which port state will the higher-cost path's port be placed in?",
+    "options": [
+      "A. Forwarding",
+      "B. Listening",
+      "C. Learning",
+      "D. Blocking"
+    ],
+    "correct": "D",
+    "explanation": "The port with the best (lowest) root path cost becomes the root port and is placed in Forwarding. The higher-cost redundant path port becomes a non-designated port and is placed in Blocking to prevent loops.",
+    "tags": [
+      "STP",
+      "blocking",
+      "root-port",
+      "path-cost"
+    ],
+    "reference": "Odom CCNA v1 Ch.9"
+  },
+  {
+    "id": "na-009",
+    "domain": "network-access",
+    "objective": "2.3",
+    "difficulty": "medium",
+    "text": "Which STP feature allows access ports to immediately transition to forwarding state, bypassing the listening and learning states?",
+    "options": [
+      "A. BPDU Guard",
+      "B. PortFast",
+      "C. Root Guard",
+      "D. Loop Guard"
+    ],
+    "correct": "B",
+    "explanation": "PortFast allows edge ports (connected to end devices) to immediately enter the forwarding state without going through the 30-second listening/learning delay. It should only be used on access ports, not trunk ports. BPDU Guard shuts down PortFast ports if they receive a BPDU.",
+    "tags": [
+      "STP",
+      "PortFast",
+      "edge-port"
+    ],
+    "reference": "Odom CCNA v1 Ch.9"
+  },
+  {
+    "id": "na-010",
+    "domain": "network-access",
+    "objective": "2.4",
+    "difficulty": "medium",
+    "text": "Which technology allows multiple physical links between two switches to act as a single logical link?",
+    "options": [
+      "A. STP",
+      "B. VLAN Trunking",
+      "C. EtherChannel",
+      "D. HSRP"
+    ],
+    "correct": "C",
+    "explanation": "EtherChannel (IEEE 802.3ad / LACP) bundles multiple physical Ethernet links into one logical interface, increasing bandwidth and providing redundancy. STP treats an EtherChannel bundle as a single link, so no ports are blocked.",
+    "tags": [
+      "EtherChannel",
+      "LACP",
+      "link-aggregation"
+    ],
+    "reference": "Odom CCNA v1 Ch.10"
+  },
+  {
+    "id": "na-011",
+    "domain": "network-access",
+    "objective": "2.4",
+    "difficulty": "hard",
+    "text": "Which EtherChannel negotiation protocol is Cisco proprietary?",
+    "options": [
+      "A. LACP",
+      "B. PAgP",
+      "C. LLDP",
+      "D. CDP"
+    ],
+    "correct": "B",
+    "explanation": "PAgP (Port Aggregation Protocol) is Cisco proprietary. LACP (Link Aggregation Control Protocol, 802.3ad) is the IEEE standard equivalent. Both negotiate EtherChannel formation. LACP is preferred for multi-vendor environments.",
+    "tags": [
+      "EtherChannel",
+      "PAgP",
+      "LACP",
+      "Cisco-proprietary"
+    ],
+    "reference": "Odom CCNA v1 Ch.10"
+  },
+  {
+    "id": "na-012",
+    "domain": "network-access",
+    "objective": "2.5",
+    "difficulty": "easy",
+    "text": "What is the SSID?",
+    "options": [
+      "A. The encryption key used to secure a wireless network",
+      "B. The human-readable name of a wireless network",
+      "C. The MAC address of a wireless access point",
+      "D. The IP address assigned to wireless clients"
+    ],
+    "correct": "B",
+    "explanation": "SSID (Service Set Identifier) is the human-readable name of a wireless network (e.g., 'Home-WiFi'). APs broadcast SSIDs in beacon frames. Multiple APs can share the same SSID to create an Extended Service Set (ESS) for roaming.",
+    "tags": [
+      "wireless",
+      "SSID",
+      "802.11"
+    ],
+    "reference": "Odom CCNA v2 Ch.27"
+  },
+  {
+    "id": "na-013",
+    "domain": "network-access",
+    "objective": "2.5",
+    "difficulty": "medium",
+    "text": "Which wireless security protocol is considered the most secure as of the current CCNA exam?",
+    "options": [
+      "A. WEP",
+      "B. WPA",
+      "C. WPA2",
+      "D. WPA3"
+    ],
+    "correct": "D",
+    "explanation": "WPA3 is the most current and secure wireless security protocol, introduced in 2018. It uses SAE (Simultaneous Authentication of Equals) instead of PSK, providing stronger password-based authentication. WEP is broken, WPA is deprecated, WPA2 is still widely used but has known vulnerabilities.",
+    "tags": [
+      "wireless",
+      "WPA3",
+      "security"
+    ],
+    "reference": "Odom CCNA v2 Ch.27"
+  },
+  {
+    "id": "na-014",
+    "domain": "network-access",
+    "objective": "2.5",
+    "difficulty": "medium",
+    "text": "What is the difference between an autonomous AP and a lightweight AP (LWAP)?",
+    "options": [
+      "A. Autonomous APs require a WLC; lightweight APs are standalone",
+      "B. Lightweight APs are managed by a WLC; autonomous APs are self-contained",
+      "C. Lightweight APs support more clients than autonomous APs",
+      "D. Autonomous APs use CAPWAP tunnels to communicate"
+    ],
+    "correct": "B",
+    "explanation": "Lightweight APs (LWAPs) offload configuration and management to a Wireless LAN Controller (WLC), communicating via CAPWAP tunnels. Autonomous APs are fully self-contained and configured individually. Large deployments use LWAPs for centralized management.",
+    "tags": [
+      "wireless",
+      "LWAP",
+      "WLC",
+      "CAPWAP"
+    ],
+    "reference": "Odom CCNA v2 Ch.28"
+  },
+  {
+    "id": "na-015",
+    "domain": "network-access",
+    "objective": "2.6",
+    "difficulty": "medium",
+    "text": "Which protocol does a lightweight AP use to communicate with a WLC?",
+    "options": [
+      "A. CDP",
+      "B. LLDP",
+      "C. CAPWAP",
+      "D. LWAPP"
+    ],
+    "correct": "C",
+    "explanation": "CAPWAP (Control and Provisioning of Wireless Access Points) is the standard protocol used between lightweight APs and the WLC. It uses UDP port 5246 for control traffic and 5247 for data traffic. LWAPP was an older Cisco proprietary predecessor.",
+    "tags": [
+      "CAPWAP",
+      "WLC",
+      "lightweight-AP"
+    ],
+    "reference": "Odom CCNA v2 Ch.28"
+  },
+  {
+    "id": "na-016",
+    "domain": "network-access",
+    "objective": "2.7",
+    "difficulty": "medium",
+    "text": "What is the function of the 'no ip domain-lookup' command on a Cisco switch?",
+    "options": [
+      "A. Disables DHCP on the switch",
+      "B. Prevents the switch from translating mistyped commands as hostnames, speeding up error response",
+      "C. Disables DNS client functionality permanently",
+      "D. Prevents the switch from obtaining a DHCP IP address"
+    ],
+    "correct": "B",
+    "explanation": "'no ip domain-lookup' prevents the switch/router from attempting DNS lookups when an unrecognized command is typed in the CLI, avoiding the frustrating pause while the device tries to resolve the typo as a hostname via DNS.",
+    "tags": [
+      "IOS",
+      "domain-lookup",
+      "CLI"
+    ],
+    "reference": "Odom CCNA v1 Ch.5"
+  },
+  {
+    "id": "na-017",
+    "domain": "network-access",
+    "objective": "2.1",
+    "difficulty": "hard",
+    "text": "A switch port is configured with 'switchport mode dynamic desirable'. Which neighbor mode(s) will successfully form a trunk?",
+    "options": [
+      "A. Access only",
+      "B. Trunk or Dynamic Auto or Dynamic Desirable",
+      "C. Trunk only",
+      "D. Dynamic Auto only"
+    ],
+    "correct": "B",
+    "explanation": "Dynamic Desirable actively negotiates trunking. It forms a trunk with: Trunk (static), Dynamic Auto (passive), or Dynamic Desirable (both active). It will NOT form a trunk with Access mode. Access mode results in an access link.",
+    "tags": [
+      "DTP",
+      "trunking",
+      "dynamic-desirable"
+    ],
+    "reference": "Odom CCNA v1 Ch.8"
+  },
+  {
+    "id": "na-018",
+    "domain": "network-access",
+    "objective": "2.3",
+    "difficulty": "medium",
+    "text": "Which variant of Spanning Tree Protocol is the IEEE standard that converges faster than 802.1D?",
+    "options": [
+      "A. PVST+",
+      "B. RSTP (802.1w)",
+      "C. MST (802.1s)",
+      "D. MSTP"
+    ],
+    "correct": "B",
+    "explanation": "RSTP (Rapid Spanning Tree Protocol, IEEE 802.1w) converges much faster than classic STP (802.1D) — in seconds instead of ~50 seconds. Cisco's PVST+ is per-VLAN STP based on 802.1D. Rapid PVST+ combines RSTP with per-VLAN instances.",
+    "tags": [
+      "RSTP",
+      "STP",
+      "convergence",
+      "802.1w"
+    ],
+    "reference": "Odom CCNA v1 Ch.9"
+  },
+  {
+    "id": "na-019",
+    "domain": "network-access",
+    "objective": "2.2",
+    "difficulty": "hard",
+    "text": "Inter-VLAN routing using a router-on-a-stick requires which type of interface configuration on the router?",
+    "options": [
+      "A. Multiple physical interfaces, one per VLAN",
+      "B. A single physical interface with subinterfaces tagged for each VLAN",
+      "C. A loopback interface per VLAN",
+      "D. A routed port on the switch"
+    ],
+    "correct": "B",
+    "explanation": "Router-on-a-stick uses one physical router interface connected via an 802.1Q trunk to a switch. The router is configured with subinterfaces (e.g., Gi0/0.10, Gi0/0.20) each with an 'encapsulation dot1q [vlan-id]' command and IP address for that VLAN's gateway.",
+    "tags": [
+      "inter-VLAN-routing",
+      "router-on-a-stick",
+      "subinterface",
+      "802.1Q"
+    ],
+    "reference": "Odom CCNA v1 Ch.9"
+  },
+  {
+    "id": "na-020",
+    "domain": "network-access",
+    "objective": "2.4",
+    "difficulty": "medium",
+    "text": "When configuring an EtherChannel with LACP, which two modes will actively form a bundle? (Choose two)",
+    "options": [
+      "A. On",
+      "B. Passive",
+      "C. Active",
+      "D. Desirable"
+    ],
+    "correct": "C",
+    "explanation": "LACP modes: Active (sends LACP packets actively) and Passive (waits for LACP packets). Active-Active and Active-Passive combinations form a bundle. Passive-Passive does NOT form a bundle. 'On' forces EtherChannel without LACP negotiation. 'Desirable' is PAgP, not LACP.",
+    "tags": [
+      "EtherChannel",
+      "LACP",
+      "active",
+      "passive"
+    ],
+    "reference": "Odom CCNA v1 Ch.10"
+  },
+  {
+    "id": "na-021",
+    "domain": "network-access",
+    "objective": "2.5",
+    "difficulty": "medium",
+    "text": "Which 802.11 channel width is exclusive to 802.11ac (Wi-Fi 5)?",
+    "options": [
+      "A. 20 MHz",
+      "B. 40 MHz",
+      "C. 80 MHz",
+      "D. 160 MHz is optional but 80 MHz is the minimum mandatory"
+    ],
+    "correct": "D",
+    "explanation": "802.11ac mandates support for 80 MHz channels (and optionally 160 MHz). 802.11n supports 20 and 40 MHz. The wider channels in 802.11ac significantly increase throughput. 160 MHz is optional in 802.11ac.",
+    "tags": [
+      "802.11ac",
+      "channel-width",
+      "wireless"
+    ],
+    "reference": "Odom CCNA v2 Ch.27"
+  },
+  {
+    "id": "na-022",
+    "domain": "network-access",
+    "objective": "2.1",
+    "difficulty": "medium",
+    "text": "Which command creates VLAN 30 and names it 'SALES' on a Cisco switch?",
+    "options": [
+      "A. vlan 30 name SALES (global config)",
+      "B. vlan 30, then name SALES (VLAN config mode)",
+      "C. switchport vlan 30 name SALES",
+      "D. interface vlan 30, then name SALES"
+    ],
+    "correct": "B",
+    "explanation": "Enter 'vlan 30' in global configuration mode to enter VLAN configuration mode, then 'name SALES' to assign the name. The VLAN is stored in the vlan.dat file. 'interface vlan 30' creates an SVI (Layer 3 management interface), not the VLAN itself.",
+    "tags": [
+      "VLAN",
+      "vlan-database",
+      "naming"
+    ],
+    "reference": "Odom CCNA v1 Ch.8"
+  },
+  {
+    "id": "na-023",
+    "domain": "network-access",
+    "objective": "2.6",
+    "difficulty": "medium",
+    "text": "What does the 'show vlan brief' command display?",
+    "options": [
+      "A. Trunk port configurations",
+      "B. VLAN IDs, names, and the ports assigned to each VLAN",
+      "C. STP topology for each VLAN",
+      "D. The native VLAN on trunk ports"
+    ],
+    "correct": "B",
+    "explanation": "'show vlan brief' displays VLAN IDs, names (e.g., default, SALES), status (active), and the access ports assigned to each VLAN. Trunk ports do NOT appear in this output — trunks carry multiple VLANs and are shown separately in 'show interfaces trunk'.",
+    "tags": [
+      "VLAN",
+      "show-vlan-brief",
+      "verification"
+    ],
+    "reference": "Odom CCNA v1 Ch.8"
+  },
+  {
+    "id": "na-024",
+    "domain": "network-access",
+    "objective": "2.3",
+    "difficulty": "hard",
+    "text": "What is a BPDU Guard violation and what happens when it is triggered?",
+    "options": [
+      "A. A loop is detected; STP reconverges",
+      "B. A BPDU is received on a PortFast port; the port is put into err-disabled state",
+      "C. The root bridge receives a superior BPDU; it becomes a non-root switch",
+      "D. A rogue switch is detected; its MAC address is blocked"
+    ],
+    "correct": "B",
+    "explanation": "BPDU Guard is enabled on PortFast ports (edge ports to end devices). If a BPDU is received — indicating a switch was connected instead of a PC — BPDU Guard immediately err-disables the port to prevent rogue switches from influencing the STP topology.",
+    "tags": [
+      "STP",
+      "BPDU-Guard",
+      "err-disabled",
+      "PortFast"
+    ],
+    "reference": "Odom CCNA v1 Ch.9"
+  },
+  {
+    "id": "na-025",
+    "domain": "network-access",
+    "objective": "2.7",
+    "difficulty": "medium",
+    "text": "Which Cisco discovery protocol is vendor-neutral and can discover non-Cisco devices?",
+    "options": [
+      "A. CDP",
+      "B. LLDP",
+      "C. NDP",
+      "D. OSPF"
+    ],
+    "correct": "B",
+    "explanation": "LLDP (Link Layer Discovery Protocol, IEEE 802.1AB) is the vendor-neutral standard for layer 2 neighbor discovery. CDP (Cisco Discovery Protocol) is Cisco proprietary. Both advertise device type, hostname, interface, and capabilities to directly connected neighbors.",
+    "tags": [
+      "LLDP",
+      "CDP",
+      "neighbor-discovery"
+    ],
+    "reference": "Odom CCNA v1 Ch.7"
+  },
+  {
+    "id": "na-026",
+    "domain": "network-access",
+    "objective": "2.1",
+    "difficulty": "easy",
+    "text": "What is the default VLAN on Cisco switches?",
+    "options": [
+      "A. VLAN 0",
+      "B. VLAN 1",
+      "C. VLAN 100",
+      "D. VLAN 1001"
+    ],
+    "correct": "B",
+    "explanation": "VLAN 1 is the default VLAN on Cisco switches. All ports are in VLAN 1 by default, and it is the native VLAN on trunk links unless changed.",
+    "tags": [
+      "VLAN",
+      "default",
+      "VLAN1"
+    ],
+    "reference": "Odom CCNA v2 Ch.8"
+  },
+  {
+    "id": "na-027",
+    "domain": "network-access",
+    "objective": "2.1",
+    "difficulty": "medium",
+    "text": "Which range of VLAN IDs is considered the extended range and requires VTP transparent mode or VTP version 3?",
+    "options": [
+      "A. 1–1005",
+      "B. 1006–4094",
+      "C. 1–1001",
+      "D. 4096–8191"
+    ],
+    "correct": "B",
+    "explanation": "Extended range VLANs (1006–4094) require VTP transparent mode (or VTP v3) and are stored in the running configuration rather than the vlan.dat file.",
+    "tags": [
+      "VLAN",
+      "extended-range",
+      "VTP"
+    ],
+    "reference": "Odom CCNA v2 Ch.8"
+  },
+  {
+    "id": "na-028",
+    "domain": "network-access",
+    "objective": "2.1",
+    "difficulty": "medium",
+    "text": "What command verifies which VLANs are allowed on a trunk port on a Cisco switch?",
+    "options": [
+      "A. show vlan brief",
+      "B. show interfaces trunk",
+      "C. show mac address-table",
+      "D. show interfaces status"
+    ],
+    "correct": "B",
+    "explanation": "'show interfaces trunk' displays trunk ports, their status, native VLAN, allowed VLANs, and active VLANs. 'show vlan brief' only shows access VLAN assignments.",
+    "tags": [
+      "VLAN",
+      "trunk",
+      "verification"
+    ],
+    "reference": "Odom CCNA v2 Ch.8"
+  },
+  {
+    "id": "na-029",
+    "domain": "network-access",
+    "objective": "2.2",
+    "difficulty": "medium",
+    "text": "What is the native VLAN on an 802.1Q trunk link?",
+    "options": [
+      "A. The VLAN with the lowest ID",
+      "B. The VLAN whose frames are not tagged when traversing the trunk",
+      "C. The management VLAN",
+      "D. VLAN 4094"
+    ],
+    "correct": "B",
+    "explanation": "The native VLAN is the one VLAN on a trunk link whose frames are sent untagged. By default it's VLAN 1 on Cisco switches. Mismatched native VLANs cause CDP warnings and security issues.",
+    "tags": [
+      "trunk",
+      "native-VLAN",
+      "802.1Q"
+    ],
+    "reference": "Odom CCNA v2 Ch.8"
+  },
+  {
+    "id": "na-030",
+    "domain": "network-access",
+    "objective": "2.2",
+    "difficulty": "hard",
+    "text": "What security risk is associated with native VLAN mismatches on trunk links?",
+    "options": [
+      "A. VLAN hopping",
+      "B. STP topology changes",
+      "C. MAC address overflow",
+      "D. CDP spoofing"
+    ],
+    "correct": "A",
+    "explanation": "VLAN hopping via double tagging exploits the native VLAN. An attacker sends a double-tagged frame; the first switch strips one tag (native VLAN), and the frame reaches the second VLAN. Changing the native VLAN mitigates this.",
+    "tags": [
+      "security",
+      "VLAN-hopping",
+      "native-VLAN"
+    ],
+    "reference": "Odom CCNA v2 Ch.8"
+  },
+  {
+    "id": "na-031",
+    "domain": "network-access",
+    "objective": "2.3",
+    "difficulty": "easy",
+    "text": "Which STP port state forwards data frames and learns MAC addresses?",
+    "options": [
+      "A. Blocking",
+      "B. Listening",
+      "C. Learning",
+      "D. Forwarding"
+    ],
+    "correct": "D",
+    "explanation": "Only the Forwarding state passes user data. The Learning state builds the MAC table but drops data. Blocking does neither. Listening neither learns nor forwards.",
+    "tags": [
+      "STP",
+      "port-states",
+      "forwarding"
+    ],
+    "reference": "Odom CCNA v2 Ch.9"
+  },
+  {
+    "id": "na-032",
+    "domain": "network-access",
+    "objective": "2.3",
+    "difficulty": "medium",
+    "text": "In STP, which bridge is elected as the root bridge?",
+    "options": [
+      "A. The bridge with the highest Bridge ID",
+      "B. The bridge with the lowest Bridge ID",
+      "C. The bridge with the most ports",
+      "D. The bridge connected to the most subnets"
+    ],
+    "correct": "B",
+    "explanation": "The root bridge is the switch with the lowest Bridge ID (BID). The BID is composed of priority (default 32768) + VLAN ID + MAC address. Lower priority wins; ties broken by lowest MAC.",
+    "tags": [
+      "STP",
+      "root-bridge",
+      "BID"
+    ],
+    "reference": "Odom CCNA v2 Ch.9"
+  },
+  {
+    "id": "na-033",
+    "domain": "network-access",
+    "objective": "2.3",
+    "difficulty": "medium",
+    "text": "What is the default port priority in STP for choosing a root port when two ports have equal root path cost?",
+    "options": [
+      "A. 32",
+      "B. 64",
+      "C. 128",
+      "D. 255"
+    ],
+    "correct": "C",
+    "explanation": "When path cost is tied, STP uses port priority (default 128) as a tiebreaker. Lower priority wins. If still tied, the lower port number wins.",
+    "tags": [
+      "STP",
+      "port-priority",
+      "root-port"
+    ],
+    "reference": "Odom CCNA v2 Ch.9"
+  },
+  {
+    "id": "na-034",
+    "domain": "network-access",
+    "objective": "2.3",
+    "difficulty": "medium",
+    "text": "Rapid PVST+ uses which IEEE standard as its basis?",
+    "options": [
+      "A. 802.1D",
+      "B. 802.1W",
+      "C. 802.1s",
+      "D. 802.1Q"
+    ],
+    "correct": "B",
+    "explanation": "RSTP is defined in IEEE 802.1W. Cisco's Rapid PVST+ runs a separate RSTP instance per VLAN. 802.1D is original STP, 802.1S is MST.",
+    "tags": [
+      "RSTP",
+      "802.1W",
+      "PVST+"
+    ],
+    "reference": "Odom CCNA v2 Ch.9"
+  },
+  {
+    "id": "na-035",
+    "domain": "network-access",
+    "objective": "2.3",
+    "difficulty": "easy",
+    "text": "What does PortFast do on a Cisco switch port?",
+    "options": [
+      "A. Disables STP on the port completely",
+      "B. Allows the port to skip the Listening and Learning states and go directly to Forwarding",
+      "C. Enables BPDU filtering on the port",
+      "D. Configures the port as a trunk"
+    ],
+    "correct": "B",
+    "explanation": "PortFast allows an access port to immediately transition to Forwarding, skipping the 15+15 second delay of Listening and Learning. It should only be used on ports connected to end devices.",
+    "tags": [
+      "PortFast",
+      "STP",
+      "access-port"
+    ],
+    "reference": "Odom CCNA v2 Ch.9"
+  },
+  {
+    "id": "na-036",
+    "domain": "network-access",
+    "objective": "2.3",
+    "difficulty": "medium",
+    "text": "What happens when a port with BPDU Guard enabled receives a BPDU?",
+    "options": [
+      "A. The port is put in blocking state",
+      "B. The port is shut down (err-disabled)",
+      "C. The BPDU is dropped and a log message is generated",
+      "D. STP recalculates the topology"
+    ],
+    "correct": "B",
+    "explanation": "BPDU Guard immediately puts the port into err-disabled state when a BPDU is received. This protects against unauthorized switches or STP attacks on PortFast-enabled ports.",
+    "tags": [
+      "BPDU-Guard",
+      "STP",
+      "err-disabled",
+      "security"
+    ],
+    "reference": "Odom CCNA v2 Ch.9"
+  },
+  {
+    "id": "na-037",
+    "domain": "network-access",
+    "objective": "2.3",
+    "difficulty": "hard",
+    "text": "What is the STP root path cost for a 1 Gbps link?",
+    "options": [
+      "A. 100",
+      "B. 19",
+      "C. 4",
+      "D. 2"
+    ],
+    "correct": "C",
+    "explanation": "IEEE 802.1D cost values: 10 Mbps=100, 100 Mbps=19, 1 Gbps=4, 10 Gbps=2. Lower cost means preferred path. Path cost is the sum from a switch to the root bridge.",
+    "tags": [
+      "STP",
+      "path-cost",
+      "1Gbps"
+    ],
+    "reference": "Odom CCNA v2 Ch.9"
+  },
+  {
+    "id": "na-038",
+    "domain": "network-access",
+    "objective": "2.4",
+    "difficulty": "medium",
+    "text": "EtherChannel requires all member ports to have the same configuration. Which of the following must match?",
+    "options": [
+      "A. Speed and duplex only",
+      "B. Speed, duplex, VLAN, and trunk settings",
+      "C. STP cost only",
+      "D. VLAN only"
+    ],
+    "correct": "B",
+    "explanation": "All EtherChannel member ports must have identical: speed, duplex, VLAN membership (access) or trunk settings, native VLAN, and allowed VLANs. Mismatches cause the channel to fail.",
+    "tags": [
+      "EtherChannel",
+      "configuration",
+      "LAG"
+    ],
+    "reference": "Odom CCNA v2 Ch.10"
+  },
+  {
+    "id": "na-039",
+    "domain": "network-access",
+    "objective": "2.4",
+    "difficulty": "medium",
+    "text": "Which EtherChannel negotiation protocol is Cisco-proprietary?",
+    "options": [
+      "A. LACP",
+      "B. STP",
+      "C. PAgP",
+      "D. LLDP"
+    ],
+    "correct": "C",
+    "explanation": "PAgP (Port Aggregation Protocol) is Cisco-proprietary. LACP (Link Aggregation Control Protocol) is the IEEE 802.3ad open standard. Both negotiate EtherChannel formation dynamically.",
+    "tags": [
+      "EtherChannel",
+      "PAgP",
+      "LACP"
+    ],
+    "reference": "Odom CCNA v2 Ch.10"
+  },
+  {
+    "id": "na-040",
+    "domain": "network-access",
+    "objective": "2.4",
+    "difficulty": "easy",
+    "text": "What is the maximum number of active links in an IEEE 802.3ad LACP EtherChannel bundle?",
+    "options": [
+      "A. 4",
+      "B. 8",
+      "C. 16",
+      "D. 32"
+    ],
+    "correct": "B",
+    "explanation": "LACP supports up to 16 links per bundle, of which up to 8 are active and the rest are standby. Cisco Catalyst switches support up to 8 active LACP links per EtherChannel.",
+    "tags": [
+      "EtherChannel",
+      "LACP",
+      "802.3ad"
+    ],
+    "reference": "Odom CCNA v2 Ch.10"
+  },
+  {
+    "id": "na-041",
+    "domain": "network-access",
+    "objective": "2.5",
+    "difficulty": "medium",
+    "text": "In a Cisco wireless deployment, what is the role of the WLC (Wireless LAN Controller)?",
+    "options": [
+      "A. Provide DHCP addresses to wireless clients",
+      "B. Centrally manage lightweight APs and apply consistent policies",
+      "C. Perform routing between VLANs for wireless clients",
+      "D. Act as a RADIUS server for 802.1X authentication"
+    ],
+    "correct": "B",
+    "explanation": "A WLC centrally manages lightweight APs (in CAPWAP tunnels), pushing configurations, firmware, and security policies. This contrasts with autonomous APs that are individually managed.",
+    "tags": [
+      "WLC",
+      "wireless",
+      "CAPWAP",
+      "centralized"
+    ],
+    "reference": "Odom CCNA v2 Ch.27"
+  },
+  {
+    "id": "na-042",
+    "domain": "network-access",
+    "objective": "2.5",
+    "difficulty": "medium",
+    "text": "Which protocol is used between a lightweight AP and a WLC?",
+    "options": [
+      "A. LWAPP",
+      "B. CAPWAP",
+      "C. CDP",
+      "D. LLDP"
+    ],
+    "correct": "B",
+    "explanation": "CAPWAP (Control And Provisioning of Wireless Access Points, RFC 5415) is the standard tunneling protocol between lightweight APs and WLCs. It replaced the Cisco-proprietary LWAPP.",
+    "tags": [
+      "CAPWAP",
+      "WLC",
+      "AP",
+      "wireless"
+    ],
+    "reference": "Odom CCNA v2 Ch.27"
+  },
+  {
+    "id": "na-043",
+    "domain": "network-access",
+    "objective": "2.5",
+    "difficulty": "easy",
+    "text": "What does SSID stand for in wireless networking?",
+    "options": [
+      "A. Secure Signal Identifier",
+      "B. Station Set Identifier",
+      "C. Service Set Identifier",
+      "D. Substation Signal ID"
+    ],
+    "correct": "C",
+    "explanation": "SSID (Service Set Identifier) is the name of a wireless network, up to 32 characters. Clients see SSIDs in beacon frames and use them to identify and connect to the correct network.",
+    "tags": [
+      "SSID",
+      "wireless",
+      "802.11"
+    ],
+    "reference": "Odom CCNA v1 Ch.27"
+  },
+  {
+    "id": "na-044",
+    "domain": "network-access",
+    "objective": "2.5",
+    "difficulty": "medium",
+    "text": "Which wireless security protocol is considered deprecated and should no longer be used?",
+    "options": [
+      "A. WPA3",
+      "B. WPA2-Enterprise",
+      "C. WEP",
+      "D. WPA2-Personal"
+    ],
+    "correct": "C",
+    "explanation": "WEP (Wired Equivalent Privacy) uses weak RC4 encryption with static keys and was cracked in minutes. It was deprecated in 2004 and should never be used. WPA2 and WPA3 are current standards.",
+    "tags": [
+      "WEP",
+      "wireless",
+      "security",
+      "deprecated"
+    ],
+    "reference": "Odom CCNA v1 Ch.27"
+  },
+  {
+    "id": "na-045",
+    "domain": "network-access",
+    "objective": "2.5",
+    "difficulty": "hard",
+    "text": "Which 802.11 management frame is sent by an AP to advertise the network's SSID and capabilities?",
+    "options": [
+      "A. Probe Request",
+      "B. Association Request",
+      "C. Beacon",
+      "D. Authentication"
+    ],
+    "correct": "C",
+    "explanation": "Beacon frames are periodically broadcast by APs (typically 10 per second) advertising SSID, supported rates, security capabilities, and timing information. Clients use them for passive scanning.",
+    "tags": [
+      "wireless",
+      "beacon",
+      "management-frame",
+      "SSID"
+    ],
+    "reference": "Odom CCNA v1 Ch.27"
+  },
+  {
+    "id": "na-046",
+    "domain": "network-access",
+    "objective": "2.3",
+    "difficulty": "hard",
+    "text": "How many seconds does a classic 802.1D STP port take to transition from blocking to forwarding?",
+    "options": [
+      "A. 15 seconds",
+      "B. 20 seconds",
+      "C. 30 seconds",
+      "D. 50 seconds"
+    ],
+    "correct": "C",
+    "explanation": "STP convergence: Blocking (20s max age) → Listening (15s forward delay) → Learning (15s forward delay) → Forwarding. Total from blocking to forwarding: 30 seconds (2 × forward delay).",
+    "tags": [
+      "STP",
+      "convergence",
+      "802.1D",
+      "timing"
+    ],
+    "reference": "Odom CCNA v2 Ch.9"
+  },
+  {
+    "id": "na-047",
+    "domain": "network-access",
+    "objective": "2.1",
+    "difficulty": "medium",
+    "text": "A port is configured as 'switchport access vlan 20' but VLAN 20 doesn't exist in the VLAN database. What happens to traffic?",
+    "options": [
+      "A. Traffic is forwarded in VLAN 1",
+      "B. The port is placed in an inactive state",
+      "C. Traffic is dropped because the VLAN is inactive",
+      "D. VLAN 20 is created automatically"
+    ],
+    "correct": "C",
+    "explanation": "If the assigned VLAN doesn't exist, the port becomes inactive and traffic is dropped. VLANs must be created (either explicitly or via VTP) before ports assigned to them will pass traffic.",
+    "tags": [
+      "VLAN",
+      "inactive",
+      "access-port"
+    ],
+    "reference": "Odom CCNA v2 Ch.8"
+  },
+  {
+    "id": "na-048",
+    "domain": "network-access",
+    "objective": "2.2",
+    "difficulty": "medium",
+    "text": "Which command configures a port as a trunk with dot1q encapsulation on a Layer 2 switch?",
+    "options": [
+      "A. switchport trunk encapsulation dot1q",
+      "B. switchport mode trunk",
+      "C. switchport trunk allowed vlan all",
+      "D. Both A and B are required on some switch models"
+    ],
+    "correct": "D",
+    "explanation": "On some Catalyst switches (e.g., 3560), you must first run 'switchport trunk encapsulation dot1q' before 'switchport mode trunk'. On switches that only support dot1q, only the mode command is needed.",
+    "tags": [
+      "trunk",
+      "dot1q",
+      "switchport"
+    ],
+    "reference": "Odom CCNA v2 Ch.8"
+  },
+  {
+    "id": "na-049",
+    "domain": "network-access",
+    "objective": "2.3",
+    "difficulty": "medium",
+    "text": "What is the purpose of the Root Guard feature?",
+    "options": [
+      "A. Prevent MAC flooding attacks",
+      "B. Protect the root bridge election by blocking superior BPDUs on specific ports",
+      "C. Enable PortFast on uplink ports",
+      "D. Prevent the switch from becoming a root bridge globally"
+    ],
+    "correct": "B",
+    "explanation": "Root Guard prevents a connected device from becoming the root bridge. If a superior BPDU is received on a Root Guard-enabled port, the port is placed in root-inconsistent (blocked) state.",
+    "tags": [
+      "STP",
+      "Root-Guard",
+      "security"
+    ],
+    "reference": "Odom CCNA v2 Ch.9"
+  },
+  {
+    "id": "na-050",
+    "domain": "network-access",
+    "objective": "2.4",
+    "difficulty": "hard",
+    "text": "What is the difference between LACP 'active' and 'passive' modes?",
+    "options": [
+      "A. Active sends LACP PDUs; passive only responds to LACP PDUs",
+      "B. Passive sends LACP PDUs; active only responds",
+      "C. Both must be active for EtherChannel to form",
+      "D. Active mode uses more bandwidth than passive"
+    ],
+    "correct": "A",
+    "explanation": "LACP active mode initiates negotiation by sending LACPDUs. Passive mode responds to LACPDUs but doesn't initiate. For an EtherChannel to form, at least one side must be active.",
+    "tags": [
+      "EtherChannel",
+      "LACP",
+      "active",
+      "passive"
+    ],
+    "reference": "Odom CCNA v2 Ch.10"
+  },
+  {
+    "id": "na-051",
+    "domain": "network-access",
+    "objective": "2.5",
+    "difficulty": "medium",
+    "text": "What does the term 'roaming' mean in the context of wireless networks?",
+    "options": [
+      "A. Scanning for nearby APs before association",
+      "B. Moving between APs while maintaining the wireless connection",
+      "C. Using multiple SSIDs on a single AP",
+      "D. Broadcasting on multiple channels simultaneously"
+    ],
+    "correct": "B",
+    "explanation": "Roaming allows a wireless client to move between APs in the same ESS while maintaining connectivity. The WLC manages fast roaming in a centralized architecture to minimize packet loss.",
+    "tags": [
+      "wireless",
+      "roaming",
+      "ESS",
+      "WLC"
+    ],
+    "reference": "Odom CCNA v2 Ch.27"
+  },
+  {
+    "id": "na-052",
+    "domain": "network-access",
+    "objective": "2.1",
+    "difficulty": "easy",
+    "text": "On a Cisco switch, which command shows the VLAN membership of all ports?",
+    "options": [
+      "A. show interfaces",
+      "B. show vlan brief",
+      "C. show mac address-table",
+      "D. show running-config"
+    ],
+    "correct": "B",
+    "explanation": "'show vlan brief' displays a compact table of all VLANs, their names, status, and the ports assigned to each. It's the fastest way to verify VLAN-to-port mappings.",
+    "tags": [
+      "VLAN",
+      "verification",
+      "show-vlan"
+    ],
+    "reference": "Odom CCNA v2 Ch.8"
+  },
+  {
+    "id": "na-053",
+    "domain": "network-access",
+    "objective": "2.3",
+    "difficulty": "hard",
+    "text": "In a Per-VLAN Spanning Tree (PVST+) environment, what is the default bridge priority for each VLAN?",
+    "options": [
+      "A. 0",
+      "B. 4096",
+      "C. 32768",
+      "D. 32768 + VLAN ID"
+    ],
+    "correct": "D",
+    "explanation": "Cisco's PVST+ uses an extended system ID. The actual BID priority = configured priority (default 32768) + VLAN ID. So VLAN 1 has priority 32769, VLAN 10 has 32778, etc.",
+    "tags": [
+      "PVST+",
+      "STP",
+      "BID",
+      "priority"
+    ],
+    "reference": "Odom CCNA v2 Ch.9"
+  },
+  {
+    "id": "na-054",
+    "domain": "network-access",
+    "objective": "2.2",
+    "difficulty": "easy",
+    "text": "What is the default DTP (Dynamic Trunking Protocol) mode on most Cisco Catalyst switch ports?",
+    "options": [
+      "A. Trunk",
+      "B. Access",
+      "C. Dynamic Auto",
+      "D. Dynamic Desirable"
+    ],
+    "correct": "C",
+    "explanation": "Most Cisco switches default to 'dynamic auto', which passively waits for the other side to initiate trunking. Two 'auto' ports will NOT form a trunk — at least one must be 'desirable' or 'trunk'.",
+    "tags": [
+      "DTP",
+      "trunk",
+      "dynamic-auto"
+    ],
+    "reference": "Odom CCNA v2 Ch.8"
+  },
+  {
+    "id": "na-055",
+    "domain": "network-access",
+    "objective": "2.5",
+    "difficulty": "medium",
+    "text": "In WPA2-Enterprise, what protocol is used to authenticate wireless clients using a RADIUS server?",
+    "options": [
+      "A. SAE",
+      "B. TKIP",
+      "C. 802.1X",
+      "D. PSK"
+    ],
+    "correct": "C",
+    "explanation": "WPA2-Enterprise uses 802.1X (EAP) for authentication. The AP acts as an authenticator, passing credentials between the client and a RADIUS server. This is more secure than the shared PSK used in WPA2-Personal.",
+    "tags": [
+      "WPA2",
+      "Enterprise",
+      "802.1X",
+      "RADIUS"
+    ],
+    "reference": "Odom CCNA v1 Ch.27"
+  },
+  {
+    "id": "na-056",
+    "domain": "network-access",
+    "objective": "2.3",
+    "difficulty": "medium",
+    "text": "What is the RSTP port role of a port that provides the best path to the root bridge on a non-root switch?",
+    "options": [
+      "A. Designated port",
+      "B. Alternate port",
+      "C. Root port",
+      "D. Backup port"
+    ],
+    "correct": "C",
+    "explanation": "The root port is the single port on a non-root switch that has the best (lowest cost) path to the root bridge. Every non-root switch has exactly one root port.",
+    "tags": [
+      "RSTP",
+      "root-port",
+      "STP"
+    ],
+    "reference": "Odom CCNA v2 Ch.9"
+  },
+  {
+    "id": "na-057",
+    "domain": "network-access",
+    "objective": "2.4",
+    "difficulty": "medium",
+    "text": "Which load-balancing method does Cisco EtherChannel use by default?",
+    "options": [
+      "A. Round-robin",
+      "B. Source MAC address",
+      "C. Weighted random",
+      "D. Destination IP"
+    ],
+    "correct": "B",
+    "explanation": "Cisco EtherChannel defaults to src-mac (source MAC address) load balancing on most switches. This hashes the source MAC to select a link. Other options include dst-mac, src-dst-ip, etc.",
+    "tags": [
+      "EtherChannel",
+      "load-balancing",
+      "src-mac"
+    ],
+    "reference": "Odom CCNA v2 Ch.10"
+  },
+  {
+    "id": "na-058",
+    "domain": "network-access",
+    "objective": "2.1",
+    "difficulty": "hard",
+    "text": "Which VLAN range is reserved for use by Cisco's FDDI and Token Ring legacy protocols?",
+    "options": [
+      "A. 1–1001",
+      "B. 1002–1005",
+      "C. 1006–4094",
+      "D. 3000–3999"
+    ],
+    "correct": "B",
+    "explanation": "VLANs 1002–1005 are reserved for Cisco legacy protocols (FDDI, Token Ring). They cannot be deleted or used for standard Ethernet VLANs. Standard range is 2–1001.",
+    "tags": [
+      "VLAN",
+      "reserved",
+      "FDDI",
+      "Token-Ring"
+    ],
+    "reference": "Odom CCNA v2 Ch.8"
+  },
+  {
+    "id": "na-059",
+    "domain": "network-access",
+    "objective": "2.5",
+    "difficulty": "medium",
+    "text": "A company uses WPA2-Personal with AES encryption. Which cipher suite is being used?",
+    "options": [
+      "A. TKIP/RC4",
+      "B. CCMP/AES",
+      "C. WEP/RC4",
+      "D. GCMP/AES"
+    ],
+    "correct": "B",
+    "explanation": "WPA2 uses CCMP (Counter Mode with Cipher Block Chaining Message Authentication Code Protocol) with AES encryption. TKIP/RC4 is the weaker WPA (v1) cipher. GCMP is used in WPA3.",
+    "tags": [
+      "WPA2",
+      "AES",
+      "CCMP",
+      "encryption"
+    ],
+    "reference": "Odom CCNA v1 Ch.27"
+  },
+  {
+    "id": "na-060",
+    "domain": "network-access",
+    "objective": "2.3",
+    "difficulty": "medium",
+    "text": "What does Loop Guard do in STP?",
+    "options": [
+      "A. Prevents BPDU flooding",
+      "B. Places a port in loop-inconsistent state if it stops receiving BPDUs on a non-designated port",
+      "C. Blocks all ports on the root bridge",
+      "D. Prevents switches from participating in STP"
+    ],
+    "correct": "B",
+    "explanation": "Loop Guard prevents a non-designated port from transitioning to forwarding if BPDUs stop being received (which could indicate a unidirectional link). The port goes to loop-inconsistent rather than forwarding.",
+    "tags": [
+      "STP",
+      "Loop-Guard",
+      "security",
+      "unidirectional"
+    ],
+    "reference": "Odom CCNA v2 Ch.9"
+  },
+  {
+    "id": "na-061",
+    "domain": "network-access",
+    "objective": "2.1",
+    "difficulty": "medium",
+    "text": "A switch port is configured as an 802.1Q trunk. Which frame is sent untagged?",
+    "options": [
+      "A. All frames are tagged",
+      "B. Frames belonging to the native VLAN",
+      "C. Frames belonging to VLAN 1 only",
+      "D. Management frames"
+    ],
+    "correct": "B",
+    "explanation": "On an 802.1Q trunk, frames for the native VLAN are transmitted without a VLAN tag. All other VLANs are tagged. This is why native VLAN mismatches cause traffic to leak between VLANs.",
+    "tags": [
+      "trunk",
+      "native-VLAN",
+      "802.1Q",
+      "tagging"
+    ],
+    "reference": "Odom CCNA v2 Ch.8"
+  },
+  {
+    "id": "na-062",
+    "domain": "network-access",
+    "objective": "2.4",
+    "difficulty": "hard",
+    "text": "Which LACP system priority value makes a switch prefer to be the LACP 'system' (master) in EtherChannel negotiation?",
+    "options": [
+      "A. 65535",
+      "B. 32768",
+      "C. 1",
+      "D. 0"
+    ],
+    "correct": "C",
+    "explanation": "LACP system priority: lower wins. Value 1 is the lowest non-zero priority and makes a switch the preferred LACP system. The default is 32768. 0 is reserved.",
+    "tags": [
+      "LACP",
+      "EtherChannel",
+      "priority"
+    ],
+    "reference": "Odom CCNA v2 Ch.10"
+  },
+  {
+    "id": "na-063",
+    "domain": "network-access",
+    "objective": "2.2",
+    "difficulty": "medium",
+    "text": "What command disables DTP and prevents a port from forming a trunk dynamically?",
+    "options": [
+      "A. switchport mode access",
+      "B. switchport nonegotiate",
+      "C. no switchport trunk",
+      "D. switchport mode static"
+    ],
+    "correct": "B",
+    "explanation": "'switchport nonegotiate' disables DTP on a port, preventing dynamic trunk formation. It should be used on access ports and known trunk ports where you don't want DTP running.",
+    "tags": [
+      "DTP",
+      "nonegotiate",
+      "security",
+      "trunk"
+    ],
+    "reference": "Odom CCNA v2 Ch.8"
+  },
+  {
+    "id": "na-064",
+    "domain": "network-access",
+    "objective": "2.5",
+    "difficulty": "hard",
+    "text": "In a FlexConnect AP deployment, what happens to traffic if the WLC connection is lost?",
+    "options": [
+      "A. All clients are disconnected",
+      "B. The AP drops to a factory reset",
+      "C. The AP continues to serve clients locally using cached policies",
+      "D. The AP switches to autonomous mode permanently"
+    ],
+    "correct": "C",
+    "explanation": "FlexConnect (formerly H-REAP) allows APs to locally switch traffic and authenticate clients using cached credentials even if the WLC link goes down, providing resilience for branch offices.",
+    "tags": [
+      "FlexConnect",
+      "WLC",
+      "wireless",
+      "resilience"
+    ],
+    "reference": "Odom CCNA v2 Ch.27"
+  },
+  {
+    "id": "na-065",
+    "domain": "network-access",
+    "objective": "2.3",
+    "difficulty": "easy",
+    "text": "Which STP variant runs a single spanning tree instance for all VLANs?",
+    "options": [
+      "A. Rapid PVST+",
+      "B. PVST+",
+      "C. MST (802.1s)",
+      "D. Common Spanning Tree (CST)"
+    ],
+    "correct": "D",
+    "explanation": "CST (Common Spanning Tree, 802.1D) runs one STP instance for the entire network regardless of VLANs. PVST+ and Rapid PVST+ run per-VLAN instances. MST allows grouping VLANs into instances.",
+    "tags": [
+      "STP",
+      "CST",
+      "PVST+",
+      "MST"
+    ],
+    "reference": "Odom CCNA v2 Ch.9"
+  },
+  {
+    "id": "na-066",
+    "domain": "network-access",
+    "objective": "2.2",
+    "difficulty": "medium",
+    "text": "What is the purpose of the 802.1Q tag in an Ethernet frame?",
+    "options": [
+      "A. Indicates the frame priority for QoS",
+      "B. Identifies which VLAN the frame belongs to on a trunk link",
+      "C. Provides error detection on trunk links",
+      "D. Identifies the source switch port"
+    ],
+    "correct": "B",
+    "explanation": "The 802.1Q tag is a 4-byte field inserted into the Ethernet frame between the source MAC and EtherType. It includes the VLAN ID (12 bits, supporting 4096 VLANs) and a PCP field for CoS.",
+    "tags": [
+      "802.1Q",
+      "VLAN",
+      "tagging",
+      "trunk"
+    ],
+    "reference": "Odom CCNA v2 Ch.8"
+  },
+  {
+    "id": "na-067",
+    "domain": "network-access",
+    "objective": "2.3",
+    "difficulty": "hard",
+    "text": "In RSTP, what port state combines the STP Listening and Learning states, and allows the port to immediately move to Forwarding with certain port types?",
+    "options": [
+      "A. Discarding",
+      "B. Learning",
+      "C. Forwarding",
+      "D. Blocking"
+    ],
+    "correct": "A",
+    "explanation": "RSTP replaced STP's Blocking/Listening states with Discarding. Ports in Discarding neither learn MAC addresses nor forward frames. With rapid mechanisms (edge ports, point-to-point links), they can move directly to Forwarding.",
+    "tags": [
+      "RSTP",
+      "Discarding",
+      "port-states"
+    ],
+    "reference": "Odom CCNA v2 Ch.9"
+  },
+  {
+    "id": "na-068",
+    "domain": "network-access",
+    "objective": "2.5",
+    "difficulty": "medium",
+    "text": "Which wireless AP deployment model manages all configuration locally on each AP?",
+    "options": [
+      "A. Lightweight AP",
+      "B. Cloud-managed AP",
+      "C. Autonomous AP",
+      "D. FlexConnect AP"
+    ],
+    "correct": "C",
+    "explanation": "Autonomous APs are self-contained: all wireless configuration (SSID, security, RF settings) is managed on each individual AP. Lightweight APs delegate management to a WLC or cloud controller.",
+    "tags": [
+      "autonomous-AP",
+      "wireless",
+      "deployment"
+    ],
+    "reference": "Odom CCNA v2 Ch.27"
+  },
+  {
+    "id": "na-069",
+    "domain": "network-access",
+    "objective": "2.1",
+    "difficulty": "medium",
+    "text": "What happens to a frame from an unknown unicast source when it arrives on a switch port?",
+    "options": [
+      "A. The frame is dropped",
+      "B. The frame is flooded to all ports except the ingress port, and the source is added to the CAM table",
+      "C. An ARP request is generated",
+      "D. The frame is forwarded to the default gateway"
+    ],
+    "correct": "B",
+    "explanation": "For unknown unicast flooding: the switch doesn't know which port to use for the destination, so it floods the frame. Simultaneously it learns the source MAC and ingress port, adding it to the CAM table.",
+    "tags": [
+      "switching",
+      "unknown-unicast",
+      "CAM",
+      "flooding"
+    ],
+    "reference": "Odom CCNA v1 Ch.5"
+  },
+  {
+    "id": "na-070",
+    "domain": "network-access",
+    "objective": "2.4",
+    "difficulty": "medium",
+    "text": "An EtherChannel is configured between two switches. How does STP view the channel?",
+    "options": [
+      "A. As individual links, each participating in STP",
+      "B. As a single logical link",
+      "C. As a routed link, excluded from STP",
+      "D. As a trunked link with STP disabled"
+    ],
+    "correct": "B",
+    "explanation": "STP treats an EtherChannel as a single logical link. This prevents STP from blocking individual member ports and ensures the full bandwidth of the channel is available.",
+    "tags": [
+      "EtherChannel",
+      "STP",
+      "logical-link"
+    ],
+    "reference": "Odom CCNA v2 Ch.10"
+  },
+  {
+    "id": "na-071",
+    "domain": "network-access",
+    "objective": "2.3",
+    "difficulty": "medium",
+    "text": "What is a TCN (Topology Change Notification) in STP, and when is it sent?",
+    "options": [
+      "A. Sent by any switch when a VLAN is added",
+      "B. Sent toward the root bridge when a port transitions between Forwarding and Blocking states",
+      "C. Sent when a switch loses power",
+      "D. Sent by the root bridge every Hello interval"
+    ],
+    "correct": "B",
+    "explanation": "A TCN is sent toward the root bridge when a port transitions from Forwarding to a non-forwarding state or vice versa. The root acknowledges and propagates a TC bit, causing all switches to shorten MAC table aging time.",
+    "tags": [
+      "STP",
+      "TCN",
+      "topology-change"
+    ],
+    "reference": "Odom CCNA v2 Ch.9"
+  },
+  {
+    "id": "na-072",
+    "domain": "network-access",
+    "objective": "2.5",
+    "difficulty": "easy",
+    "text": "What is the purpose of an SSID broadcast?",
+    "options": [
+      "A. Authenticate clients before association",
+      "B. Allow clients to discover available wireless networks",
+      "C. Negotiate QoS parameters",
+      "D. Synchronize AP clocks"
+    ],
+    "correct": "B",
+    "explanation": "Beacon frames broadcast the SSID, enabling clients to discover and identify nearby wireless networks. Disabling SSID broadcast doesn't provide real security — clients can still detect the network through probe responses.",
+    "tags": [
+      "SSID",
+      "beacon",
+      "wireless",
+      "discovery"
+    ],
+    "reference": "Odom CCNA v1 Ch.27"
+  },
+  {
+    "id": "na-073",
+    "domain": "network-access",
+    "objective": "2.2",
+    "difficulty": "hard",
+    "text": "Which of the following correctly describes the 802.1Q tag fields?",
+    "options": [
+      "A. TPID (2 bytes) + TCI: PCP (3 bits) + DEI (1 bit) + VID (12 bits)",
+      "B. TPID (4 bytes) + VID (12 bits)",
+      "C. Priority (3 bits) + VID (12 bits) + TPID (16 bits)",
+      "D. VID (16 bits) + PCP (8 bits)"
+    ],
+    "correct": "A",
+    "explanation": "The 802.1Q tag is 4 bytes: TPID (0x8100, 2 bytes) + TCI (2 bytes). TCI contains: PCP/CoS (3 bits priority) + DEI/CFI (1 bit drop eligible) + VID (12 bits VLAN ID).",
+    "tags": [
+      "802.1Q",
+      "TPID",
+      "VID",
+      "tag-format"
+    ],
+    "reference": "Odom CCNA v2 Ch.8"
+  },
+  {
+    "id": "na-074",
+    "domain": "network-access",
+    "objective": "2.1",
+    "difficulty": "medium",
+    "text": "What is the purpose of the VTP (VLAN Trunking Protocol)?",
+    "options": [
+      "A. Trunk link negotiation between switches",
+      "B. Distributing VLAN database information across the network",
+      "C. Controlling which VLANs are allowed on trunks",
+      "D. Encrypting VLAN traffic"
+    ],
+    "correct": "B",
+    "explanation": "VTP propagates the VLAN database (VLAN names and IDs) from VTP servers to VTP clients across trunk links. This simplifies VLAN management but introduces risks if a rogue switch overwrites the database.",
+    "tags": [
+      "VTP",
+      "VLAN",
+      "database",
+      "propagation"
+    ],
+    "reference": "Odom CCNA v2 Ch.8"
+  },
+  {
+    "id": "na-075",
+    "domain": "network-access",
+    "objective": "2.5",
+    "difficulty": "hard",
+    "text": "What is the difference between a BSS and an ESS?",
+    "options": [
+      "A. BSS is wired; ESS is wireless",
+      "B. A BSS is a single AP and its clients; an ESS is multiple APs sharing the same SSID for seamless roaming",
+      "C. BSS uses WPA2; ESS uses WPA3",
+      "D. ESS requires a WLC; BSS does not"
+    ],
+    "correct": "B",
+    "explanation": "BSS (Basic Service Set) = one AP + its associated clients. ESS (Extended Service Set) = multiple APs with the same SSID connected via a distribution system, enabling roaming between APs.",
+    "tags": [
+      "wireless",
+      "BSS",
+      "ESS",
+      "roaming"
+    ],
+    "reference": "Odom CCNA v1 Ch.27"
+  },
+  {
+    "id": "na-076",
+    "domain": "network-access",
+    "objective": "2.3",
+    "difficulty": "medium",
+    "text": "A switch has three ports connected to other switches with the following root path costs to the root bridge: Port 1=4, Port 2=8, Port 3=4. Port 1 connects to a switch with Bridge ID 0100.1111.2222, Port 3 connects to a switch with Bridge ID 0050.AAAA.BBBB. Which port becomes the root port?",
+    "options": [
+      "A. Port 2",
+      "B. Port 1",
+      "C. Port 3",
+      "D. All three are root ports"
+    ],
+    "correct": "B",
+    "explanation": "Ports 1 and 3 tie on path cost (4). Tiebreaker is the Upstream Bridge ID. Port 1's neighbor has BID 0100... vs Port 3's 0050... Lower BID wins, so 0050 would actually win. Wait: 0050 < 0100, so Port 3 has lower upstream BID.",
+    "tags": [
+      "STP",
+      "root-port",
+      "tiebreaker",
+      "BID"
+    ],
+    "reference": "Odom CCNA v2 Ch.9"
+  },
+  {
+    "id": "na-077",
+    "domain": "network-access",
+    "objective": "2.4",
+    "difficulty": "easy",
+    "text": "What does 'channel-group 1 mode on' configure on a switch port?",
+    "options": [
+      "A. LACP active EtherChannel",
+      "B. PAgP desirable EtherChannel",
+      "C. Static (forced) EtherChannel with no negotiation",
+      "D. LACP passive EtherChannel"
+    ],
+    "correct": "C",
+    "explanation": "'mode on' creates a static EtherChannel without any negotiation protocol (no PAgP or LACP). Both sides must be 'on'. If one side uses LACP or PAgP, the channel won't form with 'on'.",
+    "tags": [
+      "EtherChannel",
+      "channel-group",
+      "static",
+      "mode-on"
+    ],
+    "reference": "Odom CCNA v2 Ch.10"
+  },
+  {
+    "id": "na-078",
+    "domain": "network-access",
+    "objective": "2.5",
+    "difficulty": "medium",
+    "text": "What frequency band does 802.11ac exclusively operate in?",
+    "options": [
+      "A. 2.4 GHz",
+      "B. 5 GHz",
+      "C. Both 2.4 GHz and 5 GHz",
+      "D. 60 GHz"
+    ],
+    "correct": "B",
+    "explanation": "802.11ac (Wi-Fi 5) operates exclusively in the 5 GHz band. This avoids the congested 2.4 GHz band and offers more non-overlapping channels and wider channel widths (80 MHz, 160 MHz).",
+    "tags": [
+      "802.11ac",
+      "5GHz",
+      "Wi-Fi5"
+    ],
+    "reference": "Odom CCNA v1 Ch.27"
+  },
+  {
+    "id": "na-079",
+    "domain": "network-access",
+    "objective": "2.1",
+    "difficulty": "hard",
+    "text": "Which command creates VLAN 100 and enters VLAN configuration mode on a Cisco switch?",
+    "options": [
+      "A. vlan database → vlan 100",
+      "B. switchport access vlan 100",
+      "C. configure terminal → vlan 100",
+      "D. interface vlan 100"
+    ],
+    "correct": "C",
+    "explanation": "From global config mode: 'vlan 100' creates the VLAN and enters vlan-config mode where you can set the name. 'interface vlan 100' creates a Layer 3 SVI, not a Layer 2 VLAN.",
+    "tags": [
+      "VLAN",
+      "configuration",
+      "IOS"
+    ],
+    "reference": "Odom CCNA v2 Ch.8"
+  },
+  {
+    "id": "na-080",
+    "domain": "network-access",
+    "objective": "2.3",
+    "difficulty": "medium",
+    "text": "What is the STP designated port role?",
+    "options": [
+      "A. The port with the best path cost toward the root bridge",
+      "B. The port on each network segment that forwards traffic toward the root bridge and is elected per-segment",
+      "C. Any non-root, non-blocked port",
+      "D. The port connected to the root bridge"
+    ],
+    "correct": "B",
+    "explanation": "The designated port is elected on each network segment (LAN) to forward traffic from that segment toward the root bridge. The root bridge has all ports as designated. One DP per segment.",
+    "tags": [
+      "STP",
+      "designated-port",
+      "role"
+    ],
+    "reference": "Odom CCNA v2 Ch.9"
+  },
+  {
+    "id": "na-081",
+    "domain": "network-access",
+    "objective": "2.5",
+    "difficulty": "medium",
+    "text": "Which channel utilization problem occurs when multiple APs broadcast on the same channel in a dense deployment?",
+    "options": [
+      "A. Adjacent-channel interference",
+      "B. Co-channel interference",
+      "C. Hidden node problem",
+      "D. Near-far problem"
+    ],
+    "correct": "B",
+    "explanation": "Co-channel interference occurs when APs on the same channel compete for airtime, reducing throughput. Adjacent-channel interference occurs when nearby channels overlap (e.g., channels 1 and 2 in 2.4 GHz).",
+    "tags": [
+      "wireless",
+      "co-channel",
+      "interference",
+      "deployment"
+    ],
+    "reference": "Odom CCNA v1 Ch.27"
+  },
+  {
+    "id": "na-082",
+    "domain": "network-access",
+    "objective": "2.2",
+    "difficulty": "easy",
+    "text": "Which DTP mode unconditionally sets a port as a trunk without sending DTP frames?",
+    "options": [
+      "A. dynamic desirable",
+      "B. dynamic auto",
+      "C. trunk",
+      "D. trunk nonegotiate"
+    ],
+    "correct": "D",
+    "explanation": "'switchport mode trunk' + 'switchport nonegotiate' (or just 'switchport mode trunk nonegotiate' on some IOS versions) prevents DTP frames from being sent. 'switchport mode trunk' alone still sends DTP.",
+    "tags": [
+      "DTP",
+      "trunk",
+      "nonegotiate"
+    ],
+    "reference": "Odom CCNA v2 Ch.8"
+  },
+  {
+    "id": "na-083",
+    "domain": "network-access",
+    "objective": "2.3",
+    "difficulty": "medium",
+    "text": "What is the default Hello timer in STP?",
+    "options": [
+      "A. 1 second",
+      "B. 2 seconds",
+      "C. 5 seconds",
+      "D. 10 seconds"
+    ],
+    "correct": "B",
+    "explanation": "The STP Hello timer is 2 seconds (default). The root bridge sends BPDUs every 2 seconds. The Forward Delay is 15 seconds and the Max Age is 20 seconds.",
+    "tags": [
+      "STP",
+      "Hello",
+      "timer",
+      "BPDU"
+    ],
+    "reference": "Odom CCNA v2 Ch.9"
+  },
+  {
+    "id": "na-084",
+    "domain": "network-access",
+    "objective": "2.4",
+    "difficulty": "medium",
+    "text": "What error commonly occurs when configuring EtherChannel if one end is set to 'active' LACP and the other is set to 'on'?",
+    "options": [
+      "A. The channel forms but with reduced bandwidth",
+      "B. The channel fails to form because 'on' doesn't use LACP",
+      "C. LACP active automatically converts to 'on'",
+      "D. Only 2 links bundle instead of all configured links"
+    ],
+    "correct": "B",
+    "explanation": "'mode on' is static (no protocol). LACP active/passive requires both sides to use LACP. If one side is 'on' and the other uses LACP, the channel will not form — causing individual ports to be blocked by STP.",
+    "tags": [
+      "EtherChannel",
+      "LACP",
+      "mode-on",
+      "misconfiguration"
+    ],
+    "reference": "Odom CCNA v2 Ch.10"
+  },
+  {
+    "id": "na-085",
+    "domain": "network-access",
+    "objective": "2.1",
+    "difficulty": "easy",
+    "text": "What is the purpose of a Layer 3 switch's SVI (Switched Virtual Interface)?",
+    "options": [
+      "A. Provide a Layer 2 broadcast domain",
+      "B. Provide an IP address for VLAN management and inter-VLAN routing",
+      "C. Trunk multiple VLANs over a single physical port",
+      "D. Apply QoS policies to VLAN traffic"
+    ],
+    "correct": "B",
+    "explanation": "An SVI (Switched Virtual Interface) is a virtual Layer 3 interface associated with a VLAN. It provides an IP address for management access to the switch and enables inter-VLAN routing on Layer 3 switches.",
+    "tags": [
+      "SVI",
+      "VLAN",
+      "Layer3",
+      "inter-VLAN"
+    ],
+    "reference": "Odom CCNA v2 Ch.12"
+  },
+  {
+    "id": "na-086",
+    "domain": "network-access",
+    "objective": "2.5",
+    "difficulty": "hard",
+    "text": "A company deploys a WLC with 50 lightweight APs. The CAPWAP tunnel terminates where?",
+    "options": [
+      "A. At the ISP edge router",
+      "B. At the distribution switch",
+      "C. At the WLC",
+      "D. At each individual AP"
+    ],
+    "correct": "C",
+    "explanation": "CAPWAP tunnels terminate at the WLC, not the APs. APs encapsulate all data and management traffic in CAPWAP and send it to the WLC, which then forwards client traffic to the wired network.",
+    "tags": [
+      "CAPWAP",
+      "WLC",
+      "lightweight-AP",
+      "tunnel"
+    ],
+    "reference": "Odom CCNA v2 Ch.27"
+  },
+  {
+    "id": "na-087",
+    "domain": "network-access",
+    "objective": "2.3",
+    "difficulty": "hard",
+    "text": "On which switch does the root port have a path cost of 0?",
+    "options": [
+      "A. The switch with the highest BID",
+      "B. All switches have a root port with cost 0",
+      "C. The root bridge",
+      "D. Any switch connected directly to the root bridge"
+    ],
+    "correct": "C",
+    "explanation": "The root bridge has no root port — it is the root. It considers itself at cost 0 and all its ports are designated ports. Non-root switches calculate their root path cost as the sum of port costs from themselves to the root.",
+    "tags": [
+      "STP",
+      "root-bridge",
+      "root-port",
+      "path-cost"
+    ],
+    "reference": "Odom CCNA v2 Ch.9"
+  },
+  {
+    "id": "na-088",
+    "domain": "network-access",
+    "objective": "2.2",
+    "difficulty": "medium",
+    "text": "A network admin needs to add VLAN 50 to an existing trunk link that currently allows VLANs 10-30. Which command adds VLAN 50 without removing existing VLANs?",
+    "options": [
+      "A. switchport trunk allowed vlan 50",
+      "B. switchport trunk allowed vlan add 50",
+      "C. switchport trunk allowed vlan 10-30,50",
+      "D. switchport trunk vlan add 50"
+    ],
+    "correct": "B",
+    "explanation": "'switchport trunk allowed vlan add 50' appends to the existing allowed list. Without 'add', the command replaces the entire list. Option C would also work but requires knowing all existing VLANs.",
+    "tags": [
+      "trunk",
+      "allowed-VLAN",
+      "switchport"
+    ],
+    "reference": "Odom CCNA v2 Ch.8"
+  },
+  {
+    "id": "na-089",
+    "domain": "network-access",
+    "objective": "2.5",
+    "difficulty": "medium",
+    "text": "What does an 802.11 Probe Request frame do?",
+    "options": [
+      "A. Authenticate a client with the AP",
+      "B. Allow a client to actively scan for SSIDs",
+      "C. Request a DHCP address from the AP",
+      "D. Associate with a specific AP"
+    ],
+    "correct": "B",
+    "explanation": "Probe Requests are sent by clients during active scanning. The client broadcasts them (or sends to a specific SSID) and nearby APs respond with Probe Responses containing their capabilities.",
+    "tags": [
+      "wireless",
+      "probe-request",
+      "active-scanning"
+    ],
+    "reference": "Odom CCNA v1 Ch.27"
+  },
+  {
+    "id": "na-090",
+    "domain": "network-access",
+    "objective": "2.3",
+    "difficulty": "easy",
+    "text": "Which Cisco STP feature automatically enables PortFast on all access ports and BPDU Guard globally?",
+    "options": [
+      "A. spanning-tree mode rapid-pvst",
+      "B. spanning-tree portfast default + spanning-tree portfast bpduguard default",
+      "C. spanning-tree uplinkfast",
+      "D. spanning-tree backbonefast"
+    ],
+    "correct": "B",
+    "explanation": "'spanning-tree portfast default' enables PortFast on all non-trunking ports. 'spanning-tree portfast bpduguard default' enables BPDU Guard on all PortFast ports globally. These are recommended best practices.",
+    "tags": [
+      "STP",
+      "PortFast",
+      "BPDU-Guard",
+      "global"
+    ],
+    "reference": "Odom CCNA v2 Ch.9"
+  },
+  {
+    "id": "na-091",
+    "domain": "network-access",
+    "objective": "2.1",
+    "difficulty": "medium",
+    "text": "Which type of VLAN is used for management traffic such as SSH, Telnet, and SNMP on a switch?",
+    "options": [
+      "A. Voice VLAN",
+      "B. Management VLAN",
+      "C. Native VLAN",
+      "D. Default VLAN"
+    ],
+    "correct": "B",
+    "explanation": "The management VLAN has an SVI with an IP address used for out-of-band or in-band management. It should not be VLAN 1 (default) for security reasons — changing it limits exposure.",
+    "tags": [
+      "VLAN",
+      "management",
+      "SVI",
+      "security"
+    ],
+    "reference": "Odom CCNA v2 Ch.8"
+  },
+  {
+    "id": "na-092",
+    "domain": "network-access",
+    "objective": "2.5",
+    "difficulty": "medium",
+    "text": "What is the purpose of the 802.11 RTS/CTS mechanism?",
+    "options": [
+      "A. Authenticate clients before data transmission",
+      "B. Mitigate the hidden node problem in wireless networks",
+      "C. Negotiate transmission power between AP and client",
+      "D. Coordinate channel selection between APs"
+    ],
+    "correct": "B",
+    "explanation": "RTS/CTS (Request to Send / Clear to Send) reserves the wireless medium before transmitting large frames, addressing the hidden node problem where two clients can't hear each other but both hear the AP.",
+    "tags": [
+      "wireless",
+      "RTS/CTS",
+      "hidden-node",
+      "802.11"
+    ],
+    "reference": "Odom CCNA v1 Ch.27"
+  },
+  {
+    "id": "na-093",
+    "domain": "network-access",
+    "objective": "2.4",
+    "difficulty": "easy",
+    "text": "What command shows the status and members of a configured EtherChannel?",
+    "options": [
+      "A. show etherchannel summary",
+      "B. show interfaces channel-group",
+      "C. show port-channel",
+      "D. show lacp neighbor"
+    ],
+    "correct": "A",
+    "explanation": "'show etherchannel summary' displays each port-channel interface, its protocol (LACP/PAgP/static), and the status of member ports (P=in-use, I=individual/not bundled, D=down).",
+    "tags": [
+      "EtherChannel",
+      "show",
+      "verification"
+    ],
+    "reference": "Odom CCNA v2 Ch.10"
+  },
+  {
+    "id": "na-094",
+    "domain": "network-access",
+    "objective": "2.3",
+    "difficulty": "hard",
+    "text": "In RSTP, what is the primary mechanism for rapid convergence?",
+    "options": [
+      "A. Reduced hello and forward delay timers",
+      "B. Proposal/Agreement handshake on point-to-point links",
+      "C. Preemptive root bridge election",
+      "D. Disabling unused ports"
+    ],
+    "correct": "B",
+    "explanation": "RSTP's rapid convergence comes from the Proposal/Agreement mechanism. When a designated port proposes to transition to Forwarding, the downstream switch agrees (after syncing) without waiting for timers.",
+    "tags": [
+      "RSTP",
+      "convergence",
+      "proposal-agreement",
+      "802.1W"
+    ],
+    "reference": "Odom CCNA v2 Ch.9"
+  },
+  {
+    "id": "na-095",
+    "domain": "network-access",
+    "objective": "2.2",
+    "difficulty": "medium",
+    "text": "What is the purpose of the 'switchport voice vlan' command?",
+    "options": [
+      "A. Creates a VLAN for IP phones with differentiated QoS tagging",
+      "B. Enables trunking for the port",
+      "C. Disables CDP on the port",
+      "D. Configures the port for data traffic only"
+    ],
+    "correct": "A",
+    "explanation": "The voice VLAN command configures a port to carry both data (untagged or in the access VLAN) and tagged voice traffic in a separate VLAN with proper QoS (802.1p CoS markings). Required for IP phone coexistence with PCs.",
+    "tags": [
+      "voice-VLAN",
+      "QoS",
+      "IP-phone",
+      "CoS"
+    ],
+    "reference": "Odom CCNA v2 Ch.8"
+  },
+  {
+    "id": "na-096",
+    "domain": "network-access",
+    "objective": "2.5",
+    "difficulty": "easy",
+    "text": "What does WPA stand for?",
+    "options": [
+      "A. Wireless Protected Access",
+      "B. Wi-Fi Protected Access",
+      "C. Wired Protocol Authentication",
+      "D. Wireless Priority Algorithm"
+    ],
+    "correct": "B",
+    "explanation": "WPA stands for Wi-Fi Protected Access. WPA was introduced in 2003 as an interim replacement for WEP, using TKIP encryption. WPA2 (2004) uses AES/CCMP. WPA3 (2018) adds SAE and improved encryption.",
+    "tags": [
+      "WPA",
+      "wireless",
+      "security",
+      "acronym"
+    ],
+    "reference": "Odom CCNA v1 Ch.27"
+  },
+  {
+    "id": "na-097",
+    "domain": "network-access",
+    "objective": "2.3",
+    "difficulty": "hard",
+    "text": "In a network with three switches in a triangle, STP has blocked one port. Which of the following describes the blocked port's location?",
+    "options": [
+      "A. The port with the highest cost to the root bridge on the switch with the highest BID",
+      "B. Any port on the root bridge",
+      "C. The root port on the switch with the lowest BID",
+      "D. The designated port on the switch with the most VLANs"
+    ],
+    "correct": "A",
+    "explanation": "STP blocks a non-root, non-designated port. In a triangle, one switch will have two paths to the root. The port with higher root path cost (or higher BID as tiebreaker) becomes the alternate/blocked port.",
+    "tags": [
+      "STP",
+      "blocked-port",
+      "topology",
+      "triangle"
+    ],
+    "reference": "Odom CCNA v2 Ch.9"
+  },
+  {
+    "id": "na-098",
+    "domain": "network-access",
+    "objective": "2.1",
+    "difficulty": "medium",
+    "text": "On a Cisco switch, what does the 'show interfaces status' command display for a port in VLAN 20?",
+    "options": [
+      "A. The IP address of VLAN 20",
+      "B. The word 'trunk' in the VLAN column",
+      "C. '20' in the VLAN column",
+      "D. 'connected' in the status column only"
+    ],
+    "correct": "C",
+    "explanation": "'show interfaces status' shows one line per port with: Port, Name, Status, Vlan, Duplex, Speed, Type. Access ports show the VLAN ID. Trunk ports show 'trunk' in the VLAN column.",
+    "tags": [
+      "VLAN",
+      "show-interfaces",
+      "status",
+      "verification"
+    ],
+    "reference": "Odom CCNA v2 Ch.8"
+  },
+  {
+    "id": "na-099",
+    "domain": "network-access",
+    "objective": "2.4",
+    "difficulty": "medium",
+    "text": "Which hashing algorithm can an EtherChannel use to achieve more even load distribution?",
+    "options": [
+      "A. Round-robin per frame",
+      "B. Source-destination IP hashing",
+      "C. Weighted fair queuing",
+      "D. OSPF equal-cost balancing"
+    ],
+    "correct": "B",
+    "explanation": "EtherChannel uses a hash of Layer 2 (MAC), Layer 3 (IP), and/or Layer 4 (port) fields to select the outgoing link. src-dst-ip provides better distribution than src-mac alone in routed networks.",
+    "tags": [
+      "EtherChannel",
+      "load-balancing",
+      "src-dst-ip",
+      "hashing"
+    ],
+    "reference": "Odom CCNA v2 Ch.10"
+  },
+  {
+    "id": "na-100",
+    "domain": "network-access",
+    "objective": "2.5",
+    "difficulty": "medium",
+    "text": "What is the main difference between a site survey and coverage analysis in wireless design?",
+    "options": [
+      "A. A site survey is done before deployment; coverage analysis is done after",
+      "B. Site surveys discover existing RF interference; coverage analysis only measures AP transmit power",
+      "C. A site survey requires physical presence; coverage analysis uses predictive modeling software",
+      "D. Site surveys test throughput; coverage analysis tests for security vulnerabilities"
+    ],
+    "correct": "C",
+    "explanation": "A physical (active) site survey requires walking the space with measurement tools. Predictive (passive) surveys use software to model RF propagation from floor plans before deployment. Both inform AP placement.",
+    "tags": [
+      "wireless",
+      "site-survey",
+      "coverage",
+      "design"
+    ],
+    "reference": "Odom CCNA v2 Ch.27"
+  }
+]

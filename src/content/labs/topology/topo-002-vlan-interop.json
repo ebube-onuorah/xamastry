@@ -1,0 +1,107 @@
+{
+  "id": "topo-002",
+  "title": "VLAN Inter-op: Switch + Router-on-a-Stick",
+  "domain": "network-access",
+  "difficulty": "intermediate",
+  "estimatedMinutes": 30,
+  "description": "Configure VLANs on a switch, set trunk and access ports, then configure the router with subinterfaces for inter-VLAN routing. The classic router-on-a-stick topology.",
+  "objectives": ["2.1", "3.5"],
+  "devices": [
+    {
+      "id": "SW1",
+      "type": "switch",
+      "label": "SW1",
+      "position": { "x": 400, "y": 350 },
+      "initialState": {
+        "hostname": "SW1",
+        "mode": "user"
+      }
+    },
+    {
+      "id": "R1",
+      "type": "router",
+      "label": "R1",
+      "position": { "x": 400, "y": 100 },
+      "initialState": {
+        "hostname": "R1",
+        "mode": "user"
+      }
+    },
+    {
+      "id": "PC1",
+      "type": "pc",
+      "label": "PC1\n192.168.10.10",
+      "position": { "x": 100, "y": 500 }
+    },
+    {
+      "id": "PC2",
+      "type": "pc",
+      "label": "PC2\n192.168.20.10",
+      "position": { "x": 700, "y": 500 }
+    }
+  ],
+  "links": [
+    { "id": "e1", "source": "R1", "target": "SW1", "label": "Trunk Gi0/0" },
+    { "id": "e2", "source": "SW1", "target": "PC1", "label": "Fa0/1 Access VLAN10" },
+    { "id": "e3", "source": "SW1", "target": "PC2", "label": "Fa0/2 Access VLAN20" }
+  ],
+  "scenario": "SW1 connects PC1 (VLAN 10, 192.168.10.0/24) and PC2 (VLAN 20, 192.168.20.0/24). R1's Gi0/0 is the trunk uplink. Configure the switch VLANs, trunk, and access ports; then configure R1 subinterfaces for inter-VLAN routing.",
+  "tasks": [
+    {
+      "deviceId": "SW1",
+      "id": "t1",
+      "description": "Create VLAN 10 named SALES on SW1",
+      "hint": "vlan 10 → name SALES",
+      "check": { "type": "vlan_name", "description": "VLAN 10 named SALES", "expected": { "id": 10, "name": "SALES" } }
+    },
+    {
+      "deviceId": "SW1",
+      "id": "t2",
+      "description": "Create VLAN 20 named ENGINEERING on SW1",
+      "hint": "vlan 20 → name ENGINEERING",
+      "check": { "type": "vlan_name", "description": "VLAN 20 named ENGINEERING", "expected": { "id": 20, "name": "ENGINEERING" } }
+    },
+    {
+      "deviceId": "SW1",
+      "id": "t3",
+      "description": "Set GigabitEthernet0/1 (uplink to R1) as trunk",
+      "hint": "interface GigabitEthernet0/1 → switchport mode trunk",
+      "check": { "type": "switchport_mode", "description": "Gi0/1 trunk", "expected": { "interface": "GigabitEthernet0/1", "mode": "trunk" } }
+    },
+    {
+      "deviceId": "SW1",
+      "id": "t4",
+      "description": "Assign FastEthernet0/1 (PC1) to VLAN 10 in access mode",
+      "hint": "interface FastEthernet0/1 → switchport mode access → switchport access vlan 10",
+      "check": { "type": "switchport_access_vlan", "description": "Fa0/1 access VLAN 10", "expected": { "interface": "FastEthernet0/1", "vlan": 10 } }
+    },
+    {
+      "deviceId": "SW1",
+      "id": "t5",
+      "description": "Assign FastEthernet0/2 (PC2) to VLAN 20 in access mode",
+      "hint": "interface FastEthernet0/2 → switchport mode access → switchport access vlan 20",
+      "check": { "type": "switchport_access_vlan", "description": "Fa0/2 access VLAN 20", "expected": { "interface": "FastEthernet0/2", "vlan": 20 } }
+    },
+    {
+      "deviceId": "R1",
+      "id": "t6",
+      "description": "Configure R1 Gi0/0.10 with dot1q 10 and IP 192.168.10.1/24",
+      "hint": "interface Gi0/0.10 → encapsulation dot1q 10 → ip address 192.168.10.1 255.255.255.0",
+      "check": { "type": "interface_ip", "description": "R1 Gi0/0.10 IP", "expected": { "interface": "GigabitEthernet0/0.10", "ip": "192.168.10.1", "mask": "255.255.255.0" } }
+    },
+    {
+      "deviceId": "R1",
+      "id": "t7",
+      "description": "Configure R1 Gi0/0.20 with dot1q 20 and IP 192.168.20.1/24",
+      "hint": "interface Gi0/0.20 → encapsulation dot1q 20 → ip address 192.168.20.1 255.255.255.0",
+      "check": { "type": "interface_ip", "description": "R1 Gi0/0.20 IP", "expected": { "interface": "GigabitEthernet0/0.20", "ip": "192.168.20.1", "mask": "255.255.255.0" } }
+    },
+    {
+      "deviceId": "R1",
+      "id": "t8",
+      "description": "Bring R1's GigabitEthernet0/0 physical interface up",
+      "hint": "interface GigabitEthernet0/0 → no shutdown",
+      "check": { "type": "interface_status", "description": "R1 Gi0/0 up", "expected": { "interface": "GigabitEthernet0/0", "status": "up" } }
+    }
+  ]
+}
