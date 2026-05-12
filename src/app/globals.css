@@ -2,8 +2,8 @@
 @import "xterm/css/xterm.css";
 
 :root {
-  --background: #0a0a0a;
-  --foreground: #f8fafc;
+  --background: #fafafa;
+  --foreground: #09090b;
 }
 
 @theme inline {
@@ -11,6 +11,7 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans, Geist, Arial, sans-serif);
   --font-mono: var(--font-geist-mono, "Geist Mono", monospace);
+  --font-playfair: var(--font-playfair, Georgia, serif);
 }
 
 body {
