@@ -1,7 +1,24 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { X, Loader2 } from "lucide-react";
+import { useState } from "react";
+import { X, Loader2, Sparkles } from "lucide-react";
+
+const AI_DAILY_LIMIT = 5;
+
+function getLocalUsedToday(): number {
+  if (typeof window === "undefined") return 0;
+  const today = new Date().toISOString().slice(0, 10);
+  const key = `xamastry-ai-${today}`;
+  return parseInt(localStorage.getItem(key) ?? "0", 10);
+}
+
+function incrementLocalUsed(): number {
+  const today = new Date().toISOString().slice(0, 10);
+  const key = `xamastry-ai-${today}`;
+  const next = getLocalUsedToday() + 1;
+  localStorage.setItem(key, String(next));
+  return next;
+}
 
 interface ExplanationPanelProps {
   questionId: string;
@@ -22,21 +39,49 @@ export default function ExplanationPanel({
 }: ExplanationPanelProps) {
   const [aiText, setAiText] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-  const wrong = studentAnswer !== correctAnswer;
+  const [limitReached, setLimitReached] = useState(false);
+  const [usedToday, setUsedToday] = useState(() => getLocalUsedToday());
+  const [aiRequested, setAiRequested] = useState(false);
 
-  useEffect(() => {
-    if (!wrong) return;
+  const wrong = studentAnswer !== correctAnswer;
+  const remaining = Math.max(0, AI_DAILY_LIMIT - usedToday);
+
+  async function requestAiExplanation() {
+    if (loading || aiRequested) return;
+    if (usedToday >= AI_DAILY_LIMIT) {
+      setLimitReached(true);
+      return;
+    }
+
     setLoading(true);
-    fetch("/api/explain", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ questionId, studentAnswer }),
-    })
-      .then((r) => r.json())
-      .then((d) => setAiText(d.explanation ?? null))
-      .catch(() => setAiText(null))
-      .finally(() => setLoading(false));
-  }, [questionId, studentAnswer, wrong]);
+    setAiRequested(true);
+
+    try {
+      const res = await fetch("/api/explain", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ questionId, studentAnswer }),
+      });
+
+      if (res.status === 429) {
+        setLimitReached(true);
+        setAiRequested(false);
+        return;
+      }
+
+      if (!res.ok) throw new Error("API error");
+
+      const data = await res.json();
+      setAiText(data.explanation ?? null);
+      const next = incrementLocalUsed();
+      setUsedToday(next);
+    } catch {
+      setAiText(null);
+      setAiRequested(false);
+    } finally {
+      setLoading(false);
+    }
+  }
 
   return (
     <aside className="flex flex-col border-2 border-black bg-[#fafafa] p-5">
@@ -59,30 +104,70 @@ export default function ExplanationPanel({
         </button>
       </div>
 
-      {/* Static explanation */}
+      {/* Static explanation — always visible */}
       <div className="border border-zinc-200 bg-zinc-50 p-4 text-sm leading-7 text-zinc-700">
         {staticExplanation}
       </div>
 
-      {/* AI explanation — wrong answers only */}
+      {/* AI explanation — wrong answers only, explicit opt-in */}
       {wrong && (
-        <div className="mt-4 flex-1">
-          <div className="mb-3 border-b border-zinc-200 pb-2">
+        <div className="mt-4">
+          <div className="mb-3 flex items-center justify-between border-b border-zinc-200 pb-2">
             <p className="font-mono text-[10px] font-bold uppercase tracking-widest text-black">
               AI Tutor · Groq / llama-3.3-70b
             </p>
+            <p className="font-mono text-[10px] text-zinc-400">
+              {remaining} / {AI_DAILY_LIMIT} remaining today
+            </p>
           </div>
-          {loading ? (
+
+          {/* Not yet requested — show the button */}
+          {!aiRequested && !limitReached && (
+            <button
+              onClick={requestAiExplanation}
+              disabled={remaining === 0}
+              className="flex items-center gap-2 border border-black px-4 py-2.5 font-mono text-[10px] uppercase tracking-widest text-black transition-colors hover:bg-black hover:text-white disabled:cursor-not-allowed disabled:border-zinc-200 disabled:text-zinc-300"
+            >
+              <Sparkles size={12} />
+              {remaining === 0
+                ? "Daily limit reached"
+                : `Get AI explanation · ${remaining} left today`}
+            </button>
+          )}
+
+          {/* Loading */}
+          {loading && (
             <div className="flex items-center gap-2 font-mono text-xs text-zinc-400">
               <Loader2 size={13} className="animate-spin" />
               Generating explanation…
             </div>
-          ) : aiText ? (
+          )}
+
+          {/* Limit reached (from server 429 or local check) */}
+          {limitReached && (
+            <div className="border border-zinc-200 bg-zinc-50 p-4">
+              <p className="font-mono text-xs font-bold uppercase tracking-widest text-red-600">
+                Daily limit reached
+              </p>
+              <p className="mt-1 font-sans text-sm text-zinc-600">
+                You&apos;ve used all {AI_DAILY_LIMIT} AI explanations for today. Resets at midnight UTC.
+                In the meantime, the explanation above and the reference below cover the concept.
+              </p>
+            </div>
+          )}
+
+          {/* AI text returned */}
+          {!loading && aiText && (
             <div className="whitespace-pre-line text-sm leading-7 text-zinc-700">
               {aiText}
             </div>
-          ) : (
-            <p className="font-mono text-xs text-zinc-400">AI explanation unavailable.</p>
+          )}
+
+          {/* Fetch failed (not a limit error) */}
+          {!loading && aiRequested && !aiText && !limitReached && (
+            <p className="font-mono text-xs text-zinc-400">
+              Could not load AI explanation. Check your connection.
+            </p>
           )}
         </div>
       )}

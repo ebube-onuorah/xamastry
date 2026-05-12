@@ -73,3 +73,16 @@ export const streaks = pgTable("streaks", {
   longest: integer("longest").notNull().default(0),
   lastActive: timestamp("last_active").defaultNow().notNull(),
 });
+
+// ─── ai_usage ─────────────────────────────────────────────────────────────────
+// Tracks per-user daily AI explanation usage. Date is YYYY-MM-DD string.
+// Table is created lazily on first /api/explain call — no migration needed.
+export const aiUsage = pgTable(
+  "ai_usage",
+  {
+    userId: text("user_id").notNull(),
+    date: text("date").notNull(),
+    count: integer("count").notNull().default(0),
+  },
+  (t) => [primaryKey({ columns: [t.userId, t.date] })],
+);
