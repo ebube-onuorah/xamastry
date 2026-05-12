@@ -1,8 +1,15 @@
 import type { Metadata } from "next";
 import { GeistSans } from "geist/font/sans";
 import { GeistMono } from "geist/font/mono";
+import { Playfair_Display } from "next/font/google";
 import UidInit from "@/components/UidInit";
 import "./globals.css";
+
+const playfair = Playfair_Display({
+  subsets: ["latin"],
+  weight: ["700", "800"],
+  variable: "--font-playfair",
+});
 
 export const metadata: Metadata = {
   title: "Xamastry | Free CCNA Practice Platform",
@@ -22,7 +29,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${GeistSans.variable} ${GeistMono.variable} h-full antialiased`}>
+    <html lang="en" className={`${GeistSans.variable} ${GeistMono.variable} ${playfair.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col">
         <UidInit />
         {children}
