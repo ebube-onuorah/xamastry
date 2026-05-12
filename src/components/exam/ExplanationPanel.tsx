@@ -1,8 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { X, Loader2, BookOpen } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { X, Loader2 } from "lucide-react";
 
 interface ExplanationPanelProps {
   questionId: string;
@@ -25,7 +24,6 @@ export default function ExplanationPanel({
   const [loading, setLoading] = useState(false);
   const wrong = studentAnswer !== correctAnswer;
 
-  // Only hit Groq when the student got it wrong
   useEffect(() => {
     if (!wrong) return;
     setLoading(true);
@@ -41,55 +39,57 @@ export default function ExplanationPanel({
   }, [questionId, studentAnswer, wrong]);
 
   return (
-    <aside className="flex flex-col rounded-lg border border-white/10 bg-slate-950/80 p-5 backdrop-blur">
+    <aside className="flex flex-col border-2 border-black bg-[#fafafa] p-5">
       {/* Header */}
       <div className="mb-4 flex items-start justify-between gap-3">
         <div>
-          <p className={cn("text-xs font-semibold uppercase tracking-wider", wrong ? "text-red-400" : "text-emerald-400")}>
+          <p className={`font-mono text-[10px] font-bold uppercase tracking-widest ${wrong ? "text-red-600" : "text-emerald-600"}`}>
             {wrong ? "Incorrect" : "Correct"}
           </p>
-          <p className="mt-1 text-sm font-semibold text-white">
-            Correct answer: <span className="text-teal-300">{correctAnswer}</span>
+          <p className="mt-1 font-mono text-sm font-bold text-black">
+            Correct answer:{" "}
+            <span className="text-emerald-700">{correctAnswer}</span>
           </p>
         </div>
         <button
           onClick={onClose}
-          className="rounded-md p-1 text-slate-400 hover:bg-white/10 hover:text-white"
+          className="p-1 text-zinc-400 hover:bg-zinc-100 hover:text-black transition-colors"
         >
-          <X size={16} />
+          <X size={15} />
         </button>
       </div>
 
-      {/* Static explanation always shown */}
-      <div className="rounded-md border border-white/8 bg-white/[0.03] p-4 text-sm leading-7 text-slate-300">
+      {/* Static explanation */}
+      <div className="border border-zinc-200 bg-zinc-50 p-4 text-sm leading-7 text-zinc-700">
         {staticExplanation}
       </div>
 
-      {/* AI explanation — only for wrong answers */}
+      {/* AI explanation — wrong answers only */}
       {wrong && (
         <div className="mt-4 flex-1">
-          <div className="mb-2 flex items-center gap-2 text-xs font-semibold text-teal-200">
-            <BookOpen size={13} />
-            AI Tutor explanation
+          <div className="mb-3 border-b border-zinc-200 pb-2">
+            <p className="font-mono text-[10px] font-bold uppercase tracking-widest text-black">
+              AI Tutor · Groq / llama-3.3-70b
+            </p>
           </div>
           {loading ? (
-            <div className="flex items-center gap-2 text-sm text-slate-400">
-              <Loader2 size={14} className="animate-spin" />
+            <div className="flex items-center gap-2 font-mono text-xs text-zinc-400">
+              <Loader2 size={13} className="animate-spin" />
               Generating explanation…
             </div>
           ) : aiText ? (
-            <div className="whitespace-pre-line text-sm leading-7 text-slate-300">
+            <div className="whitespace-pre-line text-sm leading-7 text-zinc-700">
               {aiText}
             </div>
           ) : (
-            <p className="text-sm text-slate-500">Could not load AI explanation.</p>
+            <p className="font-mono text-xs text-zinc-400">AI explanation unavailable.</p>
           )}
         </div>
       )}
 
       {reference && (
-        <p className="mt-4 border-t border-white/10 pt-3 text-xs text-slate-500">
-          📖 {reference}
+        <p className="mt-4 border-t border-zinc-200 pt-3 font-mono text-[10px] uppercase tracking-widest text-zinc-400">
+          Ref: {reference}
         </p>
       )}
     </aside>
