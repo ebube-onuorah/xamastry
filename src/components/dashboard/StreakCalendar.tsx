@@ -21,7 +21,7 @@ export default function StreakCalendar({ activeDates }: StreakCalendarProps) {
   startDay.setDate(today.getDate() - today.getDay() - 16 * 7);
 
   const weeks: Date[][] = [];
-  let cursor = new Date(startDay);
+  const cursor = new Date(startDay);
   while (cursor <= today) {
     const week: Date[] = [];
     for (let d = 0; d < 7; d++) {

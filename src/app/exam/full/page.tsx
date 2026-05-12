@@ -34,7 +34,6 @@ export default function FullExamPage() {
 
   const current = questions[currentIdx];
   const answeredCount = Object.keys(answers).length;
-  const unansweredCount = questions.length - answeredCount;
 
   // Timer
   useEffect(() => {
@@ -71,7 +70,7 @@ export default function FullExamPage() {
   const toggleFlag = useCallback((questionId: string) => {
     setFlagged((prev) => {
       const next = new Set(prev);
-      next.has(questionId) ? next.delete(questionId) : next.add(questionId);
+      if (next.has(questionId)) { next.delete(questionId); } else { next.add(questionId); }
       return next;
     });
   }, []);
@@ -154,7 +153,6 @@ export default function FullExamPage() {
 
   if (!current) return null;
 
-  const letterOptions: Record<string, number> = { A: 0, B: 1, C: 2, D: 3 };
 
   return (
     <div className="min-h-screen bg-[#080b10] flex flex-col text-white">
@@ -393,7 +391,7 @@ function ReviewScreen({
                 </span>
               </div>
               <div className="flex flex-wrap gap-1.5">
-                {unanswered.map((q, _) => {
+                {unanswered.map((q) => {
                   const idx = questions.indexOf(q);
                   return (
                     <button
