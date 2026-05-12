@@ -3,7 +3,6 @@
 import { cn } from "@/lib/utils";
 
 interface StreakCalendarProps {
-  /** Set of date strings "YYYY-MM-DD" that have activity */
   activeDates: Set<string>;
 }
 
@@ -12,11 +11,9 @@ function toDateString(d: Date) {
 }
 
 export default function StreakCalendar({ activeDates }: StreakCalendarProps) {
-  // Build last 16 weeks of dates (Sun→Sat columns)
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
-  // Find most recent Sunday
   const startDay = new Date(today);
   startDay.setDate(today.getDate() - today.getDay() - 16 * 7);
 
@@ -35,16 +32,14 @@ export default function StreakCalendar({ activeDates }: StreakCalendarProps) {
 
   return (
     <div className="overflow-x-auto">
-      {/* Day labels */}
-      <div className="mb-1 flex gap-1 pl-0">
+      <div className="mb-1 flex gap-1">
         {DAY_LABELS.map((l, i) => (
-          <span key={i} className="w-3 text-center text-[9px] text-slate-600">
+          <span key={i} className="w-3 text-center font-mono text-[9px] text-zinc-400">
             {l}
           </span>
         ))}
       </div>
 
-      {/* Grid — each column is one week */}
       <div className="flex gap-1">
         {weeks.map((week, wi) => (
           <div key={wi} className="flex flex-col gap-1">
@@ -57,12 +52,12 @@ export default function StreakCalendar({ activeDates }: StreakCalendarProps) {
                   key={ds}
                   title={ds}
                   className={cn(
-                    "size-3 rounded-sm transition-colors",
+                    "size-3 transition-colors",
                     future
                       ? "bg-transparent"
                       : active
-                      ? "bg-teal-400"
-                      : "bg-white/[0.06]",
+                      ? "bg-black"
+                      : "bg-zinc-200",
                   )}
                 />
               );

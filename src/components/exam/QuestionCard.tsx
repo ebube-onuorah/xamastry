@@ -23,7 +23,6 @@ export default function QuestionCard({
   index,
   total,
 }: QuestionCardProps) {
-  // Keyboard shortcuts: 1-4 to select, Enter already handled in parent
   useEffect(() => {
     function handler(e: KeyboardEvent) {
       if (revealed) return;
@@ -37,44 +36,50 @@ export default function QuestionCard({
   }, [revealed, onSelect]);
 
   function optionState(letter: string) {
-    if (!revealed) {
-      return selected === letter ? "selected" : "default";
-    }
+    if (!revealed) return selected === letter ? "selected" : "default";
     if (letter === question.correct) return "correct";
     if (letter === selected && selected !== question.correct) return "wrong";
     return "dim";
   }
 
   const stateClasses: Record<string, string> = {
-    default: "border-white/10 bg-slate-950/60 hover:border-teal-300/50 hover:bg-slate-900 cursor-pointer",
-    selected: "border-teal-300/70 bg-teal-300/10 cursor-pointer",
-    correct: "border-emerald-400/70 bg-emerald-400/10",
-    wrong: "border-red-400/70 bg-red-400/10",
-    dim: "border-white/5 bg-slate-950/30 opacity-50",
+    default:  "border-zinc-200 bg-white hover:border-black cursor-pointer",
+    selected: "border-black bg-zinc-100 cursor-pointer",
+    correct:  "border-emerald-600 bg-emerald-50",
+    wrong:    "border-red-600 bg-red-50",
+    dim:      "border-zinc-100 bg-white opacity-40",
+  };
+
+  const letterClasses: Record<string, string> = {
+    default:  "bg-zinc-100 text-zinc-500",
+    selected: "bg-black text-white",
+    correct:  "bg-emerald-600 text-white",
+    wrong:    "bg-red-600 text-white",
+    dim:      "bg-zinc-100 text-zinc-400",
   };
 
   return (
     <div>
       {/* Progress + meta */}
-      <div className="mb-6 flex items-center justify-between text-sm text-slate-400">
-        <span>
-          Question <span className="font-semibold text-white">{index + 1}</span> of {total}
+      <div className="mb-6 flex items-center justify-between">
+        <span className="font-mono text-xs text-zinc-400 uppercase tracking-widest">
+          Q{index + 1} / {total}
         </span>
         <div className="flex items-center gap-2">
-          <span className="rounded-md bg-white/8 px-2 py-0.5 text-xs capitalize">
+          <span className="border border-zinc-300 px-2 py-0.5 font-mono text-[10px] uppercase tracking-widest text-zinc-500">
             {question.difficulty}
           </span>
-          <span className="rounded-md bg-white/8 px-2 py-0.5 text-xs">
-            {question.objective}
+          <span className="border border-zinc-300 px-2 py-0.5 font-mono text-[10px] text-zinc-500">
+            obj {question.objective}
           </span>
         </div>
       </div>
 
       {/* Question text */}
-      <p className="mb-6 text-lg leading-8 text-white">{question.text}</p>
+      <p className="mb-6 text-base leading-8 text-black">{question.text}</p>
 
       {/* Options */}
-      <div className="grid gap-3">
+      <div className="grid gap-2">
         {question.options.map((option, i) => {
           const letter = LETTERS[i];
           const state = optionState(letter);
@@ -84,25 +89,17 @@ export default function QuestionCard({
               disabled={revealed}
               onClick={() => onSelect(letter)}
               className={cn(
-                "rounded-md border p-4 text-left text-sm transition-all",
+                "border p-4 text-left text-sm transition-all flex items-start gap-3",
                 stateClasses[state],
               )}
             >
-              <span
-                className={cn(
-                  "mr-3 inline-flex size-5 shrink-0 items-center justify-center rounded text-xs font-bold",
-                  state === "correct"
-                    ? "bg-emerald-400 text-slate-950"
-                    : state === "wrong"
-                    ? "bg-red-400 text-slate-950"
-                    : state === "selected"
-                    ? "bg-teal-300 text-slate-950"
-                    : "bg-white/10 text-slate-300",
-                )}
-              >
+              <span className={cn(
+                "inline-flex size-5 shrink-0 items-center justify-center font-mono text-xs font-bold",
+                letterClasses[state],
+              )}>
                 {letter}
               </span>
-              <span className={state === "dim" ? "text-slate-500" : "text-slate-200"}>
+              <span className={cn("text-sm leading-6", state === "dim" ? "text-zinc-400" : "text-black")}>
                 {option.replace(/^[A-D]\.\s*/, "")}
               </span>
             </button>
@@ -110,10 +107,13 @@ export default function QuestionCard({
         })}
       </div>
 
-      <p className="mt-4 text-xs text-slate-600">
-        Press <kbd className="rounded bg-white/10 px-1 py-0.5 font-mono">1</kbd>–
-        <kbd className="rounded bg-white/10 px-1 py-0.5 font-mono">4</kbd> to select ·{" "}
-        <kbd className="rounded bg-white/10 px-1 py-0.5 font-mono">Enter</kbd> to submit
+      <p className="mt-4 font-mono text-[10px] text-zinc-400 uppercase tracking-widest">
+        Press{" "}
+        <kbd className="border border-zinc-300 px-1 py-0.5">1</kbd>–
+        <kbd className="border border-zinc-300 px-1 py-0.5">4</kbd>{" "}
+        to select ·{" "}
+        <kbd className="border border-zinc-300 px-1 py-0.5">Enter</kbd>{" "}
+        to submit
       </p>
     </div>
   );
