@@ -10,7 +10,7 @@ import {
   setSwitchportAccessVlan,
   setEncapsulationDot1q,
 } from "./commands/interface";
-import { addStaticRoute, removeStaticRoute, configureOspf, addOspfNetwork } from "./commands/routing";
+import { addStaticRoute, removeStaticRoute, addOspfNetwork } from "./commands/routing";
 import {
   setEnableSecret,
   setHostname,
