@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
+import SiteNav from "@/components/nav/SiteNav";
 
 const TOPOLOGY_LABS = [
   { id: "topo-001", title: "Two-Router OSPF Adjacency",         type: "TOPOLOGY", domain: "IP Connectivity",       difficulty: "MED",  est: 35, description: "Configure OSPF between two routers over a serial link and establish area 0 adjacency.", objectives: ["3.4"] },
@@ -63,25 +64,7 @@ export default function LabsPage() {
   return (
     <main className="min-h-screen bg-[#fafafa]">
 
-      {/* Nav */}
-      <nav className="border-b-2 border-black">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-3 sm:px-8">
-          <Link href="/" className="flex items-center gap-3">
-            <span className="grid size-7 place-items-center bg-black font-mono text-sm font-bold text-white">X</span>
-            <span className="font-mono text-sm font-bold uppercase tracking-widest text-black">Xamastry</span>
-          </Link>
-          <div className="hidden items-center gap-6 font-mono text-xs uppercase tracking-widest text-zinc-500 md:flex">
-            <Link href="/exam/practice" className="hover:text-black transition-colors">Practice</Link>
-            <Link href="/dashboard"     className="hover:text-black transition-colors">Dashboard</Link>
-          </div>
-          <Link
-            href="/exam/practice"
-            className="bg-black px-5 py-2 font-mono text-xs font-bold uppercase tracking-widest text-white transition-colors hover:bg-red-600"
-          >
-            Start practice
-          </Link>
-        </div>
-      </nav>
+      <SiteNav />
 
       <div className="mx-auto max-w-7xl px-6 py-10 sm:px-8">
 

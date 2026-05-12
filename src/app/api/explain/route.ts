@@ -59,16 +59,17 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Missing questionId or studentAnswer" }, { status: 400 });
     }
 
-    // Rate limit by browser UID
+    // Rate limit by browser UID — reject if no identity token present
     const userId = req.cookies.get("xamastry-uid")?.value ?? req.headers.get("x-uid");
-    if (userId) {
-      const { allowed, used } = await checkAndIncrementUsage(userId);
-      if (!allowed) {
-        return NextResponse.json(
-          { error: "limit_reached", used, limit: AI_DAILY_LIMIT },
-          { status: 429 },
-        );
-      }
+    if (!userId) {
+      return NextResponse.json({ error: "Missing identity token" }, { status: 401 });
+    }
+    const { allowed, used } = await checkAndIncrementUsage(userId);
+    if (!allowed) {
+      return NextResponse.json(
+        { error: "limit_reached", used, limit: AI_DAILY_LIMIT },
+        { status: 429 },
+      );
     }
 
     const question = getQuestionById(questionId);

@@ -95,12 +95,15 @@ export function gradeTask(state: DeviceState, check: TaskCheck): GradeResult {
     case "ospf_network": {
       const pid = (check.expected.pid as number) ?? 1;
       const network = check.expected.network as string;
+      const wildcard = check.expected.wildcard as string | undefined;
       const area = check.expected.area as number;
       const proc = state.ospfProcesses[pid];
       if (!proc) return fail(`OSPF process ${pid} is not configured`);
       const entry = proc.networks.find((n) => n.network === network && n.area === area);
       if (!entry)
         return fail(`OSPF network ${network} area ${area} not found in process ${pid}`);
+      if (wildcard && entry.wildcard !== wildcard)
+        return fail(`OSPF network ${network} wildcard is "${entry.wildcard}", expected "${wildcard}"`);
       return pass(`OSPF network ${network} area ${area} is correctly configured`);
     }
 

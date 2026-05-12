@@ -31,25 +31,26 @@ export default function FullExamPage() {
   const [phase, setPhase] = useState<"exam" | "review" | "submitting">("exam");
   const [sessionId, setSessionId] = useState<string | null>(null);
   const startTimeRef = useRef(Date.now());
+  const handleSubmitRef = useRef<() => void>(() => {});
 
   const current = questions[currentIdx];
   const answeredCount = Object.keys(answers).length;
 
-  // Timer
+  // Timer — reads handleSubmitRef so it always calls the current version
   useEffect(() => {
     if (phase !== "exam") return;
     const interval = setInterval(() => {
       setTimeLeft((t) => {
         if (t <= 1) {
           clearInterval(interval);
-          handleSubmit();
+          handleSubmitRef.current();
           return 0;
         }
         return t - 1;
       });
     }, 1000);
     return () => clearInterval(interval);
-  }, [phase]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [phase]);
 
   // Create session on mount
   useEffect(() => {
@@ -75,7 +76,7 @@ export default function FullExamPage() {
     });
   }, []);
 
-  const handleSubmit = useCallback(async () => {
+  const handleSubmit = useCallback(async () => { // eslint-disable-line react-hooks/exhaustive-deps
     if (phase === "submitting") return;
     setPhase("submitting");
 
@@ -121,6 +122,9 @@ export default function FullExamPage() {
       router.push(`/exam/results/local?score=${score}&total=${questions.length}&correct=${correct}`);
     }
   }, [phase, sessionId, questions, answers, router]);
+
+  // Keep the timer's ref current on every render
+  handleSubmitRef.current = handleSubmit;
 
   const isWarning = timeLeft < EXAM_SECONDS * 0.25;
   const isDanger = timeLeft < EXAM_SECONDS * 0.1;
