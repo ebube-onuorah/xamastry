@@ -108,15 +108,15 @@ export default function CliLabPage({ params }: { params: Promise<{ labId: string
   return (
     <div className="min-h-screen bg-[#080b10] flex flex-col lg:h-screen lg:overflow-hidden">
       {/* Top bar */}
-      <div className="flex-shrink-0 border-b border-zinc-800/60 bg-zinc-950/80 backdrop-blur-sm px-3 py-2.5 flex items-center gap-3 sm:px-4 sm:gap-4">
+      <div className="flex flex-shrink-0 flex-wrap items-center gap-2 border-b border-zinc-800/60 bg-zinc-950/80 px-3 py-2.5 backdrop-blur-sm sm:flex-nowrap sm:gap-4 sm:px-4">
         <Link
           href="/labs"
-          className="flex items-center gap-1.5 text-zinc-400 hover:text-white transition-colors text-sm"
+          className="flex w-full items-center gap-1.5 text-sm text-zinc-400 transition-colors hover:text-white sm:w-auto"
         >
           <ArrowLeft className="w-4 h-4" />
-          Labs
+          Back to labs
         </Link>
-        <div className="h-4 w-px bg-zinc-800" />
+        <div className="hidden h-4 w-px bg-zinc-800 sm:block" />
         <div className="flex min-w-0 items-center gap-2">
           <Terminal className="w-4 h-4 text-teal-500" />
           <span className="text-white font-semibold text-sm truncate">{lab.title}</span>
