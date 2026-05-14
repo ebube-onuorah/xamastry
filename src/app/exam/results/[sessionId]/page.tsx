@@ -5,7 +5,8 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { CheckCircle2, XCircle, Trophy, RotateCcw, BookOpen, Loader2, ChevronDown, ChevronUp } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { ALL_QUESTIONS } from "@/lib/questions";
+import { ALL_QUESTIONS, getCorrectAnswers } from "@/lib/questions";
+import BackButton from "@/components/nav/BackButton";
 
 const PASS_THRESHOLD = 825;
 
@@ -21,7 +22,7 @@ interface AnswerData {
   domain: string;
   objective: string;
   selected: string;
-  correct: string;
+  correct: boolean;
 }
 
 const DOMAIN_LABELS: Record<string, string> = {
@@ -56,16 +57,18 @@ export default function ResultsPage({ params }: { params: Promise<{ sessionId: s
       }
 
       try {
-        const [sessionRes, answersRes] = await Promise.all([
-          fetch(`/api/session?id=${sessionId}`),
-          fetch(`/api/session?id=${sessionId}&answers=true`),
-        ]);
+        const sessionRes = await fetch(`/api/session?id=${sessionId}`);
         if (sessionRes.ok) {
           const d = await sessionRes.json();
-          setSessionData(d);
-        }
-        if (answersRes.ok) {
-          const d = await answersRes.json();
+          const session = d.session;
+          if (session) {
+            setSessionData({
+              score: session.score ?? 0,
+              totalQuestions: session.totalQuestions ?? 0,
+              correctCount: session.correctAnswers ?? 0,
+              domainScores: session.domainScores ?? {},
+            });
+          }
           setAnswers(d.answers ?? []);
         }
       } catch {
@@ -82,7 +85,7 @@ export default function ResultsPage({ params }: { params: Promise<{ sessionId: s
     setLoadingPlan(true);
     try {
       const weakObjectives = answers
-        .filter((a) => a.selected !== a.correct)
+        .filter((a) => !a.correct)
         .reduce<Record<string, number>>((acc, a) => {
           acc[a.objective] = (acc[a.objective] ?? 0) + 1;
           return acc;
@@ -125,7 +128,7 @@ export default function ResultsPage({ params }: { params: Promise<{ sessionId: s
     for (const a of answers) {
       if (!byDomain[a.domain]) byDomain[a.domain] = { correct: 0, total: 0 };
       byDomain[a.domain].total++;
-      if (a.selected === a.correct) byDomain[a.domain].correct++;
+      if (a.correct) byDomain[a.domain].correct++;
     }
     for (const [domain, { correct: c, total: t }] of Object.entries(byDomain)) {
       domainScores[domain] = t > 0 ? Math.round((c / t) * 100) : 0;
@@ -135,6 +138,8 @@ export default function ResultsPage({ params }: { params: Promise<{ sessionId: s
   return (
     <div className="min-h-screen bg-[#080b10] text-white px-4 py-10">
       <div className="max-w-3xl mx-auto space-y-8">
+        <BackButton fallbackHref="/dashboard" className="text-zinc-500 hover:text-white" />
+
         {/* Score card */}
         <div
           className={cn(
@@ -223,8 +228,10 @@ export default function ResultsPage({ params }: { params: Promise<{ sessionId: s
             {answers.map((a) => {
               const q = ALL_QUESTIONS.find((q) => q.id === a.questionId);
               if (!q) return null;
-              const isCorrect = a.selected === a.correct;
+              const isCorrect = a.correct;
               const isExpanded = expandedQ === a.questionId;
+              const correctLetters = getCorrectAnswers(q);
+              const selectedLetters = a.selected.split(",").map((letter) => letter.trim()).filter(Boolean);
               return (
                 <div
                   key={a.questionId}
@@ -260,18 +267,18 @@ export default function ResultsPage({ params }: { params: Promise<{ sessionId: s
                               key={opt}
                               className={cn(
                                 "px-3 py-1.5 rounded text-sm",
-                                letter === a.correct
+                                correctLetters.includes(letter)
                                   ? "bg-emerald-500/15 text-emerald-300 border border-emerald-500/30"
-                                  : letter === a.selected && !isCorrect
+                                  : selectedLetters.includes(letter) && !isCorrect
                                     ? "bg-red-500/15 text-red-300 border border-red-500/30"
                                     : "text-zinc-500",
                               )}
                             >
                               {opt}
-                              {letter === a.correct && (
+                              {correctLetters.includes(letter) && (
                                 <span className="ml-2 text-xs text-emerald-500">✓ Correct</span>
                               )}
-                              {letter === a.selected && !isCorrect && (
+                              {selectedLetters.includes(letter) && !isCorrect && (
                                 <span className="ml-2 text-xs text-red-500">✗ Your answer</span>
                               )}
                             </div>

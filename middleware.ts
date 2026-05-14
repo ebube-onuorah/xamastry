@@ -1,9 +1,8 @@
 // No auth — all routes are public.
 // Keep this file so Next.js middleware config controls edge caching correctly.
 import { NextResponse } from "next/server";
-import type { NextRequest } from "next/server";
 
-export function middleware(_req: NextRequest) {
+export function middleware() {
   return NextResponse.next();
 }
 

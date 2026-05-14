@@ -55,6 +55,8 @@ export default async function DashboardPage() {
   ];
 
   const recentSessions = stats?.recentSessions ?? [];
+  const activeSessions = stats?.activeSessions ?? [];
+  const activeDates = new Set(stats?.activeDates ?? []);
 
   const statCards = [
     { label: "Current Streak",       value: `${streak.current}d`, sub: `Longest: ${streak.longest}d` },
@@ -142,9 +144,9 @@ export default async function DashboardPage() {
                 <p className="font-mono text-[10px] uppercase tracking-widest text-zinc-400">Study History</p>
                 <h2 className="mt-1 font-mono text-base font-bold uppercase tracking-wide text-black">Activity</h2>
               </div>
-              <StreakCalendar activeDates={new Set<string>()} />
+              <StreakCalendar activeDates={activeDates} />
               <p className="mt-3 font-mono text-[10px] uppercase tracking-widest text-zinc-400">
-                Study every day to build your streak.
+                Completed practice and exam sessions are marked here.
               </p>
             </div>
 
@@ -198,6 +200,26 @@ export default async function DashboardPage() {
                 </div>
               )}
             </div>
+
+            {activeSessions.length > 0 && (
+              <div className="border-2 border-black p-6">
+                <div className="mb-4 border-b border-zinc-200 pb-4">
+                  <p className="font-mono text-[10px] uppercase tracking-widest text-zinc-400">Open</p>
+                  <h2 className="mt-1 font-mono text-base font-bold uppercase tracking-wide text-black">In Progress</h2>
+                </div>
+                <div className="divide-y divide-zinc-200">
+                  {activeSessions.map((s) => (
+                    <div key={s.id} className="grid grid-cols-3 py-3 font-mono text-xs">
+                      <span className="capitalize text-zinc-600">{s.type}</span>
+                      <span className="font-bold text-zinc-400">{s.totalQuestions} Q</span>
+                      <span className="text-right text-zinc-400">
+                        {new Date(s.createdAt).toLocaleDateString()}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div>

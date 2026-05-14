@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { Menu, X } from "lucide-react";
+import BackButton from "@/components/nav/BackButton";
 
 const NAV_LINKS = [
   { href: "/exam/practice", label: "Practice" },
@@ -17,14 +18,17 @@ export default function SiteNav() {
     <nav className="border-b-2 border-black bg-[#fafafa]">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-3 sm:px-8">
 
-        <Link href="/" className="flex items-center gap-3">
-          <span className="grid size-7 place-items-center bg-black font-mono text-sm font-bold text-white">
-            X
-          </span>
-          <span className="font-mono text-sm font-bold uppercase tracking-widest text-black">
-            Xamastry
-          </span>
-        </Link>
+        <div className="flex items-center gap-4">
+          <BackButton fallbackHref="/" className="hidden text-zinc-500 hover:text-black sm:inline-flex" />
+          <Link href="/" className="flex items-center gap-3">
+            <span className="grid size-7 place-items-center bg-black font-mono text-sm font-bold text-white">
+              X
+            </span>
+            <span className="font-mono text-sm font-bold uppercase tracking-widest text-black">
+              Xamastry
+            </span>
+          </Link>
+        </div>
 
         {/* Desktop links */}
         <div className="hidden items-center gap-6 font-mono text-xs uppercase tracking-widest text-zinc-500 md:flex">

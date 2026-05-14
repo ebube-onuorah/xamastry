@@ -5,7 +5,16 @@ import Link from "next/link";
 import { ArrowRight, RotateCcw } from "lucide-react";
 import QuestionCard from "@/components/exam/QuestionCard";
 import ExplanationPanel from "@/components/exam/ExplanationPanel";
-import { ALL_QUESTIONS, type Question } from "@/lib/questions";
+import BackButton from "@/components/nav/BackButton";
+import {
+  ALL_QUESTIONS,
+  formatAnswer,
+  getRequiredAnswerCount,
+  isAnswerCorrect,
+  isMultiAnswerQuestion,
+  type AnswerSelection,
+  type Question,
+} from "@/lib/questions";
 import { cn } from "@/lib/utils";
 
 const PRACTICE_COUNT = 20;
@@ -17,7 +26,7 @@ function shuffled<T>(arr: T[]): T[] {
 export default function PracticePage() {
   const [questions, setQuestions] = useState<Question[]>([]);
   const [index, setIndex] = useState(0);
-  const [selected, setSelected] = useState<string | null>(null);
+  const [selected, setSelected] = useState<AnswerSelection>([]);
   const [revealed, setRevealed] = useState(false);
   const [showPanel, setShowPanel] = useState(false);
   const [score, setScore] = useState({ correct: 0, total: 0 });
@@ -41,7 +50,8 @@ export default function PracticePage() {
   useEffect(() => {
     function handler(e: KeyboardEvent) {
       if (e.key === "Enter") {
-        if (!revealed && selected) handleSubmit();
+        const current = questions[index];
+        if (!revealed && current && selected.length === getRequiredAnswerCount(current)) handleSubmit();
         else if (revealed) handleNext();
       }
     }
@@ -50,9 +60,10 @@ export default function PracticePage() {
   });
 
   const handleSubmit = useCallback(() => {
-    if (!selected || revealed) return;
     const q = questions[index];
-    const correct = selected === q.correct;
+    if (!q || revealed || selected.length !== getRequiredAnswerCount(q)) return;
+    const correct = isAnswerCorrect(q, selected);
+    const selectedAnswer = formatAnswer(selected);
     const timeMs = Date.now() - startTime.current;
     setRevealed(true);
     setShowPanel(true);
@@ -64,7 +75,7 @@ export default function PracticePage() {
         body: JSON.stringify({
           action: "answer", sessionId,
           questionId: q.id, domain: q.domain, objective: q.objective,
-          selected, correct, timeMs,
+          selected: selectedAnswer, correct, timeMs,
         }),
       }).catch(() => null);
     }
@@ -83,7 +94,7 @@ export default function PracticePage() {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             action: "complete", sessionId,
-            correctAnswers: score.correct + (selected === questions[index].correct ? 1 : 0),
+            correctAnswers: score.correct,
             domainScores: {},
           }),
         }).catch(() => null);
@@ -92,7 +103,7 @@ export default function PracticePage() {
       return;
     }
     setIndex((i) => i + 1);
-    setSelected(null);
+    setSelected([]);
     setRevealed(false);
     setShowPanel(false);
     startTime.current = Date.now();
@@ -100,7 +111,7 @@ export default function PracticePage() {
 
   function restart() {
     setQuestions(shuffled(ALL_QUESTIONS).slice(0, PRACTICE_COUNT));
-    setIndex(0); setSelected(null); setRevealed(false);
+    setIndex(0); setSelected([]); setRevealed(false);
     setShowPanel(false); setScore({ correct: 0, total: 0 });
     setDone(false); setSessionId(null);
     startTime.current = Date.now();
@@ -122,10 +133,13 @@ export default function PracticePage() {
     return (
       <main className="min-h-screen bg-[#fafafa]">
         <nav className="border-b-2 border-black px-6 py-3 sm:px-8">
-          <Link href="/" className="flex items-center gap-3 w-fit">
-            <span className="grid size-7 place-items-center bg-black font-mono text-sm font-bold text-white">X</span>
-            <span className="font-mono text-sm font-bold uppercase tracking-widest text-black">Xamastry</span>
-          </Link>
+          <div className="flex items-center gap-4">
+            <BackButton fallbackHref="/dashboard" className="text-zinc-500 hover:text-black" />
+            <Link href="/" className="flex items-center gap-3 w-fit">
+              <span className="grid size-7 place-items-center bg-black font-mono text-sm font-bold text-white">X</span>
+              <span className="font-mono text-sm font-bold uppercase tracking-widest text-black">Xamastry</span>
+            </Link>
+          </div>
         </nav>
 
         <div className="mx-auto max-w-xl px-6 py-20 sm:px-8 text-center">
@@ -173,6 +187,7 @@ export default function PracticePage() {
             <span className="grid size-7 place-items-center bg-black font-mono text-sm font-bold text-white">X</span>
             <span className="font-mono text-sm font-bold uppercase tracking-widest text-black">Xamastry</span>
           </Link>
+          <BackButton fallbackHref="/dashboard" className="text-zinc-500 hover:text-black" />
           <div className="flex items-center gap-4 font-mono text-xs text-zinc-400">
             <span className="text-emerald-700 font-bold">{score.correct} correct</span>
             <span>/</span>
@@ -207,7 +222,15 @@ export default function PracticePage() {
               question={q}
               selected={selected}
               revealed={revealed}
-              onSelect={(l) => !revealed && setSelected(l)}
+              onSelect={(letter) => {
+                if (revealed) return;
+                setSelected((current) => {
+                  if (!isMultiAnswerQuestion(q)) return [letter];
+                  if (current.includes(letter)) return current.filter((item) => item !== letter);
+                  if (current.length >= getRequiredAnswerCount(q)) return current;
+                  return [...current, letter];
+                });
+              }}
               index={index}
               total={questions.length}
             />
@@ -216,7 +239,7 @@ export default function PracticePage() {
             <div className="mt-8 flex items-center gap-3">
               {!revealed ? (
                 <button
-                  disabled={!selected}
+                  disabled={selected.length !== getRequiredAnswerCount(q)}
                   onClick={handleSubmit}
                   className="bg-black px-6 py-3 font-mono text-xs font-bold uppercase tracking-widest text-white transition-colors hover:bg-red-600 disabled:cursor-not-allowed disabled:opacity-30"
                 >
@@ -248,8 +271,8 @@ export default function PracticePage() {
           {showPanel && revealed && (
             <ExplanationPanel
               questionId={q.id}
-              studentAnswer={selected ?? ""}
-              correctAnswer={q.correct}
+              studentAnswer={formatAnswer(selected)}
+              correctAnswer={formatAnswer(q.correct)}
               staticExplanation={q.explanation}
               reference={q.reference}
               onClose={() => setShowPanel(false)}

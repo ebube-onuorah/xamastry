@@ -68,7 +68,7 @@
     "domain": "network-fundamentals",
     "objective": "1.1",
     "difficulty": "medium",
-    "text": "Which two layers of the OSI model does the TCP/IP model's 'Internet' layer map to? (Choose two)",
+    "text": "Which OSI model layer does the TCP/IP model's Internet layer map to?",
     "options": [
       "A. Physical",
       "B. Data Link",

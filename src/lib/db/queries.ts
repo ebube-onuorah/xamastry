@@ -1,4 +1,4 @@
-import { eq, and, lte, sql, desc } from "drizzle-orm";
+import { eq, and, lte, sql, desc, isNotNull } from "drizzle-orm";
 import { db, examSessions, answers, labAttempts, cardStates, streaks } from "./index";
 
 // ─── Streak ──────────────────────────────────────────────────────────────────
@@ -86,19 +86,28 @@ export async function saveAnswer(
 
 export async function completeSession(
   sessionId: string,
-  correctAnswers: number,
-  domainScores: Record<string, number>,
+  correctAnswers?: number,
+  domainScores: Record<string, number> = {},
 ) {
   // Scaled score: 0-1000, where 825+ is pass (approximation of Cisco's scaling)
   const total = await db.query.examSessions.findFirst({
     where: eq(examSessions.id, sessionId),
   });
-  const pct = total ? correctAnswers / total.totalQuestions : 0;
+  let finalCorrectAnswers = correctAnswers;
+  if (finalCorrectAnswers === undefined) {
+    const savedAnswers = await db
+      .select({ correct: sql<number>`sum(case when ${answers.correct} then 1 else 0 end)` })
+      .from(answers)
+      .where(eq(answers.sessionId, sessionId));
+    finalCorrectAnswers = Number(savedAnswers[0]?.correct ?? 0);
+  }
+
+  const pct = total ? finalCorrectAnswers / total.totalQuestions : 0;
   const score = Math.round(pct * 1000);
 
   await db
     .update(examSessions)
-    .set({ correctAnswers, score, domainScores, completedAt: new Date() })
+    .set({ correctAnswers: finalCorrectAnswers, score, domainScores, completedAt: new Date() })
     .where(eq(examSessions.id, sessionId));
 }
 
@@ -118,9 +127,15 @@ export async function getSessionAnswers(sessionId: string) {
 // ─── Dashboard stats ─────────────────────────────────────────────────────────
 
 export async function getDashboardStats(userId: string) {
-  // Recent sessions
+  // Completed history should not be hidden by newer in-progress sessions.
   const recentSessions = await db.query.examSessions.findMany({
-    where: eq(examSessions.userId, userId),
+    where: and(eq(examSessions.userId, userId), isNotNull(examSessions.completedAt)),
+    orderBy: desc(examSessions.completedAt),
+    limit: 10,
+  });
+
+  const activeSessions = await db.query.examSessions.findMany({
+    where: and(eq(examSessions.userId, userId), sql`${examSessions.completedAt} is null`),
     orderBy: desc(examSessions.createdAt),
     limit: 5,
   });
@@ -163,6 +178,10 @@ export async function getDashboardStats(userId: string) {
 
   return {
     recentSessions,
+    activeSessions,
+    activeDates: recentSessions
+      .map((session) => session.completedAt?.toISOString().slice(0, 10))
+      .filter((date): date is string => Boolean(date)),
     objectiveStats,
     domainStats,
     streak: streak ?? { current: 0, longest: 0 },

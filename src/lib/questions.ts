@@ -12,10 +12,38 @@ export interface Question {
   difficulty: "easy" | "medium" | "hard";
   text: string;
   options: string[];
-  correct: string;
+  correct: string | string[];
   explanation: string;
   tags: string[];
   reference?: string;
+}
+
+export type AnswerSelection = string[];
+
+export function getCorrectAnswers(question: Question): string[] {
+  return Array.isArray(question.correct) ? question.correct : [question.correct];
+}
+
+export function getRequiredAnswerCount(question: Question): number {
+  return getCorrectAnswers(question).length;
+}
+
+export function isMultiAnswerQuestion(question: Question): boolean {
+  return getRequiredAnswerCount(question) > 1;
+}
+
+export function formatAnswer(selection: string | string[]): string {
+  const answers = Array.isArray(selection) ? selection : [selection];
+  return answers.filter(Boolean).sort().join(", ");
+}
+
+export function isAnswerCorrect(question: Question, selection: AnswerSelection): boolean {
+  const correct = getCorrectAnswers(question).sort();
+  const selected = [...selection].sort();
+  return (
+    selected.length === correct.length &&
+    selected.every((letter, index) => letter === correct[index])
+  );
 }
 
 export const ALL_QUESTIONS: Question[] = [

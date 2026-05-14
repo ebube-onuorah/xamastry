@@ -8,7 +8,7 @@ export interface Question {
   objective: string;
   text: string;
   options: string[];
-  correct: string;
+  correct: string | string[];
   explanation: string;
   reference?: string;
 }
@@ -20,7 +20,10 @@ export async function explainWrongAnswer(
   question: Question,
   studentAnswer: string,
 ): Promise<string> {
-  const correctOption = question.options.find((o) => o.startsWith(question.correct));
+  const correctLetters = Array.isArray(question.correct) ? question.correct : [question.correct];
+  const correctOption = question.options
+    .filter((o) => correctLetters.some((letter) => o.startsWith(letter)))
+    .join(", ");
   const studentOption = question.options.find((o) => o.startsWith(studentAnswer)) ?? studentAnswer;
 
   const completion = await groq.chat.completions.create({

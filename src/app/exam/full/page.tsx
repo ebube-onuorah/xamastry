@@ -3,14 +3,21 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { Flag, ChevronLeft, ChevronRight, Send, Clock, AlertTriangle } from "lucide-react";
-import { sampleFullExam } from "@/lib/questions";
+import {
+  formatAnswer,
+  getRequiredAnswerCount,
+  isAnswerCorrect,
+  isMultiAnswerQuestion,
+  sampleFullExam,
+} from "@/lib/questions";
 import type { Question } from "@/lib/questions";
 import { cn } from "@/lib/utils";
+import BackButton from "@/components/nav/BackButton";
 
 const EXAM_MINUTES = 120;
 const EXAM_SECONDS = EXAM_MINUTES * 60;
 
-type AnswerMap = Record<string, string>;
+type AnswerMap = Record<string, string[]>;
 type FlagSet = Set<string>;
 
 function formatTime(seconds: number) {
@@ -34,7 +41,7 @@ export default function FullExamPage() {
   const handleSubmitRef = useRef<() => void>(() => {});
 
   const current = questions[currentIdx];
-  const answeredCount = Object.keys(answers).length;
+  const answeredCount = Object.values(answers).filter((answer) => answer.length > 0).length;
 
   // Timer — reads handleSubmitRef so it always calls the current version
   useEffect(() => {
@@ -64,8 +71,16 @@ export default function FullExamPage() {
       .catch(() => null);
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const selectAnswer = useCallback((questionId: string, letter: string) => {
-    setAnswers((prev) => ({ ...prev, [questionId]: letter }));
+  const selectAnswer = useCallback((question: Question, letter: string) => {
+    setAnswers((prev) => {
+      const current = prev[question.id] ?? [];
+      if (!isMultiAnswerQuestion(question)) return { ...prev, [question.id]: [letter] };
+      if (current.includes(letter)) {
+        return { ...prev, [question.id]: current.filter((item) => item !== letter) };
+      }
+      if (current.length >= getRequiredAnswerCount(question)) return prev;
+      return { ...prev, [question.id]: [...current, letter] };
+    });
   }, []);
 
   const toggleFlag = useCallback((questionId: string) => {
@@ -76,7 +91,7 @@ export default function FullExamPage() {
     });
   }, []);
 
-  const handleSubmit = useCallback(async () => { // eslint-disable-line react-hooks/exhaustive-deps
+  const handleSubmit = useCallback(async () => {
     if (phase === "submitting") return;
     setPhase("submitting");
 
@@ -86,7 +101,7 @@ export default function FullExamPage() {
       if (sessionId) {
         // Save all answers
         for (const q of questions) {
-          const selected = answers[q.id] ?? "";
+          const selected = answers[q.id] ?? [];
           await fetch("/api/session", {
             method: "PATCH",
             headers: { "Content-Type": "application/json" },
@@ -96,28 +111,29 @@ export default function FullExamPage() {
               questionId: q.id,
               domain: q.domain,
               objective: q.objective,
-              selected,
-              correct: q.correct,
+              selected: formatAnswer(selected),
+              correct: isAnswerCorrect(q, selected),
               timeMs: Math.round(timeUsedMs / questions.length),
             }),
           });
         }
         // Complete session
+        const correctAnswers = questions.filter((q) => isAnswerCorrect(q, answers[q.id] ?? [])).length;
         await fetch("/api/session", {
           method: "PATCH",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ action: "complete", sessionId }),
+          body: JSON.stringify({ action: "complete", sessionId, correctAnswers, domainScores: {} }),
         });
         router.push(`/exam/results/${sessionId}`);
       } else {
         // Offline fallback — compute score locally and pass via query param
-        const correct = questions.filter((q) => answers[q.id] === q.correct).length;
+        const correct = questions.filter((q) => isAnswerCorrect(q, answers[q.id] ?? [])).length;
         const score = Math.round((correct / questions.length) * 1000);
         router.push(`/exam/results/local?score=${score}&total=${questions.length}&correct=${correct}`);
       }
     } catch {
       // fallback
-      const correct = questions.filter((q) => answers[q.id] === q.correct).length;
+      const correct = questions.filter((q) => isAnswerCorrect(q, answers[q.id] ?? [])).length;
       const score = Math.round((correct / questions.length) * 1000);
       router.push(`/exam/results/local?score=${score}&total=${questions.length}&correct=${correct}`);
     }
@@ -162,6 +178,7 @@ export default function FullExamPage() {
     <div className="min-h-screen bg-[#080b10] flex flex-col text-white">
       {/* Top bar */}
       <div className="flex-shrink-0 border-b border-zinc-800/60 bg-zinc-950/90 backdrop-blur-sm px-4 py-3 flex items-center gap-4">
+        <BackButton fallbackHref="/dashboard" className="text-zinc-500 hover:text-white" />
         <div className="flex items-center gap-2">
           <span className="text-xs text-zinc-400">CCNA 200-301</span>
           <span className="text-xs text-zinc-700">·</span>
@@ -199,7 +216,7 @@ export default function FullExamPage() {
           <p className="text-xs font-semibold text-zinc-500 mb-3 uppercase tracking-wide">Questions</p>
           <div className="grid grid-cols-5 gap-1">
             {questions.map((q, idx) => {
-              const answered = !!answers[q.id];
+              const answered = (answers[q.id] ?? []).length > 0;
               const isFlagged = flagged.has(q.id);
               const isCurrent = idx === currentIdx;
               return (
@@ -257,14 +274,19 @@ export default function FullExamPage() {
             </div>
 
             {/* Options */}
+            {isMultiAnswerQuestion(current) && (
+              <p className="font-mono text-xs uppercase tracking-wide text-zinc-500">
+                Choose exactly {getRequiredAnswerCount(current)} options
+              </p>
+            )}
             <div className="space-y-2.5">
               {current.options.map((option) => {
                 const letter = option.charAt(0);
-                const selected = answers[current.id] === letter;
+                const selected = (answers[current.id] ?? []).includes(letter);
                 return (
                   <button
                     key={option}
-                    onClick={() => selectAnswer(current.id, letter)}
+                    onClick={() => selectAnswer(current, letter)}
                     className={cn(
                       "w-full text-left px-4 py-3 rounded-lg border text-sm transition-all duration-150",
                       selected
@@ -342,12 +364,13 @@ function ReviewScreen({
   isDanger,
   isWarning,
 }: ReviewScreenProps) {
-  const unanswered = questions.filter((q) => !answers[q.id]);
+  const unanswered = questions.filter((q) => (answers[q.id] ?? []).length === 0);
   const flaggedList = questions.filter((q) => flagged.has(q.id));
 
   return (
     <div className="min-h-screen bg-[#080b10] text-white flex flex-col">
       <div className="flex-shrink-0 border-b border-zinc-800/60 bg-zinc-950/90 px-4 py-3 flex items-center gap-4">
+        <BackButton fallbackHref="/exam/full" className="text-zinc-500 hover:text-white" />
         <h1 className="text-sm font-semibold">Review & Submit</h1>
         <div className="ml-auto flex items-center gap-3">
           <div
@@ -371,7 +394,9 @@ function ReviewScreen({
           {/* Summary */}
           <div className="grid grid-cols-3 gap-3">
             <div className="bg-zinc-900/60 border border-zinc-800 rounded-lg p-4 text-center">
-              <p className="text-2xl font-bold text-teal-400">{Object.keys(answers).length}</p>
+              <p className="text-2xl font-bold text-teal-400">
+                {Object.values(answers).filter((answer) => answer.length > 0).length}
+              </p>
               <p className="text-xs text-zinc-400 mt-1">Answered</p>
             </div>
             <div className="bg-zinc-900/60 border border-zinc-800 rounded-lg p-4 text-center">

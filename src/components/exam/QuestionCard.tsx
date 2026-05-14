@@ -2,11 +2,17 @@
 
 import { useEffect } from "react";
 import { cn } from "@/lib/utils";
-import type { Question } from "@/lib/questions";
+import {
+  getCorrectAnswers,
+  getRequiredAnswerCount,
+  isMultiAnswerQuestion,
+  type AnswerSelection,
+  type Question,
+} from "@/lib/questions";
 
 interface QuestionCardProps {
   question: Question;
-  selected: string | null;
+  selected: AnswerSelection;
   revealed: boolean;
   onSelect: (letter: string) => void;
   index: number;
@@ -23,6 +29,10 @@ export default function QuestionCard({
   index,
   total,
 }: QuestionCardProps) {
+  const correctAnswers = getCorrectAnswers(question);
+  const requiredAnswers = getRequiredAnswerCount(question);
+  const isMultiAnswer = isMultiAnswerQuestion(question);
+
   useEffect(() => {
     function handler(e: KeyboardEvent) {
       if (revealed) return;
@@ -36,49 +46,51 @@ export default function QuestionCard({
   }, [revealed, onSelect]);
 
   function optionState(letter: string) {
-    if (!revealed) return selected === letter ? "selected" : "default";
-    if (letter === question.correct) return "correct";
-    if (letter === selected && selected !== question.correct) return "wrong";
+    const isSelected = selected.includes(letter);
+    const isCorrect = correctAnswers.includes(letter);
+    if (!revealed) return isSelected ? "selected" : "default";
+    if (isCorrect) return "correct";
+    if (isSelected) return "wrong";
     return "dim";
   }
 
   const stateClasses: Record<string, string> = {
-    default:  "border-zinc-200 bg-white hover:border-black cursor-pointer",
+    default: "border-zinc-200 bg-white hover:border-black cursor-pointer",
     selected: "border-black bg-zinc-100 cursor-pointer",
-    correct:  "border-emerald-600 bg-emerald-50",
-    wrong:    "border-red-600 bg-red-50",
-    dim:      "border-zinc-100 bg-white opacity-40",
+    correct: "border-emerald-600 bg-emerald-50",
+    wrong: "border-red-600 bg-red-50",
+    dim: "border-zinc-100 bg-white opacity-40",
   };
 
   const letterClasses: Record<string, string> = {
-    default:  "bg-zinc-100 text-zinc-500",
+    default: "bg-zinc-100 text-zinc-500",
     selected: "bg-black text-white",
-    correct:  "bg-emerald-600 text-white",
-    wrong:    "bg-red-600 text-white",
-    dim:      "bg-zinc-100 text-zinc-400",
+    correct: "bg-emerald-600 text-white",
+    wrong: "bg-red-600 text-white",
+    dim: "bg-zinc-100 text-zinc-400",
   };
 
   return (
     <div>
-      {/* Progress + meta */}
       <div className="mb-6 flex items-center justify-between">
         <span className="font-mono text-xs text-zinc-400 uppercase tracking-widest">
           Q{index + 1} / {total}
         </span>
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center justify-end gap-2">
           <span className="border border-zinc-300 px-2 py-0.5 font-mono text-[10px] uppercase tracking-widest text-zinc-500">
             {question.difficulty}
           </span>
           <span className="border border-zinc-300 px-2 py-0.5 font-mono text-[10px] text-zinc-500">
             obj {question.objective}
           </span>
+          <span className="border border-zinc-300 px-2 py-0.5 font-mono text-[10px] uppercase tracking-widest text-zinc-500">
+            {isMultiAnswer ? `select ${requiredAnswers}` : "select 1"}
+          </span>
         </div>
       </div>
 
-      {/* Question text */}
       <p className="mb-6 text-base leading-8 text-black">{question.text}</p>
 
-      {/* Options */}
       <div className="grid gap-2">
         {question.options.map((option, i) => {
           const letter = LETTERS[i];
@@ -93,13 +105,20 @@ export default function QuestionCard({
                 stateClasses[state],
               )}
             >
-              <span className={cn(
-                "inline-flex size-5 shrink-0 items-center justify-center font-mono text-xs font-bold",
-                letterClasses[state],
-              )}>
+              <span
+                className={cn(
+                  "inline-flex size-5 shrink-0 items-center justify-center font-mono text-xs font-bold",
+                  letterClasses[state],
+                )}
+              >
                 {letter}
               </span>
-              <span className={cn("text-sm leading-6", state === "dim" ? "text-zinc-400" : "text-black")}>
+              <span
+                className={cn(
+                  "text-sm leading-6",
+                  state === "dim" ? "text-zinc-400" : "text-black",
+                )}
+              >
                 {option.replace(/^[A-D]\.\s*/, "")}
               </span>
             </button>
@@ -108,12 +127,9 @@ export default function QuestionCard({
       </div>
 
       <p className="mt-4 font-mono text-[10px] text-zinc-400 uppercase tracking-widest">
-        Press{" "}
-        <kbd className="border border-zinc-300 px-1 py-0.5">1</kbd>–
-        <kbd className="border border-zinc-300 px-1 py-0.5">4</kbd>{" "}
-        to select ·{" "}
-        <kbd className="border border-zinc-300 px-1 py-0.5">Enter</kbd>{" "}
-        to submit
+        {isMultiAnswer ? `Choose exactly ${requiredAnswers} options. ` : "Choose one option. "}
+        Press <kbd className="border border-zinc-300 px-1 py-0.5">1</kbd>-
+        <kbd className="border border-zinc-300 px-1 py-0.5">4</kbd> to select.
       </p>
     </div>
   );
