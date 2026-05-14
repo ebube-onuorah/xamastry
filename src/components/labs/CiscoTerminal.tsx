@@ -149,12 +149,10 @@ export default function CiscoTerminal({ initialState, onStateChange, className }
       termRef.current = term;
       fitRef.current = fitAddon;
 
-      // Welcome banner
-      term.writeln("\x1b[1;32m╔══════════════════════════════════════════════════════╗\x1b[0m");
-      term.writeln("\x1b[1;32m║      Xamastry — Cisco IOS CLI Simulator              ║\x1b[0m");
-      term.writeln("\x1b[1;32m║      Type commands as you would on a real device     ║\x1b[0m");
-      term.writeln("\x1b[1;32m║      Ctrl+L to clear · ↑↓ for command history        ║\x1b[0m");
-      term.writeln("\x1b[1;32m╚══════════════════════════════════════════════════════╝\x1b[0m");
+      // Keep the banner short so it stays readable in narrow mobile terminals.
+      term.writeln("\x1b[1;32mXamastry Cisco IOS CLI Simulator\x1b[0m");
+      term.writeln("\x1b[32mType IOS-style commands below.\x1b[0m");
+      term.writeln("\x1b[32mCtrl+L clears. Arrows browse history.\x1b[0m");
       term.writeln("");
 
       writePrompt(term, stateRef.current);

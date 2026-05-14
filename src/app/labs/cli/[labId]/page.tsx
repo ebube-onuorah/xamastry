@@ -6,7 +6,7 @@ import Link from "next/link";
 import dynamic from "next/dynamic";
 import LabInstructions from "@/components/labs/LabInstructions";
 import GradingPanel from "@/components/labs/GradingPanel";
-import type { DeviceState } from "@/lib/ios/state";
+import { createDevice, type DeviceState } from "@/lib/ios/state";
 import type { TaskResult } from "@/components/labs/GradingPanel";
 import { cn } from "@/lib/utils";
 
@@ -62,6 +62,15 @@ export default function CliLabPage({ params }: { params: Promise<{ labId: string
     fetchLab(labId).then(setLab);
   }, [labId]);
 
+  useEffect(() => {
+    if (!lab) return;
+    const initialState = lab.initialState as Partial<DeviceState> | undefined;
+    setDeviceState({
+      ...createDevice(initialState?.hostname ?? "Router"),
+      ...(initialState ?? {}),
+    });
+  }, [lab]);
+
   const handleStateChange = useCallback((state: DeviceState) => {
     setDeviceState(state);
   }, []);
@@ -97,9 +106,9 @@ export default function CliLabPage({ params }: { params: Promise<{ labId: string
   const initialState = lab.initialState as Partial<DeviceState> | undefined;
 
   return (
-    <div className="h-screen bg-[#080b10] flex flex-col overflow-hidden">
+    <div className="min-h-screen bg-[#080b10] flex flex-col lg:h-screen lg:overflow-hidden">
       {/* Top bar */}
-      <div className="flex-shrink-0 border-b border-zinc-800/60 bg-zinc-950/80 backdrop-blur-sm px-4 py-2.5 flex items-center gap-4">
+      <div className="flex-shrink-0 border-b border-zinc-800/60 bg-zinc-950/80 backdrop-blur-sm px-3 py-2.5 flex items-center gap-3 sm:px-4 sm:gap-4">
         <Link
           href="/labs"
           className="flex items-center gap-1.5 text-zinc-400 hover:text-white transition-colors text-sm"
@@ -108,7 +117,7 @@ export default function CliLabPage({ params }: { params: Promise<{ labId: string
           Labs
         </Link>
         <div className="h-4 w-px bg-zinc-800" />
-        <div className="flex items-center gap-2">
+        <div className="flex min-w-0 items-center gap-2">
           <Terminal className="w-4 h-4 text-teal-500" />
           <span className="text-white font-semibold text-sm truncate">{lab.title}</span>
         </div>
@@ -120,9 +129,9 @@ export default function CliLabPage({ params }: { params: Promise<{ labId: string
       </div>
 
       {/* Main layout: instructions left (40%) + terminal right (60%) */}
-      <div className="flex-1 flex min-h-0">
+      <div className="flex flex-1 flex-col lg:min-h-0 lg:flex-row">
         {/* Left panel — instructions + grading */}
-        <div className="w-[40%] min-w-[320px] border-r border-zinc-800/60 flex flex-col bg-zinc-950/40">
+        <div className="flex max-h-[48vh] min-h-[360px] w-full flex-col border-b border-zinc-800/60 bg-zinc-950/40 lg:max-h-none lg:min-h-0 lg:w-[40%] lg:min-w-[320px] lg:border-b-0 lg:border-r">
           {/* Tab bar */}
           <div className="flex-shrink-0 flex border-b border-zinc-800/60">
             <button
@@ -190,7 +199,7 @@ export default function CliLabPage({ params }: { params: Promise<{ labId: string
             <div className="flex-shrink-0 p-3 border-t border-zinc-800/60">
               <button
                 onClick={handleGrade}
-                disabled={isGrading || !deviceState}
+                disabled={isGrading}
                 className="w-full py-2 px-4 bg-teal-500/20 hover:bg-teal-500/30 border border-teal-500/40 text-teal-300 text-sm font-semibold rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
               >
                 {isGrading ? (
@@ -207,7 +216,7 @@ export default function CliLabPage({ params }: { params: Promise<{ labId: string
         </div>
 
         {/* Right panel — terminal */}
-        <div className="flex-1 flex flex-col min-w-0 p-3 gap-2">
+        <div className="flex min-h-[70vh] flex-1 flex-col gap-2 p-3 lg:min-h-0 lg:min-w-0">
           <div className="flex items-center gap-2 flex-shrink-0">
             <div className="flex gap-1.5">
               <div className="w-3 h-3 rounded-full bg-red-500/70" />

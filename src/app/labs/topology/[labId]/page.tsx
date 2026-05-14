@@ -170,15 +170,15 @@ export default function TopologyLabPage({ params }: { params: Promise<{ labId: s
   const configurableDevices = lab.devices.filter((d) => d.type === "router" || d.type === "switch");
 
   return (
-    <div className="h-screen bg-[#080b10] flex flex-col overflow-hidden">
+    <div className="min-h-screen bg-[#080b10] flex flex-col lg:h-screen lg:overflow-hidden">
       {/* Top bar */}
-      <div className="flex-shrink-0 border-b border-zinc-800/60 bg-zinc-950/80 backdrop-blur-sm px-4 py-2.5 flex items-center gap-4">
+      <div className="flex-shrink-0 border-b border-zinc-800/60 bg-zinc-950/80 backdrop-blur-sm px-3 py-2.5 flex items-center gap-3 sm:px-4 sm:gap-4">
         <Link href="/labs" className="flex items-center gap-1.5 text-zinc-400 hover:text-white transition-colors text-sm">
           <ArrowLeft className="w-4 h-4" />
           Labs
         </Link>
         <div className="h-4 w-px bg-zinc-800" />
-        <div className="flex items-center gap-2">
+        <div className="flex min-w-0 items-center gap-2">
           <Monitor className="w-4 h-4 text-purple-400" />
           <span className="text-white font-semibold text-sm truncate">{lab.title}</span>
         </div>
@@ -190,9 +190,9 @@ export default function TopologyLabPage({ params }: { params: Promise<{ labId: s
       </div>
 
       {/* Body: left panel + main area */}
-      <div className="flex-1 flex min-h-0">
+      <div className="flex flex-1 flex-col lg:min-h-0 lg:flex-row">
         {/* Left panel */}
-        <div className="w-[320px] flex-shrink-0 border-r border-zinc-800/60 flex flex-col bg-zinc-950/40">
+        <div className="flex max-h-[45vh] min-h-[320px] w-full flex-shrink-0 flex-col border-b border-zinc-800/60 bg-zinc-950/40 lg:max-h-none lg:min-h-0 lg:w-[320px] lg:border-b-0 lg:border-r">
           {/* Tabs */}
           <div className="flex-shrink-0 flex border-b border-zinc-800/60">
             <button
@@ -247,21 +247,23 @@ export default function TopologyLabPage({ params }: { params: Promise<{ labId: s
             )}
           </div>
 
-          <div className="flex-shrink-0 p-3 border-t border-zinc-800/60">
-            <button
-              onClick={handleGrade}
-              disabled={isGrading}
-              className="w-full py-2 px-4 bg-teal-500/20 hover:bg-teal-500/30 border border-teal-500/40 text-teal-300 text-sm font-semibold rounded-lg transition-all disabled:opacity-50"
-            >
-              {isGrading ? "Grading..." : "Check My Work"}
-            </button>
-          </div>
+          {activeTab === "instructions" && (
+            <div className="flex-shrink-0 p-3 border-t border-zinc-800/60">
+              <button
+                onClick={handleGrade}
+                disabled={isGrading}
+                className="w-full py-2 px-4 bg-teal-500/20 hover:bg-teal-500/30 border border-teal-500/40 text-teal-300 text-sm font-semibold rounded-lg transition-all disabled:opacity-50"
+              >
+                {isGrading ? "Grading..." : "Check My Work"}
+              </button>
+            </div>
+          )}
         </div>
 
         {/* Right: topology (top 55%) + terminal (bottom 45%) */}
-        <div className="flex-1 flex flex-col min-h-0">
+        <div className="flex min-h-[92vh] flex-1 flex-col lg:min-h-0">
           {/* Topology canvas */}
-          <div className="relative" style={{ height: "55%" }}>
+          <div className="relative h-[46vh] min-h-[300px] lg:h-[55%] lg:min-h-0">
             <TopologyCanvas
               devices={lab.devices}
               links={lab.links}
@@ -277,7 +279,7 @@ export default function TopologyLabPage({ params }: { params: Promise<{ labId: s
           </div>
 
           {/* Device selector + terminal */}
-          <div className="flex-1 min-h-0 border-t border-zinc-800/60 flex flex-col">
+          <div className="flex min-h-[52vh] flex-1 flex-col border-t border-zinc-800/60 lg:min-h-0">
             {/* Device tab strip */}
             <div className="flex-shrink-0 flex items-center gap-1 px-3 py-1.5 border-b border-zinc-800/60 bg-zinc-950/60 overflow-x-auto">
               <Terminal className="w-3.5 h-3.5 text-zinc-500 flex-shrink-0 mr-1" />
