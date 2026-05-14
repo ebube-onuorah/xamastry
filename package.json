@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "audit:content": "node scripts/audit-content.mjs"
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.1.0",

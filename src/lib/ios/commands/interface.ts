@@ -122,6 +122,44 @@ export function setSwitchportAccessVlan(state: DeviceState, args: string[]): { o
   };
 }
 
+export function setSwitchportTrunkNativeVlan(state: DeviceState, args: string[]): { output: string; state: DeviceState } {
+  if (state.mode !== "interface" || !state.currentInterface) {
+    return { output: "% Not in interface config mode.", state };
+  }
+  const vlanId = parseInt(args[0] ?? "");
+  if (isNaN(vlanId) || vlanId < 1 || vlanId > 4094) {
+    return { output: "% Invalid VLAN id.", state };
+  }
+  const iface: IosInterface = {
+    ...state.interfaces[state.currentInterface]!,
+    switchportMode: "trunk",
+    trunkNativeVlan: vlanId,
+  };
+  return {
+    output: "",
+    state: { ...state, interfaces: { ...state.interfaces, [state.currentInterface]: iface } },
+  };
+}
+
+export function setSwitchportTrunkAllowedVlans(state: DeviceState, args: string[]): { output: string; state: DeviceState } {
+  if (state.mode !== "interface" || !state.currentInterface) {
+    return { output: "% Not in interface config mode.", state };
+  }
+  const vlanList = args.join("").split(",").map((vlan) => parseInt(vlan)).filter((vlan) => !isNaN(vlan));
+  if (vlanList.length === 0 || vlanList.some((vlan) => vlan < 1 || vlan > 4094)) {
+    return { output: "% Invalid VLAN list.", state };
+  }
+  const iface: IosInterface = {
+    ...state.interfaces[state.currentInterface]!,
+    switchportMode: "trunk",
+    trunkAllowedVlans: vlanList,
+  };
+  return {
+    output: "",
+    state: { ...state, interfaces: { ...state.interfaces, [state.currentInterface]: iface } },
+  };
+}
+
 export function setEncapsulationDot1q(state: DeviceState, args: string[]): { output: string; state: DeviceState } {
   if (state.mode !== "interface" || !state.currentInterface) {
     return { output: "% Not in interface config mode.", state };

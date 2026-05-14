@@ -3,6 +3,7 @@ export type IosMode =
   | "privileged"
   | "config"
   | "interface"
+  | "router-ospf"
   | "vlan-config"
   | "line";
 
@@ -16,6 +17,7 @@ export interface IosInterface {
   switchportMode?: "access" | "trunk";
   accessVlan?: number;
   trunkAllowedVlans?: number[];
+  trunkNativeVlan?: number;
   encapsulationDot1q?: number; // for subinterfaces
 }
 
@@ -92,6 +94,8 @@ export function getPrompt(state: DeviceState): string {
       return `${h}(config)#`;
     case "interface":
       return `${h}(config-if)#`;
+    case "router-ospf":
+      return `${h}(config-router)#`;
     case "vlan-config":
       return `${h}(config-vlan)#`;
     case "line":

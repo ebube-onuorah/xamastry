@@ -95,7 +95,7 @@
       "C. They are sent untagged",
       "D. They are encapsulated with ISL"
     ],
-    "correct": ["B", "C"],
+    "correct": "C",
     "explanation": "Frames belonging to the native VLAN are sent untagged across an 802.1Q trunk. The receiving switch assumes untagged frames belong to the native VLAN. If both sides have mismatched native VLANs, a VLAN mismatch occurs — a security risk and connectivity issue.",
     "tags": [
       "trunk",

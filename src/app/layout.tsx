@@ -18,7 +18,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Xamastry | Free CCNA Practice Platform",
     description:
-      "Pass the CCNA 200-301 free. 500+ adaptive questions, browser-based CLI labs, Groq AI explanations.",
+      "CCNA 200-301 practice with adaptive questions, browser-based IOS-style CLI labs, state grading, and AI explanations.",
     type: "website",
   },
 };

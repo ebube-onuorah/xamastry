@@ -78,9 +78,9 @@
       "description": "Restrict VTY lines to SSH only (no Telnet)",
       "hint": "line vty 0 4 → transport input ssh",
       "check": {
-        "type": "line_password",
-        "description": "VTY lines must have transport input configured",
-        "expected": { "line": "vty 0 4" }
+        "type": "line_transport_input",
+        "description": "VTY lines must allow SSH only",
+        "expected": { "line": "vty 0 4", "protocol": "ssh" }
       }
     }
   ],

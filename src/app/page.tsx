@@ -19,26 +19,27 @@ const labs = [
 ];
 
 const metrics = [
-  { value: "400+", label: "MCQ", sub: "domain-tagged questions" },
-  { value: "15",   label: "LAB", sub: "CLI and topology labs"   },
-  { value: "SM-2", label: "ALGO",sub: "adaptive spaced repetition" },
-  { value: "Groq", label: "AI",  sub: "llama-3.3-70b explanations" },
+  { value: "400", label: "MCQ", sub: "audited answer schema" },
+  { value: "15",  label: "LAB", sub: "state-graded scenarios" },
+  { value: "IOS", label: "CLI", sub: "browser command parser" },
+  { value: "SM-2", label: "SRS", sub: "review scheduling" },
 ];
 
 const terminal = [
-  { prompt: "R1>",           cmd: "enable",                                out: false },
-  { prompt: "R1#",           cmd: "configure terminal",                    out: false },
-  { prompt: "R1(config)#",   cmd: "interface GigabitEthernet0/0",          out: false },
-  { prompt: "R1(config-if)#",cmd: "ip address 192.168.1.1 255.255.255.0",  out: false },
-  { prompt: "R1(config-if)#",cmd: "no shutdown",                           out: false },
-  { prompt: "",              cmd: "%LINK-5-CHANGED: Interface Gi0/0, changed state to up", out: true },
-  { prompt: "R1(config-if)#",cmd: "_",                                     out: false },
+  { prompt: "SW1>", cmd: "enable", out: false },
+  { prompt: "SW1#", cmd: "configure terminal", out: false },
+  { prompt: "SW1(config)#", cmd: "interface GigabitEthernet0/1", out: false },
+  { prompt: "SW1(config-if)#", cmd: "switchport mode trunk", out: false },
+  { prompt: "SW1(config-if)#", cmd: "switchport trunk native vlan 99", out: false },
+  { prompt: "SW1(config-if)#", cmd: "no shutdown", out: false },
+  { prompt: "", cmd: "%LINK-5-CHANGED: Interface GigabitEthernet0/1, changed state to up", out: true },
+  { prompt: "SW1(config-if)#", cmd: "_", out: false },
 ];
 
 const tasks = [
-  { label: "Gi0/0 — ip address",  status: "PASS" },
-  { label: "Gi0/0 — no shutdown", status: "PASS" },
-  { label: "Gi0/1 — ip address",  status: "FAIL" },
+  { label: "Gi0/1 - trunk mode", status: "PASS" },
+  { label: "Gi0/1 - native VLAN 99", status: "PASS" },
+  { label: "Gi0/2 - native VLAN 99", status: "FAIL" },
 ];
 
 function ScoreStamp({ score }: { score: number }) {
@@ -80,14 +81,13 @@ export default function Home() {
             </span>
 
             <h1 className="font-playfair text-5xl font-extrabold leading-[1.1] tracking-tight text-black sm:text-6xl">
-              Pass the CCNA.<br />
-              <span className="text-zinc-400">No paywalls.<br />No fluff.</span>
+              CCNA study cockpit.<br />
+              <span className="text-zinc-400">Questions, CLI labs, review.</span>
             </h1>
 
             <p className="max-w-sm font-sans text-sm leading-7 text-zinc-600">
-              Adaptive MCQs graded by spaced repetition, browser-based Cisco IOS
-              labs checked against real device state, and AI explanations when a
-              concept refuses to stick.
+              Drill exam objectives, configure IOS-style labs in the browser, and
+              verify work against device state instead of memorising isolated answers.
             </p>
 
             <div className="flex flex-wrap gap-3">
@@ -129,7 +129,7 @@ export default function Home() {
                 <span className="size-2.5 rounded-full bg-zinc-700" />
                 <span className="size-2.5 rounded-full bg-zinc-700" />
               </div>
-              <span className="font-mono text-xs text-zinc-500">lab-001 — basic-router-config</span>
+              <span className="font-mono text-xs text-zinc-500">lab-007 - trunk-native-vlan</span>
               <span className="flex items-center gap-1.5 font-mono text-xs text-emerald-400">
                 <span className="size-1.5 rounded-full bg-emerald-400" />
                 2 / 3 PASS
@@ -174,7 +174,7 @@ export default function Home() {
               ))}
               <div className="border-t border-zinc-800 px-5 py-3">
                 <Link
-                  href="/labs/cli/lab-001"
+                  href="/labs/cli/lab-007"
                   className="font-mono text-[10px] uppercase tracking-widest text-emerald-400 hover:text-white transition-colors"
                 >
                   Open in full lab →
@@ -199,7 +199,7 @@ export default function Home() {
                 Domain Readiness
               </h2>
               <p className="mt-0.5 font-mono text-[9px] uppercase tracking-widest text-zinc-400">
-                Sample — sign in to see your real scores
+                Sample scores until you complete practice sessions
               </p>
             </div>
             <Link

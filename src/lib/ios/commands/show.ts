@@ -70,6 +70,12 @@ export function showRunningConfig(state: DeviceState): string {
       if (iface.switchportMode === "access" && iface.accessVlan) {
         lines.push(` switchport access vlan ${iface.accessVlan}`);
       }
+      if (iface.switchportMode === "trunk") {
+        if (iface.trunkNativeVlan) lines.push(` switchport trunk native vlan ${iface.trunkNativeVlan}`);
+        if (iface.trunkAllowedVlans?.length) {
+          lines.push(` switchport trunk allowed vlan ${iface.trunkAllowedVlans.join(",")}`);
+        }
+      }
     }
     if (iface.status === "down") lines.push(" shutdown");
     lines.push("!");
@@ -134,6 +140,34 @@ export function showIpRoute(state: DeviceState): string {
     lines.push(`${code}    ${r.network}/${maskToCidr(r.mask)} [${r.metric === 0 ? "0/0" : `110/${r.metric}`}] ${via}`);
   }
   return lines.join("\n");
+}
+
+export function showInterfacesTrunk(state: DeviceState): string {
+  const trunks = Object.values(state.interfaces).filter((iface) => iface.switchportMode === "trunk");
+  if (trunks.length === 0) {
+    return "Port        Mode         Encapsulation  Status        Native vlan\n(no trunk ports configured)";
+  }
+
+  const header = "Port        Mode         Encapsulation  Status        Native vlan";
+  const rows = trunks.map((iface) => {
+    const nativeVlan = iface.trunkNativeVlan ?? 1;
+    const status = iface.status === "up" ? "trunking" : "not-trunking";
+    return (
+      padRight(iface.name, 12) +
+      padRight("on", 13) +
+      padRight("802.1q", 15) +
+      padRight(status, 14) +
+      nativeVlan
+    );
+  });
+
+  const vlanHeader = "\nPort        Vlans allowed on trunk";
+  const vlanRows = trunks.map((iface) => {
+    const allowed = iface.trunkAllowedVlans?.length ? iface.trunkAllowedVlans.join(",") : "1-4094";
+    return padRight(iface.name, 12) + allowed;
+  });
+
+  return [header, ...rows, vlanHeader, ...vlanRows].join("\n");
 }
 
 function maskToCidr(mask: string): number {

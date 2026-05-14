@@ -5,7 +5,7 @@
   "difficulty": "intermediate",
   "estimatedMinutes": 20,
   "topology": "single-switch",
-  "description": "Configure an 802.1Q trunk link on a switch port and understand how VLANs are carried across trunk links. Configure the native VLAN and add a description to document the uplink.",
+  "description": "Configure 802.1Q trunk links, set the native VLAN, and document uplinks. This lab focuses on the trunk behavior CCNA candidates must know cold.",
   "objectives": ["2.2"],
   "initialState": {
     "hostname": "SW1",
@@ -16,12 +16,12 @@
       "99": { "id": 99, "name": "MANAGEMENT", "active": true }
     }
   },
-  "scenario": "SW1 already has VLANs 10, 20, and 99 configured. GigabitEthernet0/1 connects to an upstream router. You need to configure it as a trunk so all VLANs can be routed. GigabitEthernet0/2 connects to another switch and must also be a trunk.",
+  "scenario": "SW1 already has VLANs 10, 20, and 99 configured. GigabitEthernet0/1 connects to an upstream router. GigabitEthernet0/2 connects to another switch. Configure both as active trunks and set VLAN 99 as the native VLAN on each trunk.",
   "tasks": [
     {
       "id": "t1",
       "description": "Configure GigabitEthernet0/1 as a trunk port",
-      "hint": "interface GigabitEthernet0/1 → switchport mode trunk",
+      "hint": "interface GigabitEthernet0/1 -> switchport mode trunk",
       "check": {
         "type": "switchport_mode",
         "description": "Gi0/1 must be in trunk mode",
@@ -30,8 +30,18 @@
     },
     {
       "id": "t2",
+      "description": "Set GigabitEthernet0/1 native VLAN to 99",
+      "hint": "interface GigabitEthernet0/1 -> switchport trunk native vlan 99",
+      "check": {
+        "type": "switchport_trunk_native_vlan",
+        "description": "Gi0/1 native VLAN must be 99",
+        "expected": { "interface": "GigabitEthernet0/1", "vlan": 99 }
+      }
+    },
+    {
+      "id": "t3",
       "description": "Add a description 'Uplink to Router' on GigabitEthernet0/1",
-      "hint": "interface GigabitEthernet0/1 → description Uplink to Router",
+      "hint": "description Uplink to Router",
       "check": {
         "type": "interface_description",
         "description": "Gi0/1 must have description 'Uplink to Router'",
@@ -39,7 +49,7 @@
       }
     },
     {
-      "id": "t3",
+      "id": "t4",
       "description": "Bring GigabitEthernet0/1 up",
       "hint": "no shutdown",
       "check": {
@@ -49,9 +59,9 @@
       }
     },
     {
-      "id": "t4",
+      "id": "t5",
       "description": "Configure GigabitEthernet0/2 as a trunk port",
-      "hint": "interface GigabitEthernet0/2 → switchport mode trunk",
+      "hint": "interface GigabitEthernet0/2 -> switchport mode trunk",
       "check": {
         "type": "switchport_mode",
         "description": "Gi0/2 must be in trunk mode",
@@ -59,13 +69,33 @@
       }
     },
     {
-      "id": "t5",
+      "id": "t6",
+      "description": "Set GigabitEthernet0/2 native VLAN to 99",
+      "hint": "interface GigabitEthernet0/2 -> switchport trunk native vlan 99",
+      "check": {
+        "type": "switchport_trunk_native_vlan",
+        "description": "Gi0/2 native VLAN must be 99",
+        "expected": { "interface": "GigabitEthernet0/2", "vlan": 99 }
+      }
+    },
+    {
+      "id": "t7",
       "description": "Add a description 'Uplink to SW2' on GigabitEthernet0/2",
       "hint": "description Uplink to SW2",
       "check": {
         "type": "interface_description",
         "description": "Gi0/2 must have description 'Uplink to SW2'",
         "expected": { "interface": "GigabitEthernet0/2", "description": "Uplink to SW2" }
+      }
+    },
+    {
+      "id": "t8",
+      "description": "Bring GigabitEthernet0/2 up",
+      "hint": "no shutdown",
+      "check": {
+        "type": "interface_status",
+        "description": "Gi0/2 must be up",
+        "expected": { "interface": "GigabitEthernet0/2", "status": "up" }
       }
     }
   ],
@@ -74,11 +104,13 @@
     "configure terminal",
     "interface GigabitEthernet0/1",
     "switchport mode trunk",
+    "switchport trunk native vlan 99",
     "description Uplink to Router",
     "no shutdown",
     "exit",
     "interface GigabitEthernet0/2",
     "switchport mode trunk",
+    "switchport trunk native vlan 99",
     "description Uplink to SW2",
     "no shutdown",
     "end",

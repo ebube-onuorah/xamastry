@@ -1,5 +1,5 @@
 import { type DeviceState, getPrompt } from "./state";
-import { showIpInterfaceBrief, showRunningConfig, showVlanBrief, showIpRoute } from "./commands/show";
+import { showInterfacesTrunk, showIpInterfaceBrief, showRunningConfig, showVlanBrief, showIpRoute } from "./commands/show";
 import {
   enterInterface,
   setIpAddress,
@@ -8,6 +8,8 @@ import {
   setDescription,
   setSwitchportMode,
   setSwitchportAccessVlan,
+  setSwitchportTrunkAllowedVlans,
+  setSwitchportTrunkNativeVlan,
   setEncapsulationDot1q,
 } from "./commands/interface";
 import { addStaticRoute, removeStaticRoute, addOspfNetwork } from "./commands/routing";
@@ -76,6 +78,8 @@ export function execute(state: DeviceState, rawInput: string): CommandResult {
       output = showVlanBrief(state);
     } else if (sub === "ip" && sub2 === "route") {
       output = showIpRoute(state);
+    } else if (sub === "interfaces" && sub2 === "trunk") {
+      output = showInterfacesTrunk(state);
     } else if (sub === "version") {
       output = `Cisco IOS Software, Version 15.2 (Xamastry Simulator)\nHostname: ${state.hostname}`;
     } else {
@@ -84,7 +88,7 @@ export function execute(state: DeviceState, rawInput: string): CommandResult {
   }
 
   // ── Config-mode commands ─────────────────────────────────────────────────────
-  else if (state.mode === "config" || state.mode === "interface" || state.mode === "vlan-config" || state.mode === "line") {
+  else if (state.mode === "config" || state.mode === "interface" || state.mode === "router-ospf" || state.mode === "vlan-config" || state.mode === "line") {
 
     if (cmd === "interface") {
       const r = enterInterface(state, args);
@@ -107,6 +111,12 @@ export function execute(state: DeviceState, rawInput: string): CommandResult {
     } else if (cmd === "switchport" && args[0]?.toLowerCase() === "access" && args[1]?.toLowerCase() === "vlan") {
       const r = setSwitchportAccessVlan(state, args.slice(2));
       output = r.output; newState = r.state;
+    } else if (cmd === "switchport" && args[0]?.toLowerCase() === "trunk" && args[1]?.toLowerCase() === "native" && args[2]?.toLowerCase() === "vlan") {
+      const r = setSwitchportTrunkNativeVlan(state, args.slice(3));
+      output = r.output; newState = r.state;
+    } else if (cmd === "switchport" && args[0]?.toLowerCase() === "trunk" && args[1]?.toLowerCase() === "allowed" && args[2]?.toLowerCase() === "vlan") {
+      const r = setSwitchportTrunkAllowedVlans(state, args.slice(3));
+      output = r.output; newState = r.state;
     } else if (cmd === "encapsulation" && args[0]?.toLowerCase().startsWith("dot1q")) {
       const r = setEncapsulationDot1q(state, args.slice(1));
       output = r.output; newState = r.state;
@@ -118,12 +128,12 @@ export function execute(state: DeviceState, rawInput: string): CommandResult {
       output = r.output; newState = r.state;
     } else if (cmd === "router" && args[0]?.toLowerCase() === "ospf") {
       const pid = parseInt(args[1] ?? "1");
-      newState = { ...state, currentLine: `ospf:${pid}` };
-    } else if (cmd === "network" && state.currentLine?.startsWith("ospf:")) {
+      newState = { ...state, mode: "router-ospf", currentLine: `ospf:${pid}` };
+    } else if (cmd === "network" && state.mode === "router-ospf" && state.currentLine?.startsWith("ospf:")) {
       const pid = activeOspfPid(state);
       const r = addOspfNetwork(state, args, pid);
       output = r.output; newState = r.state;
-    } else if (cmd === "router-id" && state.currentLine?.startsWith("ospf:")) {
+    } else if (cmd === "router-id" && state.mode === "router-ospf" && state.currentLine?.startsWith("ospf:")) {
       const pid = activeOspfPid(state);
       const ospfProcesses = { ...state.ospfProcesses };
       ospfProcesses[pid] = { ...ospfProcesses[pid], routerId: args[0] };
@@ -182,6 +192,8 @@ function handleExit(state: DeviceState): DeviceState {
   switch (state.mode) {
     case "interface":
       return { ...state, mode: "config", currentInterface: undefined };
+    case "router-ospf":
+      return { ...state, mode: "config", currentLine: undefined };
     case "vlan-config":
       return { ...state, mode: "config", currentInterface: undefined };
     case "line":

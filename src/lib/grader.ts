@@ -12,12 +12,15 @@ export type TaskCheckType =
   | "vlan_name"
   | "switchport_mode"
   | "switchport_access_vlan"
+  | "switchport_trunk_allowed_vlans"
+  | "switchport_trunk_native_vlan"
   | "enable_secret"
   | "username_exists"
   | "service_password_encryption"
   | "ssh_version"
   | "line_password"
   | "line_login"
+  | "line_transport_input"
   | "encapsulation_dot1q"
   | "banner_motd_contains";
 
@@ -153,6 +156,28 @@ export function gradeTask(state: DeviceState, check: TaskCheck): GradeResult {
       return pass(`${ifName} is correctly assigned to VLAN ${expectedVlan}`);
     }
 
+    case "switchport_trunk_native_vlan": {
+      const ifName = check.expected.interface as string;
+      const expectedVlan = check.expected.vlan as number;
+      const iface = findInterface(state, ifName);
+      if (!iface) return fail(`Interface ${ifName} does not exist`);
+      if (iface.trunkNativeVlan !== expectedVlan)
+        return fail(`${ifName} native VLAN is ${iface.trunkNativeVlan ?? "not set"}, expected ${expectedVlan}`);
+      return pass(`${ifName} native VLAN is correctly set to ${expectedVlan}`);
+    }
+
+    case "switchport_trunk_allowed_vlans": {
+      const ifName = check.expected.interface as string;
+      const expectedVlans = check.expected.vlans as number[];
+      const iface = findInterface(state, ifName);
+      if (!iface) return fail(`Interface ${ifName} does not exist`);
+      const actual = iface.trunkAllowedVlans ?? [];
+      const missing = expectedVlans.filter((vlan) => !actual.includes(vlan));
+      if (missing.length)
+        return fail(`${ifName} allowed VLANs missing: ${missing.join(", ")}`);
+      return pass(`${ifName} allows VLANs ${expectedVlans.join(", ")}`);
+    }
+
     case "enable_secret": {
       if (!state.enableSecret) return fail("Enable secret is not set");
       return pass("Enable secret is configured");
@@ -192,6 +217,15 @@ export function gradeTask(state: DeviceState, check: TaskCheck): GradeResult {
       if (method !== expectedMethod)
         return fail(`Line ${line} login method is "${method ?? "not set"}", expected "${expectedMethod}"`);
       return pass(`Line ${line} login method is correctly set to "${expectedMethod}"`);
+    }
+
+    case "line_transport_input": {
+      const line = check.expected.line as string;
+      const expected = check.expected.protocol as string;
+      const actual = state.lineTransportInput[line] ?? [];
+      if (!actual.includes(expected))
+        return fail(`Line ${line} transport input is "${actual.join(" ") || "not set"}", expected "${expected}"`);
+      return pass(`Line ${line} transport input includes "${expected}"`);
     }
 
     case "encapsulation_dot1q": {
