@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { Menu, X } from "lucide-react";
+import ThemeToggle from "./ThemeToggle";
 
 const NAV_LINKS = [
   { href: "/exam/practice", label: "Practice" },
@@ -36,6 +37,8 @@ export default function SiteNav() {
         </div>
 
         <div className="flex items-center gap-3">
+          <ThemeToggle />
+
           <Link
             href="/exam/practice"
             className="hidden sm:block bg-black px-5 py-2 font-mono text-xs font-bold uppercase tracking-widest text-white transition-colors hover:bg-red-600"

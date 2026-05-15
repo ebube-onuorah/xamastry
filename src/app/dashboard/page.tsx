@@ -80,7 +80,7 @@ export default async function DashboardPage() {
 
   const statCards = [
     { label: "Current Streak",       value: `${streak.current}d`, sub: `Longest: ${streak.longest}d` },
-    { label: "Due Today",            value: dueCount > 0 ? String(dueCount) : "—",    sub: "SM-2 review queue" },
+    { label: "Questions to Review",  value: String(dueCount), sub: dueCount > 0 ? "Ready for another pass" : "Nothing waiting right now" },
     { label: "Labs Complete",        value: String(completedLabCount), sub: "Unique passed labs" },
     { label: "Last Session",
       value: recentSessions[0]
@@ -123,6 +123,33 @@ export default async function DashboardPage() {
               <p className="mt-1 font-mono text-[10px] text-zinc-400">{s.sub}</p>
             </div>
           ))}
+        </div>
+
+        <div className="mb-8 border-2 border-black p-6">
+          <div className="mb-4 border-b border-zinc-200 pb-4">
+            <p className="font-mono text-[10px] uppercase tracking-widest text-zinc-400">Start Here</p>
+            <h2 className="mt-1 font-mono text-base font-bold uppercase tracking-wide text-black">What to do next</h2>
+          </div>
+          <div className="grid gap-3 md:grid-cols-3">
+            <Link href="/exam/practice" className="border border-zinc-300 p-4 transition-colors hover:border-black">
+              <p className="font-mono text-xs font-bold uppercase tracking-widest text-black">Practice Questions</p>
+              <p className="mt-2 text-sm leading-6 text-zinc-600">
+                Build your score and reveal weak CCNA objectives.
+              </p>
+            </Link>
+            <Link href="/labs" className="border border-zinc-300 p-4 transition-colors hover:border-black">
+              <p className="font-mono text-xs font-bold uppercase tracking-widest text-black">Do a Lab</p>
+              <p className="mt-2 text-sm leading-6 text-zinc-600">
+                Configure IOS-style tasks and save your lab checks here.
+              </p>
+            </Link>
+            <Link href="/exam/full" className="border border-zinc-300 p-4 transition-colors hover:border-black">
+              <p className="font-mono text-xs font-bold uppercase tracking-widest text-black">Take a Mock Exam</p>
+              <p className="mt-2 text-sm leading-6 text-zinc-600">
+                Get a timed score when you want a readiness check.
+              </p>
+            </Link>
+          </div>
         </div>
 
         <div className="grid gap-6 lg:grid-cols-[1fr_1fr]">

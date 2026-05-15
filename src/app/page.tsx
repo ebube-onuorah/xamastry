@@ -22,7 +22,7 @@ const metrics = [
   { value: "400", label: "MCQ", sub: "audited answer schema" },
   { value: "15",  label: "LAB", sub: "state-graded scenarios" },
   { value: "IOS", label: "CLI", sub: "browser command parser" },
-  { value: "SM-2", label: "SRS", sub: "review scheduling" },
+  { value: "SMART", label: "REVIEW", sub: "weak topics resurface" },
 ];
 
 const terminal = [
@@ -323,7 +323,7 @@ export default function Home() {
               {
                 n: "01",
                 title: "Answer MCQs",
-                body: "400+ questions mapped to every CCNA 200-301 exam objective. The SM-2 algorithm schedules the next time you see each question based on how you performed.",
+                body: "400+ questions mapped to every CCNA 200-301 exam objective. Missed and weak questions are scheduled to come back when they are worth reviewing.",
               },
               {
                 n: "02",

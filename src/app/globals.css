@@ -6,6 +6,12 @@
   --foreground: #09090b;
 }
 
+:root.dark {
+  color-scheme: dark;
+  --background: #080b10;
+  --foreground: #f4f4f5;
+}
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -26,4 +32,65 @@ body {
 
 a {
   text-decoration: none;
+}
+
+.dark .bg-\[\#fafafa\],
+.dark .bg-zinc-100,
+.dark .bg-white {
+  background-color: #080b10 !important;
+}
+
+.dark .bg-zinc-200 {
+  background-color: #27272a !important;
+}
+
+.dark .bg-black {
+  background-color: #f4f4f5 !important;
+}
+
+.dark .text-black {
+  color: #f4f4f5 !important;
+}
+
+.dark .text-zinc-700,
+.dark .text-zinc-600,
+.dark .text-zinc-500 {
+  color: #a1a1aa !important;
+}
+
+.dark .text-zinc-400 {
+  color: #71717a !important;
+}
+
+.dark .border-black {
+  border-color: #f4f4f5 !important;
+}
+
+.dark .border-zinc-300,
+.dark .border-zinc-200 {
+  border-color: #3f3f46 !important;
+}
+
+.dark .bg-zinc-950\/80,
+.dark .bg-zinc-950\/40,
+.dark .bg-zinc-900\/60,
+.dark .bg-zinc-900\/40 {
+  background-color: rgba(24, 24, 27, 0.92) !important;
+}
+
+.dark .hover\:bg-zinc-100:hover {
+  background-color: #18181b !important;
+}
+
+.dark .hover\:bg-black:hover {
+  background-color: #f4f4f5 !important;
+  color: #09090b !important;
+}
+
+.dark .bg-black.text-white {
+  color: #09090b !important;
+}
+
+.dark .fill-\[\#000000\] {
+  fill: #f4f4f5 !important;
 }
