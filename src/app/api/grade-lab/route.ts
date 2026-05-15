@@ -2,8 +2,10 @@ import { NextRequest, NextResponse } from "next/server";
 import { gradeLab } from "@/lib/grader";
 import type { DeviceState } from "@/lib/ios/state";
 import type { TaskCheck } from "@/lib/grader";
+import { saveLabAttempt, touchStreak } from "@/lib/db/queries";
 import { readFileSync } from "fs";
 import { join } from "path";
+import { nanoid } from "nanoid";
 
 interface LabDefinition {
   id: string;
@@ -39,9 +41,10 @@ function loadLab(labId: string): LabDefinition | null {
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { labId, deviceState, tasks: inlineTasks } = body as {
+    const { labId, deviceState, labType, tasks: inlineTasks } = body as {
       labId: string;
       deviceState: DeviceState;
+      labType?: "cli" | "topology";
       tasks?: Array<{ id: string; check: TaskCheck }>;
     };
 
@@ -63,7 +66,25 @@ export async function POST(req: NextRequest) {
     }
 
     const { taskResults, allPassed } = gradeLab(deviceState, gradingTasks);
-    return NextResponse.json({ taskResults, allPassed });
+    const userId = req.cookies.get("xamastry-uid")?.value ?? req.headers.get("x-uid");
+
+    if (userId) {
+      try {
+        await saveLabAttempt(
+          nanoid(),
+          userId,
+          labId,
+          labType ?? (inlineTasks?.length ? "topology" : "cli"),
+          Object.entries(taskResults).map(([id, result]) => ({ id, ...result })),
+          allPassed,
+        );
+        if (allPassed) await touchStreak(userId);
+      } catch (saveError) {
+        console.error("[grade-lab:save-attempt]", saveError);
+      }
+    }
+
+    return NextResponse.json({ taskResults, allPassed, saved: Boolean(userId) });
   } catch (err) {
     console.error("[grade-lab]", err);
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });

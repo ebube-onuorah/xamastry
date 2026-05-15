@@ -140,6 +140,17 @@ export async function getDashboardStats(userId: string) {
     limit: 5,
   });
 
+  const recentLabAttempts = await db.query.labAttempts.findMany({
+    where: eq(labAttempts.userId, userId),
+    orderBy: desc(labAttempts.completedAt),
+    limit: 10,
+  });
+
+  const completedLabCount = await db
+    .select({ count: sql<number>`count(distinct ${labAttempts.labId})` })
+    .from(labAttempts)
+    .where(and(eq(labAttempts.userId, userId), eq(labAttempts.passedAll, true)));
+
   // Per-objective accuracy (weak areas = objectives < 60% correct)
   const objectiveStats = await db
     .select({
@@ -179,8 +190,10 @@ export async function getDashboardStats(userId: string) {
   return {
     recentSessions,
     activeSessions,
-    activeDates: recentSessions
-      .map((session) => session.completedAt?.toISOString().slice(0, 10))
+    recentLabAttempts,
+    completedLabCount: Number(completedLabCount[0]?.count ?? 0),
+    activeDates: [...recentSessions, ...recentLabAttempts]
+      .map((entry) => ("completedAt" in entry ? entry.completedAt?.toISOString().slice(0, 10) : null))
       .filter((date): date is string => Boolean(date)),
     objectiveStats,
     domainStats,

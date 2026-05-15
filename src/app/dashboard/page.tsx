@@ -55,12 +55,33 @@ export default async function DashboardPage() {
   ];
 
   const recentSessions = stats?.recentSessions ?? [];
+  const recentLabAttempts = stats?.recentLabAttempts ?? [];
   const activeSessions = stats?.activeSessions ?? [];
   const activeDates = new Set(stats?.activeDates ?? []);
+  const completedLabCount = stats?.completedLabCount ?? 0;
+
+  const labTitles: Record<string, string> = {
+    "lab-001": "Basic Router Configuration",
+    "lab-002": "Static Routing",
+    "lab-003": "VLAN Configuration",
+    "lab-004": "Router-on-a-Stick",
+    "lab-005": "OSPF Single-Area",
+    "lab-006": "Device Security",
+    "lab-007": "Trunk Links",
+    "lab-008": "Loopback & Serial WAN",
+    "lab-009": "Banner & Console Security",
+    "lab-010": "Complete Router Setup",
+    "topo-001": "Two-Router OSPF",
+    "topo-002": "VLAN Inter-op",
+    "topo-003": "Three-Router Static Routing",
+    "topo-004": "Device Hardening",
+    "topo-005": "Campus Capstone",
+  };
 
   const statCards = [
     { label: "Current Streak",       value: `${streak.current}d`, sub: `Longest: ${streak.longest}d` },
     { label: "Due Today",            value: dueCount > 0 ? String(dueCount) : "—",    sub: "SM-2 review queue" },
+    { label: "Labs Complete",        value: String(completedLabCount), sub: "Unique passed labs" },
     { label: "Last Session",
       value: recentSessions[0]
         ? `${Math.round(((recentSessions[0].correctAnswers ?? 0) / (recentSessions[0].totalQuestions || 1)) * 100)}%`
@@ -91,7 +112,7 @@ export default async function DashboardPage() {
         </div>
 
         {/* Stat cards */}
-        <div className="mb-8 grid gap-0 border-2 border-black sm:grid-cols-3">
+        <div className="mb-8 grid gap-0 border-2 border-black sm:grid-cols-2 lg:grid-cols-4">
           {statCards.map((s, i) => (
             <div
               key={s.label}
@@ -197,6 +218,50 @@ export default async function DashboardPage() {
                       </span>
                     </div>
                   ))}
+                </div>
+              )}
+            </div>
+
+            {/* Recent labs */}
+            <div className="border-2 border-black p-6">
+              <div className="mb-4 border-b border-zinc-200 pb-4">
+                <p className="font-mono text-[10px] uppercase tracking-widest text-zinc-400">Labs</p>
+                <h2 className="mt-1 font-mono text-base font-bold uppercase tracking-wide text-black">Recent Lab Checks</h2>
+              </div>
+              {recentLabAttempts.length === 0 ? (
+                <p className="font-mono text-xs text-zinc-400">No lab checks yet. Open a lab and use Check My Work.</p>
+              ) : (
+                <div className="divide-y divide-zinc-200">
+                  {recentLabAttempts.slice(0, 5).map((attempt) => {
+                    const tasks = Array.isArray(attempt.tasksJson) ? attempt.tasksJson : [];
+                    const passed = tasks.filter((task) => {
+                      return typeof task === "object" && task !== null && "passed" in task && task.passed === true;
+                    }).length;
+                    const href =
+                      attempt.labType === "topology"
+                        ? `/labs/topology/${attempt.labId}`
+                        : `/labs/cli/${attempt.labId}`;
+
+                    return (
+                      <Link
+                        key={attempt.id}
+                        href={href}
+                        className="grid grid-cols-[1fr_auto] gap-3 py-3 transition-colors hover:text-red-600"
+                      >
+                        <div className="min-w-0">
+                          <p className="truncate font-sans text-sm text-zinc-700">
+                            {labTitles[attempt.labId] ?? attempt.labId}
+                          </p>
+                          <p className="mt-0.5 font-mono text-[10px] uppercase tracking-widest text-zinc-400">
+                            {attempt.labType} · {attempt.completedAt.toLocaleDateString()}
+                          </p>
+                        </div>
+                        <span className={attempt.passedAll ? "font-mono text-xs font-bold text-black" : "font-mono text-xs font-bold text-red-600"}>
+                          {passed}/{tasks.length}
+                        </span>
+                      </Link>
+                    );
+                  })}
                 </div>
               )}
             </div>

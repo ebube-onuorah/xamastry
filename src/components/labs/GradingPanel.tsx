@@ -25,6 +25,8 @@ export default function GradingPanel({
 }: GradingPanelProps) {
   const passedCount = Object.values(taskResults).filter((r) => r.passed).length;
   const gradedCount = Object.keys(taskResults).length;
+  const taskIds = new Set(tasks.map((task) => task.id));
+  const generalResults = Object.entries(taskResults).filter(([id]) => !taskIds.has(id));
 
   return (
     <div className="flex flex-col gap-3">
@@ -81,6 +83,27 @@ export default function GradingPanel({
       {/* Per-task results */}
       {gradedCount > 0 && (
         <div className="space-y-1.5">
+          {generalResults.map(([id, result]) => (
+            <div
+              key={id}
+              className={cn(
+                "flex items-start gap-2 p-2 rounded-md text-xs",
+                result.passed
+                  ? "bg-emerald-500/8 border border-emerald-500/20"
+                  : "bg-red-500/8 border border-red-500/20",
+              )}
+            >
+              {result.passed ? (
+                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 flex-shrink-0 mt-0.5" />
+              ) : (
+                <XCircle className="w-3.5 h-3.5 text-red-400 flex-shrink-0 mt-0.5" />
+              )}
+              <span className={result.passed ? "text-emerald-300/80" : "text-red-300/80"}>
+                {result.message}
+              </span>
+            </div>
+          ))}
+
           {tasks.map((task) => {
             const result = taskResults[task.id];
             if (!result) return null;

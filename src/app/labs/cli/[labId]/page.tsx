@@ -82,14 +82,23 @@ export default function CliLabPage({ params }: { params: Promise<{ labId: string
       const res = await fetch("/api/grade-lab", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ labId: lab.id, deviceState }),
+        body: JSON.stringify({ labId: lab.id, labType: "cli", deviceState }),
       });
+      if (!res.ok) throw new Error("Failed to grade lab");
       const data = await res.json();
       setTaskResults(data.taskResults ?? {});
       setAllPassed(data.allPassed ?? false);
       setActiveTab("grading");
-    } catch {
-      // fallback: silently fail
+    } catch (error) {
+      console.error("[cli-lab:grade]", error);
+      setTaskResults({
+        error: {
+          passed: false,
+          message: "Could not check your work. Please try again.",
+        },
+      });
+      setAllPassed(false);
+      setActiveTab("grading");
     } finally {
       setIsGrading(false);
     }

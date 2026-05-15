@@ -128,7 +128,9 @@ export function execute(state: DeviceState, rawInput: string): CommandResult {
       output = r.output; newState = r.state;
     } else if (cmd === "router" && args[0]?.toLowerCase() === "ospf") {
       const pid = parseInt(args[1] ?? "1");
-      newState = { ...state, mode: "router-ospf", currentLine: `ospf:${pid}` };
+      const ospfProcesses = { ...state.ospfProcesses };
+      ospfProcesses[pid] = ospfProcesses[pid] ?? { networks: [] };
+      newState = { ...state, mode: "router-ospf", currentLine: `ospf:${pid}`, ospfProcesses };
     } else if (cmd === "network" && state.mode === "router-ospf" && state.currentLine?.startsWith("ospf:")) {
       const pid = activeOspfPid(state);
       const r = addOspfNetwork(state, args, pid);
@@ -136,7 +138,8 @@ export function execute(state: DeviceState, rawInput: string): CommandResult {
     } else if (cmd === "router-id" && state.mode === "router-ospf" && state.currentLine?.startsWith("ospf:")) {
       const pid = activeOspfPid(state);
       const ospfProcesses = { ...state.ospfProcesses };
-      ospfProcesses[pid] = { ...ospfProcesses[pid], routerId: args[0] };
+      const proc = ospfProcesses[pid] ?? { networks: [] };
+      ospfProcesses[pid] = { ...proc, routerId: args[0] };
       newState = { ...state, ospfProcesses };
     } else if (cmd === "enable" && args[0]?.toLowerCase() === "secret") {
       const r = setEnableSecret(state, args.slice(1));

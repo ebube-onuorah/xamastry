@@ -51,7 +51,8 @@ export function addOspfNetwork(
   if (isNaN(area)) return { output: "% Invalid area id.", state };
 
   const ospfProcesses = { ...state.ospfProcesses };
-  const proc = ospfProcesses[pid] ?? { networks: [] };
+  const existingProc = ospfProcesses[pid];
+  const proc = existingProc ? { ...existingProc, networks: existingProc.networks ?? [] } : { networks: [] };
   ospfProcesses[pid] = {
     ...proc,
     networks: [...proc.networks.filter((n) => n.network !== network), { network, wildcard, area }],

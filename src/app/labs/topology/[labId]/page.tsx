@@ -129,11 +129,13 @@ export default function TopologyLabPage({ params }: { params: Promise<{ labId: s
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             labId: lab.id,
+            labType: "topology",
             deviceState: state,
             taskIds: tasks.map((t) => t.id),
             tasks: tasks.map((t) => ({ id: t.id, check: t.check })),
           }),
         });
+        if (!res.ok) throw new Error(`Failed to grade ${deviceId}`);
         const data = await res.json();
         Object.assign(allResults, data.taskResults ?? {});
         if (!data.allPassed) allPassed = false;
@@ -142,8 +144,16 @@ export default function TopologyLabPage({ params }: { params: Promise<{ labId: s
       setTaskResults(allResults);
       setAllPassed(allPassed);
       setActiveTab("grading");
-    } catch {
-      // ignore
+    } catch (error) {
+      console.error("[topology-lab:grade]", error);
+      setTaskResults({
+        error: {
+          passed: false,
+          message: "Could not check your work. Please try again.",
+        },
+      });
+      setAllPassed(false);
+      setActiveTab("grading");
     } finally {
       setIsGrading(false);
     }
