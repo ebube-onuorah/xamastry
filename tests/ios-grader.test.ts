@@ -129,3 +129,22 @@ test("tracks VLAN, switchport, and OSPF configuration state", () => {
 
   assert.equal(result.allPassed, true);
 });
+
+test("adds connected routes and supports basic ping reachability", () => {
+  const state = runCommands([
+    "enable",
+    "configure terminal",
+    "interface GigabitEthernet0/0",
+    "ip address 10.0.0.1 255.255.255.252",
+    "no shutdown",
+    "end",
+  ]);
+
+  assert.ok(state.routes.some((route) => route.source === "connected" && route.network === "10.0.0.0"));
+
+  const reachable = execute(state, "ping 10.0.0.2");
+  assert.match(reachable.output, /Success rate is 100 percent/);
+
+  const unreachable = execute(state, "ping 192.168.50.1");
+  assert.match(unreachable.output, /Success rate is 0 percent/);
+});

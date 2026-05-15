@@ -49,12 +49,13 @@ export function setIpAddress(state: DeviceState, args: string[]): { output: stri
     return { output: "% Invalid IP address.", state };
   }
   const iface: IosInterface = { ...state.interfaces[state.currentInterface]!, ip, mask };
+  const nextState = {
+    ...state,
+    interfaces: { ...state.interfaces, [state.currentInterface]: iface },
+  };
   return {
     output: "",
-    state: {
-      ...state,
-      interfaces: { ...state.interfaces, [state.currentInterface]: iface },
-    },
+    state: refreshConnectedRoutes(nextState),
   };
 }
 
@@ -65,7 +66,7 @@ export function noShutdown(state: DeviceState): { output: string; state: DeviceS
   const iface: IosInterface = { ...state.interfaces[state.currentInterface]!, status: "up" };
   return {
     output: `%LINK-5-CHANGED: Interface ${state.currentInterface}, changed state to up`,
-    state: { ...state, interfaces: { ...state.interfaces, [state.currentInterface]: iface } },
+    state: refreshConnectedRoutes({ ...state, interfaces: { ...state.interfaces, [state.currentInterface]: iface } }),
   };
 }
 
@@ -76,7 +77,7 @@ export function shutdown(state: DeviceState): { output: string; state: DeviceSta
   const iface: IosInterface = { ...state.interfaces[state.currentInterface]!, status: "down" };
   return {
     output: `%LINK-5-CHANGED: Interface ${state.currentInterface}, changed state to administratively down`,
-    state: { ...state, interfaces: { ...state.interfaces, [state.currentInterface]: iface } },
+    state: refreshConnectedRoutes({ ...state, interfaces: { ...state.interfaces, [state.currentInterface]: iface } }),
   };
 }
 
@@ -175,4 +176,25 @@ export function setEncapsulationDot1q(state: DeviceState, args: string[]): { out
 
 function isValidIp(s: string): boolean {
   return /^\d{1,3}(\.\d{1,3}){3}$/.test(s);
+}
+
+function refreshConnectedRoutes(state: DeviceState): DeviceState {
+  const staticAndOspfRoutes = state.routes.filter((route) => route.source !== "connected");
+  const connectedRoutes = Object.values(state.interfaces)
+    .filter((iface) => iface.status === "up" && iface.ip && iface.mask)
+    .map((iface) => ({
+      network: networkAddress(iface.ip!, iface.mask!),
+      mask: iface.mask!,
+      exitInterface: iface.name,
+      metric: 0,
+      source: "connected" as const,
+    }));
+
+  return { ...state, routes: [...staticAndOspfRoutes, ...connectedRoutes] };
+}
+
+function networkAddress(ip: string, mask: string): string {
+  const ipParts = ip.split(".").map(Number);
+  const maskParts = mask.split(".").map(Number);
+  return ipParts.map((part, index) => part & maskParts[index]).join(".");
 }

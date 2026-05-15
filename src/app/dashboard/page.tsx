@@ -4,6 +4,7 @@ import { cookies } from "next/headers";
 import SiteNav from "@/components/nav/SiteNav";
 import DomainRadar from "@/components/dashboard/DomainRadar";
 import StreakCalendar from "@/components/dashboard/StreakCalendar";
+import ProgressBackup from "@/components/dashboard/ProgressBackup";
 import { DOMAINS } from "@/lib/questions";
 
 export const metadata: Metadata = {
@@ -149,6 +150,9 @@ export default async function DashboardPage() {
                 Get a timed score when you want a readiness check.
               </p>
             </Link>
+          </div>
+          <div className="mt-3">
+            <ProgressBackup />
           </div>
         </div>
 

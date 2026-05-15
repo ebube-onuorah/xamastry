@@ -13,6 +13,7 @@ import {
 import type { Question } from "@/lib/questions";
 import { cn } from "@/lib/utils";
 import BackButton from "@/components/nav/BackButton";
+import ThemeToggle from "@/components/nav/ThemeToggle";
 
 const EXAM_MINUTES = 120;
 const EXAM_SECONDS = EXAM_MINUTES * 60;
@@ -179,6 +180,7 @@ export default function FullExamPage() {
       {/* Top bar */}
       <div className="flex-shrink-0 border-b border-zinc-800/60 bg-zinc-950/90 backdrop-blur-sm px-4 py-3 flex items-center gap-4">
         <BackButton fallbackHref="/dashboard" className="text-zinc-500 hover:text-white" />
+        <ThemeToggle />
         <div className="flex items-center gap-2">
           <span className="text-xs text-zinc-400">CCNA 200-301</span>
           <span className="text-xs text-zinc-700">·</span>

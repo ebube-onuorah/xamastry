@@ -6,6 +6,7 @@ import { ArrowRight, RotateCcw } from "lucide-react";
 import QuestionCard from "@/components/exam/QuestionCard";
 import ExplanationPanel from "@/components/exam/ExplanationPanel";
 import BackButton from "@/components/nav/BackButton";
+import ThemeToggle from "@/components/nav/ThemeToggle";
 import {
   ALL_QUESTIONS,
   formatAnswer,
@@ -139,6 +140,9 @@ export default function PracticePage() {
               <span className="grid size-7 place-items-center bg-black font-mono text-sm font-bold text-white">X</span>
               <span className="font-mono text-sm font-bold uppercase tracking-widest text-black">Xamastry</span>
             </Link>
+            <div className="ml-auto">
+              <ThemeToggle />
+            </div>
           </div>
         </nav>
 
@@ -188,6 +192,7 @@ export default function PracticePage() {
             <span className="font-mono text-sm font-bold uppercase tracking-widest text-black">Xamastry</span>
           </Link>
           <BackButton fallbackHref="/dashboard" className="text-zinc-500 hover:text-black" />
+          <ThemeToggle />
           <div className="flex items-center gap-4 font-mono text-xs text-zinc-400">
             <span className="text-emerald-700 font-bold">{score.correct} correct</span>
             <span>/</span>

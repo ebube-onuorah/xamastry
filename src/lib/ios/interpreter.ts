@@ -87,6 +87,10 @@ export function execute(state: DeviceState, rawInput: string): CommandResult {
     }
   }
 
+  else if (cmd === "ping") {
+    output = ping(state, args[0]);
+  }
+
   // ── Config-mode commands ─────────────────────────────────────────────────────
   else if (state.mode === "config" || state.mode === "interface" || state.mode === "router-ospf" || state.mode === "vlan-config" || state.mode === "line") {
 
@@ -189,6 +193,37 @@ export function execute(state: DeviceState, rawInput: string): CommandResult {
   }
 
   return { output, newState, prompt: getPrompt(newState) };
+}
+
+function ping(state: DeviceState, target?: string): string {
+  if (!target) return "% Incomplete command.";
+  if (!/^\d{1,3}(\.\d{1,3}){3}$/.test(target)) return "% Invalid IP address.";
+
+  const directInterface = Object.values(state.interfaces).find((iface) => iface.ip === target && iface.status === "up");
+  const route = state.routes.find((candidate) => ipInSubnet(target, candidate.network, candidate.mask));
+
+  if (directInterface || route) {
+    return [
+      `Type escape sequence to abort.`,
+      `Sending 5, 100-byte ICMP Echos to ${target}, timeout is 2 seconds:`,
+      "!!!!!",
+      `Success rate is 100 percent (5/5), round-trip min/avg/max = 1/2/4 ms`,
+    ].join("\n");
+  }
+
+  return [
+    `Type escape sequence to abort.`,
+    `Sending 5, 100-byte ICMP Echos to ${target}, timeout is 2 seconds:`,
+    ".....",
+    `Success rate is 0 percent (0/5)`,
+  ].join("\n");
+}
+
+function ipInSubnet(ip: string, network: string, mask: string): boolean {
+  const ipParts = ip.split(".").map(Number);
+  const networkParts = network.split(".").map(Number);
+  const maskParts = mask.split(".").map(Number);
+  return ipParts.every((part, index) => (part & maskParts[index]) === (networkParts[index] & maskParts[index]));
 }
 
 function handleExit(state: DeviceState): DeviceState {

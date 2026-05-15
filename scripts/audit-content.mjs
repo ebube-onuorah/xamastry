@@ -42,6 +42,16 @@ function auditQuestions() {
     questions.forEach((question, index) => {
       const loc = `${fileName}#${question.id || index}`;
       const correct = Array.isArray(question.correct) ? question.correct : [question.correct];
+      if (!question.id) issues.push(`${loc}: missing id`);
+      if (!question.text || typeof question.text !== "string") issues.push(`${loc}: missing text`);
+      if (!Array.isArray(question.options) || question.options.length !== 4) {
+        issues.push(`${loc}: must have exactly 4 options`);
+      }
+      if (!question.explanation || String(question.explanation).length < 40) {
+        issues.push(`${loc}: explanation is missing or too short`);
+      }
+      if (!question.domain) issues.push(`${loc}: missing domain`);
+      if (!question.objective) issues.push(`${loc}: missing objective`);
       const choose = String(question.text || "").match(/choose\s+(two|three|four|\d+)/i);
       const expected = choose
         ? { two: 2, three: 3, four: 4 }[choose[1].toLowerCase()] || Number(choose[1])
@@ -75,8 +85,14 @@ function auditLabs() {
   for (const file of collectLabFiles(labDir)) {
     const lab = readJson(file);
     const rel = path.relative(root, file);
+    if (!lab.id) issues.push(`${rel}: missing id`);
+    if (!lab.title) issues.push(`${rel}: missing title`);
+    if (!lab.scenario || String(lab.scenario).length < 40) issues.push(`${rel}: scenario is missing or too short`);
+    if (!Array.isArray(lab.tasks) || lab.tasks.length === 0) issues.push(`${rel}: missing tasks`);
     for (const task of lab.tasks || []) {
       const type = task.check?.type;
+      if (!task.id) issues.push(`${rel}: task missing id`);
+      if (!task.description) issues.push(`${rel}#${task.id}: missing description`);
       if (!validTaskChecks.has(type)) {
         issues.push(`${rel}#${task.id}: unsupported check type "${type}"`);
       }

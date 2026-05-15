@@ -381,13 +381,14 @@ export default function Home() {
 
       {/* ── FOOTER ── */}
       <footer className="mx-auto max-w-7xl px-6 py-5 sm:px-8">
-        <div className="flex items-center justify-between">
+        <div className="flex flex-wrap items-center justify-between gap-3">
           <span className="font-mono text-[10px] uppercase tracking-widest text-zinc-400">
-            Xamastry · CCNA 200-301
+            Xamastry - CCNA 200-301
           </span>
-          <span className="font-mono text-[10px] uppercase tracking-widest text-zinc-400">
-            Free · Open · No Account Required
-          </span>
+          <div className="flex gap-4 font-mono text-[10px] uppercase tracking-widest text-zinc-400">
+            <Link href="/privacy" className="hover:text-black">Privacy</Link>
+            <Link href="/terms" className="hover:text-black">Terms</Link>
+          </div>
         </div>
       </footer>
 
