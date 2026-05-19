@@ -1,6 +1,9 @@
 "use client";
 
 import { useState } from "react";
+import { trackUsage } from "@/components/UsageTracker";
+
+const UID_PATTERN = /^[A-Za-z0-9_-]{8,80}$/;
 
 interface BackupPayload {
   version: 1;
@@ -24,17 +27,23 @@ export default function ProgressBackup() {
     setValue(encoded);
     void navigator.clipboard?.writeText(encoded).catch(() => null);
     setMessage("Backup code created. Keep it somewhere safe.");
+    trackUsage("progress_backup_created");
   }
 
   function importProgress() {
     try {
+      if (value.length > 2_000) throw new Error("Invalid backup");
       const payload = JSON.parse(atob(value.trim())) as BackupPayload;
-      if (payload.version !== 1 || !payload.uid) throw new Error("Invalid backup");
+      if (payload.version !== 1 || !payload.uid || !UID_PATTERN.test(payload.uid)) {
+        throw new Error("Invalid backup");
+      }
       localStorage.setItem("xamastry-uid", payload.uid);
-      document.cookie = `xamastry-uid=${payload.uid}; path=/; max-age=${60 * 60 * 24 * 365}; SameSite=Lax`;
+      const secure = window.location.protocol === "https:" ? "; Secure" : "";
+      document.cookie = `xamastry-uid=${payload.uid}; path=/; max-age=${60 * 60 * 24 * 365}; SameSite=Lax${secure}`;
       if (payload.theme === "dark" || payload.theme === "light") {
         localStorage.setItem("xamastry-theme", payload.theme);
       }
+      trackUsage("progress_restored");
       setMessage("Progress restored. Refreshing dashboard...");
       window.location.reload();
     } catch {

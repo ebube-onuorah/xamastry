@@ -86,3 +86,16 @@ export const aiUsage = pgTable(
   },
   (t) => [primaryKey({ columns: [t.userId, t.date] })],
 );
+
+// Anonymous first-party usage analytics. This is intentionally lightweight and
+// stores product events without IP addresses or account data.
+export const usageEvents = pgTable("usage_events", {
+  id: text("id").primaryKey(),
+  userId: text("user_id"),
+  event: text("event").notNull(),
+  path: text("path").notNull(),
+  referrer: text("referrer"),
+  userAgent: text("user_agent"),
+  metadata: jsonb("metadata"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});

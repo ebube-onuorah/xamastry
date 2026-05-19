@@ -1,17 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getDueCards, upsertCardState } from "@/lib/db/queries";
 import { updateSM2, answerToQuality } from "@/lib/sm2";
-
-function getUid(req: NextRequest): string | null {
-  return (
-    req.headers.get("x-uid") ??
-    req.cookies.get("xamastry-uid")?.value ??
-    null
-  );
-}
+import { getRequestUid, hasOversizedBody, isSafeId, safeNumber } from "@/lib/security";
+import { getQuestionById } from "@/lib/questions";
 
 export async function GET(req: NextRequest) {
-  const uid = getUid(req);
+  const uid = getRequestUid(req);
   if (!uid) return NextResponse.json({ dueIds: [] });
 
   try {
@@ -24,25 +18,32 @@ export async function GET(req: NextRequest) {
 }
 
 export async function POST(req: NextRequest) {
-  const uid = getUid(req);
+  if (hasOversizedBody(req, 10_000)) {
+    return NextResponse.json({ error: "Request too large" }, { status: 413 });
+  }
+
+  const uid = getRequestUid(req);
   if (!uid) return NextResponse.json({ ok: false });
 
   try {
     const { questionId, correct, timeMs, currentState } = await req.json();
 
-    if (!questionId || correct === undefined) {
+    if (!isSafeId(questionId) || typeof correct !== "boolean" || !getQuestionById(questionId)) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
     }
 
-    const quality = answerToQuality(correct, timeMs);
+    const safeTimeMs = safeNumber(timeMs, 0, 0, 7_200_000);
+    const quality = answerToQuality(correct, safeTimeMs);
+    const safeNextReview = currentState?.nextReview ? new Date(currentState.nextReview) : new Date();
+    const nextReview = Number.isFinite(safeNextReview.getTime()) ? safeNextReview : new Date();
 
     const state = {
       userId: uid,
       questionId,
-      easeFactor: currentState?.easeFactor ?? 2.5,
-      interval: currentState?.interval ?? 1,
-      repetitions: currentState?.repetitions ?? 0,
-      nextReview: currentState?.nextReview ? new Date(currentState.nextReview) : new Date(),
+      easeFactor: safeNumber(currentState?.easeFactor, 2.5, 1.3, 3.5),
+      interval: safeNumber(currentState?.interval, 1, 1, 365),
+      repetitions: safeNumber(currentState?.repetitions, 0, 0, 100),
+      nextReview,
       updatedAt: new Date(),
     };
 

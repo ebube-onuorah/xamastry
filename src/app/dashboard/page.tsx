@@ -6,6 +6,7 @@ import DomainRadar from "@/components/dashboard/DomainRadar";
 import StreakCalendar from "@/components/dashboard/StreakCalendar";
 import ProgressBackup from "@/components/dashboard/ProgressBackup";
 import { DOMAINS } from "@/lib/questions";
+import { isValidUid } from "@/lib/security";
 
 export const metadata: Metadata = {
   title: "Dashboard | Xamastry",
@@ -23,7 +24,8 @@ async function getStats(userId: string) {
 
 export default async function DashboardPage() {
   const cookieStore = await cookies();
-  const userId = cookieStore.get("xamastry-uid")?.value ?? null;
+  const rawUserId = cookieStore.get("xamastry-uid")?.value ?? null;
+  const userId = isValidUid(rawUserId) ? rawUserId : null;
   const stats = userId ? await getStats(userId) : null;
 
   const domainScores = DOMAINS.map((d) => {

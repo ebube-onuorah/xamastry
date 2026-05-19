@@ -2,7 +2,9 @@ import type { Metadata } from "next";
 import { GeistSans } from "geist/font/sans";
 import { GeistMono } from "geist/font/mono";
 import { Playfair_Display } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
 import UidInit from "@/components/UidInit";
+import UsageTracker from "@/components/UsageTracker";
 import "./globals.css";
 
 const playfair = Playfair_Display({
@@ -37,7 +39,9 @@ export default function RootLayout({
           }}
         />
         <UidInit />
+        <UsageTracker />
         {children}
+        <Analytics />
       </body>
     </html>
   );

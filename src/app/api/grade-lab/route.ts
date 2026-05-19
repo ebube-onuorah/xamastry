@@ -3,6 +3,8 @@ import { gradeLab } from "@/lib/grader";
 import type { DeviceState } from "@/lib/ios/state";
 import type { TaskCheck } from "@/lib/grader";
 import { saveLabAttempt, touchStreak } from "@/lib/db/queries";
+import { recordUsageEvent } from "@/lib/db/usage";
+import { getRequestUid, hasOversizedBody, isSafeId } from "@/lib/security";
 import { readFileSync } from "fs";
 import { join } from "path";
 import { nanoid } from "nanoid";
@@ -39,6 +41,10 @@ function loadLab(labId: string): LabDefinition | null {
 }
 
 export async function POST(req: NextRequest) {
+  if (hasOversizedBody(req, 120_000)) {
+    return NextResponse.json({ error: "Request too large" }, { status: 413 });
+  }
+
   try {
     const body = await req.json();
     const { labId, deviceState, labType, tasks: inlineTasks } = body as {
@@ -48,7 +54,7 @@ export async function POST(req: NextRequest) {
       tasks?: Array<{ id: string; check: TaskCheck }>;
     };
 
-    if (!labId || !deviceState) {
+    if (!isSafeId(labId) || !deviceState || (labType && labType !== "cli" && labType !== "topology")) {
       return NextResponse.json({ error: "labId and deviceState are required" }, { status: 400 });
     }
 
@@ -56,6 +62,9 @@ export async function POST(req: NextRequest) {
     let gradingTasks: Array<{ id: string; check: TaskCheck }>;
 
     if (inlineTasks && inlineTasks.length > 0) {
+      if (inlineTasks.length > 40 || inlineTasks.some((task) => !isSafeId(task.id) || !task.check)) {
+        return NextResponse.json({ error: "Invalid task payload" }, { status: 400 });
+      }
       gradingTasks = inlineTasks;
     } else {
       const lab = loadLab(labId);
@@ -66,18 +75,34 @@ export async function POST(req: NextRequest) {
     }
 
     const { taskResults, allPassed } = gradeLab(deviceState, gradingTasks);
-    const userId = req.cookies.get("xamastry-uid")?.value ?? req.headers.get("x-uid");
+    const userId = getRequestUid(req);
 
     if (userId) {
       try {
+        const resolvedLabType = labType ?? (inlineTasks?.length ? "topology" : "cli");
         await saveLabAttempt(
           nanoid(),
           userId,
           labId,
-          labType ?? (inlineTasks?.length ? "topology" : "cli"),
+          resolvedLabType,
           Object.entries(taskResults).map(([id, result]) => ({ id, ...result })),
           allPassed,
         );
+        await recordUsageEvent({
+          id: nanoid(),
+          userId,
+          event: "lab_checked",
+          path: `/labs/${resolvedLabType}/${labId}`,
+          referrer: req.headers.get("referer"),
+          userAgent: req.headers.get("user-agent"),
+          metadata: {
+            labId,
+            labType: resolvedLabType,
+            allPassed,
+            passedTasks: Object.values(taskResults).filter((result) => result.passed).length,
+            totalTasks: Object.keys(taskResults).length,
+          },
+        });
         if (allPassed) await touchStreak(userId);
       } catch (saveError) {
         console.error("[grade-lab:save-attempt]", saveError);
