@@ -17,21 +17,3 @@ export const STARTER_PATH = [
     body: "See weak domains, review items, streaks, and saved lab checks.",
   },
 ];
-
-export const POPULAR_STARTER_LABS = [
-  {
-    href: "/labs/cli/lab-001",
-    title: "Basic Router Configuration",
-    body: "Best first lab: hostname, interface IPs, and no shutdown.",
-  },
-  {
-    href: "/labs/cli/lab-003",
-    title: "VLAN Configuration",
-    body: "Good next step for switching fundamentals and access ports.",
-  },
-  {
-    href: "/labs/cli/lab-007",
-    title: "Trunk Links",
-    body: "Practice 802.1Q trunking and native VLAN checks.",
-  },
-];

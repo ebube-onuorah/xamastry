@@ -7,7 +7,7 @@ import StreakCalendar from "@/components/dashboard/StreakCalendar";
 import ProgressBackup from "@/components/dashboard/ProgressBackup";
 import ContinueLearning from "@/components/ContinueLearning";
 import { DOMAINS } from "@/lib/questions";
-import { CONTENT_VERSION, POPULAR_STARTER_LABS } from "@/lib/product";
+import { CONTENT_VERSION } from "@/lib/product";
 import { isValidUid } from "@/lib/security";
 
 export const metadata: Metadata = {
@@ -176,20 +176,6 @@ export default async function DashboardPage() {
                 Configure IOS-style tasks and save your lab checks here.
               </p>
             </Link>
-            <Link href="/exam/full" className="border border-zinc-300 p-4 transition-colors hover:border-black">
-              <p className="font-mono text-xs font-bold uppercase tracking-widest text-black">Take a Mock Exam</p>
-              <p className="mt-2 text-sm leading-6 text-zinc-600">
-                Get a timed score when you want a readiness check.
-              </p>
-            </Link>
-          </div>
-          <div className="mt-3 grid gap-3 md:grid-cols-3">
-            {POPULAR_STARTER_LABS.map((lab) => (
-              <Link key={lab.href} href={lab.href} className="border border-zinc-200 p-4 transition-colors hover:border-black">
-                <p className="font-mono text-[10px] font-bold uppercase tracking-widest text-black">{lab.title}</p>
-                <p className="mt-2 text-sm leading-6 text-zinc-600">{lab.body}</p>
-              </Link>
-            ))}
           </div>
           <div className="mt-3">
             <ProgressBackup />

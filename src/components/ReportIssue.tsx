@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import type { FormEvent } from "react";
 
 type ReportIssueProps = {
   contentType: "question" | "lab";
@@ -18,9 +19,19 @@ export default function ReportIssue({
   const [open, setOpen] = useState(false);
   const [message, setMessage] = useState("");
   const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
+  const [notice, setNotice] = useState("");
 
-  async function submit() {
-    if (message.trim().length < 5 || status === "sending") return;
+  async function submit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const trimmed = message.trim();
+
+    if (trimmed.length < 5) {
+      setNotice("Add a short note first.");
+      return;
+    }
+    if (status === "sending") return;
+
+    setNotice("");
     setStatus("sending");
     try {
       const res = await fetch("/api/report", {
@@ -29,16 +40,17 @@ export default function ReportIssue({
         body: JSON.stringify({
           contentType,
           contentId,
-          message: message.trim(),
+          message: trimmed,
           path: window.location.pathname,
         }),
       });
       if (!res.ok) throw new Error("Failed");
       setStatus("sent");
       setMessage("");
-      setTimeout(() => setOpen(false), 1200);
+      setNotice("Sent. Thank you.");
     } catch {
       setStatus("error");
+      setNotice("Could not send. Try again.");
     }
   }
 
@@ -58,10 +70,14 @@ export default function ReportIssue({
         {label}
       </button>
       {open && (
-        <div className={`mt-2 border p-3 ${panel}`}>
+        <form onSubmit={submit} className={`mt-2 border p-3 ${panel}`}>
           <textarea
             value={message}
-            onChange={(event) => setMessage(event.target.value.slice(0, 800))}
+            onChange={(event) => {
+              setMessage(event.target.value.slice(0, 800));
+              if (status !== "sending") setStatus("idle");
+              setNotice("");
+            }}
             rows={3}
             placeholder="What looks wrong or confusing?"
             className={`w-full resize-none border bg-transparent p-2 text-sm outline-none ${
@@ -70,20 +86,19 @@ export default function ReportIssue({
           />
           <div className="mt-2 flex items-center justify-between gap-3">
             <span className="font-mono text-[10px] uppercase tracking-widest text-zinc-500">
-              {status === "sent" ? "Sent. Thank you." : status === "error" ? "Could not send." : `${message.length}/800`}
+              {notice || `${message.length}/800`}
             </span>
             <button
-              type="button"
-              onClick={submit}
-              disabled={message.trim().length < 5 || status === "sending" || status === "sent"}
-              className={`px-3 py-2 font-mono text-[10px] font-bold uppercase tracking-widest disabled:cursor-not-allowed disabled:opacity-40 ${
+              type="submit"
+              disabled={status === "sending" || status === "sent"}
+              className={`px-3 py-2 font-mono text-[10px] font-bold uppercase tracking-widest transition-opacity disabled:cursor-not-allowed disabled:opacity-50 ${
                 isDark ? "bg-teal-500 text-black" : "bg-black text-white"
               }`}
             >
               {status === "sending" ? "Sending" : "Send"}
             </button>
           </div>
-        </div>
+        </form>
       )}
     </div>
   );
