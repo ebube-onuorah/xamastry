@@ -238,6 +238,7 @@ export default function TopologyLabPage({ params }: { params: Promise<{ labId: s
           <div className="flex-1 overflow-y-auto p-4">
             {activeTab === "instructions" ? (
               <LabInstructions
+                id={lab.id}
                 title={lab.title}
                 scenario={lab.scenario}
                 tasks={flatTasks}

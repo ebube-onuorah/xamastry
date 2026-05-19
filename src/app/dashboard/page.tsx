@@ -5,7 +5,9 @@ import SiteNav from "@/components/nav/SiteNav";
 import DomainRadar from "@/components/dashboard/DomainRadar";
 import StreakCalendar from "@/components/dashboard/StreakCalendar";
 import ProgressBackup from "@/components/dashboard/ProgressBackup";
+import ContinueLearning from "@/components/ContinueLearning";
 import { DOMAINS } from "@/lib/questions";
+import { CONTENT_VERSION, POPULAR_STARTER_LABS } from "@/lib/product";
 import { isValidUid } from "@/lib/security";
 
 export const metadata: Metadata = {
@@ -92,6 +94,24 @@ export default async function DashboardPage() {
       sub: recentSessions[0]?.type ?? "No sessions yet" },
   ];
 
+  const nextRecommendation = dueCount > 0
+    ? {
+        href: "/exam/practice?utm_source=app&utm_medium=dashboard&utm_campaign=due_review",
+        title: "Review due questions",
+        body: `${dueCount} question${dueCount === 1 ? "" : "s"} are ready for another pass.`,
+      }
+    : completedLabCount === 0
+      ? {
+          href: "/labs/cli/lab-001?utm_source=app&utm_medium=dashboard&utm_campaign=first_lab",
+          title: "Try your first lab",
+          body: "Start with Basic Router Configuration and use Check My Work.",
+        }
+      : {
+          href: "/exam/full?utm_source=app&utm_medium=dashboard&utm_campaign=mock_exam",
+          title: "Take a mock exam",
+          body: "Use a timed session when you want a readiness check.",
+        };
+
   return (
     <main className="min-h-screen bg-[#fafafa]">
 
@@ -111,6 +131,12 @@ export default async function DashboardPage() {
                 Demo data — scores update as you practise
               </p>
             )}
+            <p className="mt-2 font-mono text-[10px] uppercase tracking-widest text-zinc-400">
+              {CONTENT_VERSION}
+            </p>
+          </div>
+          <div className="w-full md:w-72">
+            <ContinueLearning />
           </div>
         </div>
 
@@ -134,6 +160,10 @@ export default async function DashboardPage() {
             <h2 className="mt-1 font-mono text-base font-bold uppercase tracking-wide text-black">What to do next</h2>
           </div>
           <div className="grid gap-3 md:grid-cols-3">
+            <Link href={nextRecommendation.href} className="border-2 border-black p-4 transition-colors hover:bg-zinc-100">
+              <p className="font-mono text-xs font-bold uppercase tracking-widest text-black">{nextRecommendation.title}</p>
+              <p className="mt-2 text-sm leading-6 text-zinc-600">{nextRecommendation.body}</p>
+            </Link>
             <Link href="/exam/practice" className="border border-zinc-300 p-4 transition-colors hover:border-black">
               <p className="font-mono text-xs font-bold uppercase tracking-widest text-black">Practice Questions</p>
               <p className="mt-2 text-sm leading-6 text-zinc-600">
@@ -152,6 +182,14 @@ export default async function DashboardPage() {
                 Get a timed score when you want a readiness check.
               </p>
             </Link>
+          </div>
+          <div className="mt-3 grid gap-3 md:grid-cols-3">
+            {POPULAR_STARTER_LABS.map((lab) => (
+              <Link key={lab.href} href={lab.href} className="border border-zinc-200 p-4 transition-colors hover:border-black">
+                <p className="font-mono text-[10px] font-bold uppercase tracking-widest text-black">{lab.title}</p>
+                <p className="mt-2 text-sm leading-6 text-zinc-600">{lab.body}</p>
+              </Link>
+            ))}
           </div>
           <div className="mt-3">
             <ProgressBackup />

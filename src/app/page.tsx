@@ -1,5 +1,7 @@
 import Link from "next/link";
 import SiteNav from "@/components/nav/SiteNav";
+import ContinueLearning from "@/components/ContinueLearning";
+import { CONTENT_VERSION, POPULAR_STARTER_LABS, STARTER_PATH } from "@/lib/product";
 
 const domains = [
   { id: "1.x", name: "Network Fundamentals", score: 82, weight: 20 },
@@ -105,6 +107,8 @@ export default function Home() {
               </Link>
             </div>
 
+            <ContinueLearning />
+
             {/* Metric grid */}
             <div className="grid grid-cols-2 gap-0 border-t-2 border-black pt-0 sm:grid-cols-4">
               {metrics.map((m, i) => (
@@ -185,6 +189,37 @@ export default function Home() {
         </div>
       </section>
 
+      {/* STARTER PATH */}
+      <section className="border-b-2 border-black">
+        <div className="mx-auto max-w-7xl">
+          <div className="border-b border-zinc-200 px-6 py-5 sm:px-8">
+            <p className="font-mono text-[10px] uppercase tracking-widest text-zinc-400">New Here?</p>
+            <h2 className="mt-1 font-mono text-lg font-bold uppercase tracking-wide text-black">
+              Recommended First 20 Minutes
+            </h2>
+          </div>
+          <div className="grid sm:grid-cols-3">
+            {STARTER_PATH.map((step, index) => (
+              <Link
+                key={step.href}
+                href={step.href}
+                className={`px-6 py-6 transition-colors hover:bg-zinc-100 sm:px-8 ${
+                  index < STARTER_PATH.length - 1 ? "border-b sm:border-b-0 sm:border-r border-zinc-200" : ""
+                }`}
+              >
+                <span className="font-mono text-3xl font-bold text-zinc-200">
+                  {String(index + 1).padStart(2, "0")}
+                </span>
+                <h3 className="mt-3 font-mono text-sm font-bold uppercase tracking-widest text-black">
+                  {step.label}
+                </h3>
+                <p className="mt-2 text-sm leading-6 text-zinc-600">{step.body}</p>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* ── DOMAIN READINESS ── */}
       <section className="border-b-2 border-black">
         <div className="mx-auto max-w-7xl">
@@ -242,6 +277,32 @@ export default function Home() {
                 </div>
               );
             })}
+          </div>
+        </div>
+      </section>
+
+      {/* POPULAR STARTERS */}
+      <section className="border-b-2 border-black">
+        <div className="mx-auto max-w-7xl">
+          <div className="border-b border-zinc-200 px-6 py-5 sm:px-8">
+            <p className="font-mono text-[10px] uppercase tracking-widest text-zinc-400">Lab Path</p>
+            <h2 className="mt-1 font-mono text-lg font-bold uppercase tracking-wide text-black">
+              Popular Starting Labs
+            </h2>
+          </div>
+          <div className="grid sm:grid-cols-3">
+            {POPULAR_STARTER_LABS.map((lab, index) => (
+              <Link
+                key={lab.href}
+                href={lab.href}
+                className={`px-6 py-6 transition-colors hover:bg-zinc-100 sm:px-8 ${
+                  index < POPULAR_STARTER_LABS.length - 1 ? "border-b sm:border-b-0 sm:border-r border-zinc-200" : ""
+                }`}
+              >
+                <h3 className="font-mono text-sm font-bold uppercase tracking-widest text-black">{lab.title}</h3>
+                <p className="mt-2 text-sm leading-6 text-zinc-600">{lab.body}</p>
+              </Link>
+            ))}
           </div>
         </div>
       </section>
@@ -383,7 +444,7 @@ export default function Home() {
       <footer className="mx-auto max-w-7xl px-6 py-5 sm:px-8">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <span className="font-mono text-[10px] uppercase tracking-widest text-zinc-400">
-            Xamastry - CCNA 200-301
+            Xamastry - {CONTENT_VERSION}
           </span>
           <div className="flex gap-4 font-mono text-[10px] uppercase tracking-widest text-zinc-400">
             <Link href="/privacy" className="hover:text-black">Privacy</Link>

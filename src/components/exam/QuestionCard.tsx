@@ -9,6 +9,7 @@ import {
   type AnswerSelection,
   type Question,
 } from "@/lib/questions";
+import ReportIssue from "@/components/ReportIssue";
 
 interface QuestionCardProps {
   question: Question;
@@ -131,6 +132,7 @@ export default function QuestionCard({
         Press <kbd className="border border-zinc-300 px-1 py-0.5">1</kbd>-
         <kbd className="border border-zinc-300 px-1 py-0.5">4</kbd> to select.
       </p>
+      <ReportIssue contentType="question" contentId={question.id} />
     </div>
   );
 }

@@ -24,10 +24,16 @@ export function trackUsage(event: string, metadata?: Record<string, unknown>) {
   if (typeof window === "undefined") return;
   if (window.location.pathname.startsWith("/usage")) return;
 
+  const utm = Object.fromEntries(
+    new URLSearchParams(window.location.search)
+      .entries()
+      .filter(([key]) => key.startsWith("utm_")),
+  );
+
   const payload = JSON.stringify({
     event,
     path: window.location.pathname,
-    metadata,
+    metadata: { ...utm, ...metadata },
   });
 
   const uid = getUid();
@@ -48,6 +54,25 @@ export default function UsageTracker() {
   const pathname = usePathname();
 
   useEffect(() => {
+    try {
+      if (
+        pathname !== "/" &&
+        !pathname.startsWith("/usage") &&
+        !pathname.startsWith("/privacy") &&
+        !pathname.startsWith("/terms")
+      ) {
+        localStorage.setItem(
+          "xamastry-last-activity",
+          JSON.stringify({
+            path: pathname,
+            label: document.title.replace(" | Xamastry", "") || pathname,
+            savedAt: new Date().toISOString(),
+          }),
+        );
+      }
+    } catch {
+      // Continue tracking even if local storage is unavailable.
+    }
     trackUsage("page_view");
   }, [pathname]);
 

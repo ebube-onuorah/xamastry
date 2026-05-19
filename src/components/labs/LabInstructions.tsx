@@ -3,6 +3,7 @@
 import { CheckCircle2, Lightbulb, BookOpen, XCircle } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
+import ReportIssue from "@/components/ReportIssue";
 
 export interface LabTask {
   id: string;
@@ -11,6 +12,7 @@ export interface LabTask {
 }
 
 interface LabInstructionsProps {
+  id: string;
   title: string;
   scenario: string;
   tasks: LabTask[];
@@ -27,6 +29,7 @@ const difficultyColors = {
 };
 
 export default function LabInstructions({
+  id,
   title,
   scenario,
   tasks,
@@ -58,6 +61,7 @@ export default function LabInstructions({
           <span className="text-xs text-zinc-500 capitalize">{domain.replace(/-/g, " ")}</span>
         </div>
         <h2 className="text-lg font-bold text-white leading-tight">{title}</h2>
+        <ReportIssue contentType="lab" contentId={id} label="Report lab issue" tone="dark" />
       </div>
 
       {/* Scenario */}
