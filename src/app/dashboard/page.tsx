@@ -5,7 +5,6 @@ import SiteNav from "@/components/nav/SiteNav";
 import DomainRadar from "@/components/dashboard/DomainRadar";
 import StreakCalendar from "@/components/dashboard/StreakCalendar";
 import ProgressBackup from "@/components/dashboard/ProgressBackup";
-import ContinueLearning from "@/components/ContinueLearning";
 import { DOMAINS } from "@/lib/questions";
 import { CONTENT_VERSION } from "@/lib/product";
 import { isValidUid } from "@/lib/security";
@@ -134,9 +133,6 @@ export default async function DashboardPage() {
             <p className="mt-2 font-mono text-[10px] uppercase tracking-widest text-zinc-400">
               {CONTENT_VERSION}
             </p>
-          </div>
-          <div className="w-full md:w-72">
-            <ContinueLearning />
           </div>
         </div>
 

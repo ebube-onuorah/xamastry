@@ -1,6 +1,5 @@
 import Link from "next/link";
 import SiteNav from "@/components/nav/SiteNav";
-import ContinueLearning from "@/components/ContinueLearning";
 import { CONTENT_VERSION, STARTER_PATH } from "@/lib/product";
 
 const domains = [
@@ -106,8 +105,6 @@ export default function Home() {
                 Browse labs
               </Link>
             </div>
-
-            <ContinueLearning />
 
             {/* Metric grid */}
             <div className="grid grid-cols-2 gap-0 border-t-2 border-black pt-0 sm:grid-cols-4">

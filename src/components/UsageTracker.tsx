@@ -54,25 +54,6 @@ export default function UsageTracker() {
   const pathname = usePathname();
 
   useEffect(() => {
-    try {
-      if (
-        pathname !== "/" &&
-        !pathname.startsWith("/usage") &&
-        !pathname.startsWith("/privacy") &&
-        !pathname.startsWith("/terms")
-      ) {
-        localStorage.setItem(
-          "xamastry-last-activity",
-          JSON.stringify({
-            path: pathname,
-            label: document.title.replace(" | Xamastry", "") || pathname,
-            savedAt: new Date().toISOString(),
-          }),
-        );
-      }
-    } catch {
-      // Continue tracking even if local storage is unavailable.
-    }
     trackUsage("page_view");
   }, [pathname]);
 
