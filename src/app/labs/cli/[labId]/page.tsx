@@ -9,6 +9,8 @@ import GradingPanel from "@/components/labs/GradingPanel";
 import { createDevice, type DeviceState } from "@/lib/ios/state";
 import type { TaskResult } from "@/components/labs/GradingPanel";
 import { cn } from "@/lib/utils";
+import { getNextLab } from "@/lib/labs/progression";
+import { trackUsage } from "@/components/UsageTracker";
 
 // Dynamic import — xterm.js requires browser APIs
 const CiscoTerminal = dynamic(() => import("@/components/labs/CiscoTerminal"), {
@@ -63,6 +65,10 @@ export default function CliLabPage({ params }: { params: Promise<{ labId: string
   }, [labId]);
 
   useEffect(() => {
+    trackUsage("lab_opened", { labId, labType: "cli" });
+  }, [labId]);
+
+  useEffect(() => {
     if (!lab) return;
     const initialState = lab.initialState as Partial<DeviceState> | undefined;
     setDeviceState({
@@ -113,6 +119,7 @@ export default function CliLabPage({ params }: { params: Promise<{ labId: string
   }
 
   const initialState = lab.initialState as Partial<DeviceState> | undefined;
+  const nextLab = getNextLab(lab.id, "cli");
 
   return (
     <div className="min-h-screen bg-[#080b10] flex flex-col lg:h-screen lg:overflow-hidden">
@@ -200,6 +207,9 @@ export default function CliLabPage({ params }: { params: Promise<{ labId: string
                 isGrading={isGrading}
                 onGrade={handleGrade}
                 allPassed={allPassed}
+                labId={lab.id}
+                labType="cli"
+                nextLab={nextLab}
               />
             )}
           </div>

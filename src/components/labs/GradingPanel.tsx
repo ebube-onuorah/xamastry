@@ -1,7 +1,10 @@
 "use client";
 
-import { CheckCircle2, XCircle, Trophy, RefreshCw, Loader2 } from "lucide-react";
+import Link from "next/link";
+import { ArrowRight, CheckCircle2, XCircle, Trophy, RefreshCw, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { trackUsage } from "@/components/UsageTracker";
+import type { LabProgressionItem } from "@/lib/labs/progression";
 
 export interface TaskResult {
   passed: boolean;
@@ -14,6 +17,9 @@ interface GradingPanelProps {
   isGrading: boolean;
   onGrade: () => void;
   allPassed: boolean;
+  labId: string;
+  labType: "cli" | "topology";
+  nextLab?: LabProgressionItem | null;
 }
 
 export default function GradingPanel({
@@ -22,11 +28,16 @@ export default function GradingPanel({
   isGrading,
   onGrade,
   allPassed,
+  labId,
+  labType,
+  nextLab,
 }: GradingPanelProps) {
   const passedCount = Object.values(taskResults).filter((r) => r.passed).length;
   const gradedCount = Object.keys(taskResults).length;
   const taskIds = new Set(tasks.map((task) => task.id));
   const generalResults = Object.entries(taskResults).filter(([id]) => !taskIds.has(id));
+  const attempted = gradedCount > 0;
+  const close = attempted && !allPassed && tasks.length > 0 && passedCount >= Math.max(1, tasks.length - 1);
 
   return (
     <div className="flex flex-col gap-3">
@@ -77,6 +88,66 @@ export default function GradingPanel({
               style={{ width: `${tasks.length > 0 ? (passedCount / tasks.length) * 100 : 0}%` }}
             />
           </div>
+        </div>
+      )}
+
+      {attempted && (
+        <div
+          className={cn(
+            "border p-3",
+            allPassed
+              ? "border-emerald-500/30 bg-emerald-500/10"
+              : close
+                ? "border-yellow-500/30 bg-yellow-500/10"
+                : "border-zinc-800 bg-zinc-900/60",
+          )}
+        >
+          <p
+            className={cn(
+              "font-mono text-[10px] font-bold uppercase tracking-widest",
+              allPassed ? "text-emerald-300" : close ? "text-yellow-300" : "text-zinc-400",
+            )}
+          >
+            {allPassed ? "Lab complete" : close ? "Almost there" : "Keep going"}
+          </p>
+          <p className="mt-2 text-sm leading-6 text-zinc-300">
+            {allPassed
+              ? "Nice work. Your final device state passed every task."
+              : close
+                ? "You are one step away. Open the failed task, compare the expected state, and check again."
+                : "Use the failed task messages as your checklist. Most lab misses come from interface status, subnet details, or applying config in the wrong mode."}
+          </p>
+          {nextLab && (
+            <Link
+              href={nextLab.href}
+              onClick={() => {
+                trackUsage("next_lab_clicked", {
+                  fromLabId: labId,
+                  fromLabType: labType,
+                  toLabId: nextLab.id,
+                  toLabType: nextLab.type,
+                  allPassed,
+                  passedTasks: passedCount,
+                  totalTasks: tasks.length,
+                });
+              }}
+              className={cn(
+                "mt-3 flex items-center justify-between gap-3 border px-3 py-2.5 transition-colors",
+                allPassed
+                  ? "border-emerald-500/40 text-emerald-200 hover:bg-emerald-500/10"
+                  : "border-zinc-700 text-zinc-200 hover:border-teal-500/60 hover:bg-teal-500/10",
+              )}
+            >
+              <span className="min-w-0">
+                <span className="block font-mono text-[10px] uppercase tracking-widest text-zinc-500">
+                  Next lab
+                </span>
+                <span className="mt-1 block truncate text-sm font-semibold">{nextLab.title}</span>
+                <span className="mt-0.5 block text-xs text-zinc-500">{nextLab.focus}</span>
+              </span>
+              <ArrowRight className="h-4 w-4 shrink-0" />
+            </Link>
+          )}
         </div>
       )}
 
@@ -131,12 +202,11 @@ export default function GradingPanel({
         </div>
       )}
 
-      {/* Completion banner */}
       {allPassed && (
-        <div className="mt-2 p-3 bg-emerald-500/10 border border-emerald-500/30 rounded-lg text-center">
+        <div className="mt-2 border border-emerald-500/30 bg-emerald-500/10 p-3 text-center">
           <Trophy className="w-6 h-6 text-emerald-400 mx-auto mb-1" />
           <p className="text-emerald-300 font-semibold text-sm">Lab Complete!</p>
-          <p className="text-emerald-400/60 text-xs mt-0.5">All tasks passed successfully</p>
+          <p className="text-emerald-400/60 text-xs mt-0.5">All tasks passed successfully.</p>
         </div>
       )}
     </div>

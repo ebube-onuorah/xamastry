@@ -9,6 +9,9 @@ const ALLOWED_EVENTS = new Set([
   "full_exam_started",
   "lab_opened",
   "lab_checked",
+  "lab_passed",
+  "lab_failed",
+  "next_lab_clicked",
   "progress_backup_created",
   "progress_restored",
 ]);

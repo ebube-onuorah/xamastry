@@ -10,6 +10,8 @@ import type { TaskResult } from "@/components/labs/GradingPanel";
 import type { DeviceState } from "@/lib/ios/state";
 import { createDevice } from "@/lib/ios/state";
 import { cn } from "@/lib/utils";
+import { getNextLab } from "@/lib/labs/progression";
+import { trackUsage } from "@/components/UsageTracker";
 
 const TopologyCanvas = dynamic(() => import("@/components/labs/TopologyCanvas"), { ssr: false });
 const CiscoTerminal = dynamic(() => import("@/components/labs/CiscoTerminal"), {
@@ -97,6 +99,10 @@ export default function TopologyLabPage({ params }: { params: Promise<{ labId: s
     });
   }, [labId]);
 
+  useEffect(() => {
+    trackUsage("lab_opened", { labId, labType: "topology" });
+  }, [labId]);
+
   const handleStateChange = useCallback((deviceId: string, state: DeviceState) => {
     setDeviceStates((prev) => ({ ...prev, [deviceId]: state }));
   }, []);
@@ -178,6 +184,7 @@ export default function TopologyLabPage({ params }: { params: Promise<{ labId: s
   }
 
   const configurableDevices = lab.devices.filter((d) => d.type === "router" || d.type === "switch");
+  const nextLab = getNextLab(lab.id, "topology");
 
   return (
     <div className="min-h-screen bg-[#080b10] flex flex-col lg:h-screen lg:overflow-hidden">
@@ -254,6 +261,9 @@ export default function TopologyLabPage({ params }: { params: Promise<{ labId: s
                 isGrading={isGrading}
                 onGrade={handleGrade}
                 allPassed={allPassed}
+                labId={lab.id}
+                labType="topology"
+                nextLab={nextLab}
               />
             )}
           </div>

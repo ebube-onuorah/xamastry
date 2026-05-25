@@ -103,6 +103,20 @@ export async function POST(req: NextRequest) {
             totalTasks: Object.keys(taskResults).length,
           },
         });
+        await recordUsageEvent({
+          id: nanoid(),
+          userId,
+          event: allPassed ? "lab_passed" : "lab_failed",
+          path: `/labs/${resolvedLabType}/${labId}`,
+          referrer: req.headers.get("referer"),
+          userAgent: req.headers.get("user-agent"),
+          metadata: {
+            labId,
+            labType: resolvedLabType,
+            passedTasks: Object.values(taskResults).filter((result) => result.passed).length,
+            totalTasks: Object.keys(taskResults).length,
+          },
+        });
         if (allPassed) await touchStreak(userId);
       } catch (saveError) {
         console.error("[grade-lab:save-attempt]", saveError);
