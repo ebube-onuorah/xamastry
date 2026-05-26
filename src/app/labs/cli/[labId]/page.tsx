@@ -23,31 +23,44 @@ const CiscoTerminal = dynamic(() => import("@/components/labs/CiscoTerminal"), {
 });
 
 // Lab definitions are loaded client-side from JSON
-import type labType from "@/content/labs/cli/lab-001-basic-router-config.json";
-type LabDef = typeof labType;
+import lab001 from "@/content/labs/cli/lab-001-basic-router-config.json";
+import lab002 from "@/content/labs/cli/lab-002-static-routing.json";
+import lab003 from "@/content/labs/cli/lab-003-vlan-config.json";
+import lab004 from "@/content/labs/cli/lab-004-router-on-a-stick.json";
+import lab005 from "@/content/labs/cli/lab-005-ospf-single-area.json";
+import lab006 from "@/content/labs/cli/lab-006-device-security.json";
+import lab007 from "@/content/labs/cli/lab-007-trunk-links.json";
+import lab008 from "@/content/labs/cli/lab-008-loopback-and-serial.json";
+import lab009 from "@/content/labs/cli/lab-009-banner-and-motd.json";
+import lab010 from "@/content/labs/cli/lab-010-full-router-setup.json";
 
-async function fetchLab(labId: string): Promise<LabDef | null> {
-  const slugMap: Record<string, string> = {
-    "lab-001": "lab-001-basic-router-config",
-    "lab-002": "lab-002-static-routing",
-    "lab-003": "lab-003-vlan-config",
-    "lab-004": "lab-004-router-on-a-stick",
-    "lab-005": "lab-005-ospf-single-area",
-    "lab-006": "lab-006-device-security",
-    "lab-007": "lab-007-trunk-links",
-    "lab-008": "lab-008-loopback-and-serial",
-    "lab-009": "lab-009-banner-and-motd",
-    "lab-010": "lab-010-full-router-setup",
-  };
-  const fileName = slugMap[labId];
-  if (!fileName) return null;
-  try {
-    const mod = await import(`@/content/labs/cli/${fileName}.json`);
-    return mod.default as LabDef;
-  } catch {
-    return null;
-  }
-}
+type LabDef = {
+  id: string;
+  title: string;
+  domain: string;
+  difficulty: string;
+  estimatedMinutes: number;
+  scenario: string;
+  initialState?: Partial<DeviceState>;
+  tasks: Array<{
+    id: string;
+    description: string;
+    hint?: string;
+  }>;
+};
+
+const CLI_LABS: Record<string, LabDef> = {
+  "lab-001": lab001 as LabDef,
+  "lab-002": lab002 as LabDef,
+  "lab-003": lab003 as LabDef,
+  "lab-004": lab004 as LabDef,
+  "lab-005": lab005 as LabDef,
+  "lab-006": lab006 as LabDef,
+  "lab-007": lab007 as LabDef,
+  "lab-008": lab008 as LabDef,
+  "lab-009": lab009 as LabDef,
+  "lab-010": lab010 as LabDef,
+};
 
 import { useEffect } from "react";
 
@@ -61,7 +74,7 @@ export default function CliLabPage({ params }: { params: Promise<{ labId: string
   const [activeTab, setActiveTab] = useState<"instructions" | "grading">("instructions");
 
   useEffect(() => {
-    fetchLab(labId).then(setLab);
+    setLab(CLI_LABS[labId] ?? null);
   }, [labId]);
 
   useEffect(() => {

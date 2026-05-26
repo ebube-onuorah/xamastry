@@ -12,6 +12,11 @@ import { createDevice } from "@/lib/ios/state";
 import { cn } from "@/lib/utils";
 import { getNextLab } from "@/lib/labs/progression";
 import { trackUsage } from "@/components/UsageTracker";
+import topo001 from "@/content/labs/topology/topo-001-two-router-ospf.json";
+import topo002 from "@/content/labs/topology/topo-002-vlan-interop.json";
+import topo003 from "@/content/labs/topology/topo-003-three-router-static.json";
+import topo004 from "@/content/labs/topology/topo-004-device-hardening.json";
+import topo005 from "@/content/labs/topology/topo-005-full-campus.json";
 
 const TopologyCanvas = dynamic(() => import("@/components/labs/TopologyCanvas"), { ssr: false });
 const CiscoTerminal = dynamic(() => import("@/components/labs/CiscoTerminal"), {
@@ -52,24 +57,13 @@ interface TopoDef {
   tasks: TopoTask[];
 }
 
-const SLUG_MAP: Record<string, string> = {
-  "topo-001": "topo-001-two-router-ospf",
-  "topo-002": "topo-002-vlan-interop",
-  "topo-003": "topo-003-three-router-static",
-  "topo-004": "topo-004-device-hardening",
-  "topo-005": "topo-005-full-campus",
+const TOPOLOGY_LABS: Record<string, TopoDef> = {
+  "topo-001": topo001 as TopoDef,
+  "topo-002": topo002 as TopoDef,
+  "topo-003": topo003 as TopoDef,
+  "topo-004": topo004 as TopoDef,
+  "topo-005": topo005 as TopoDef,
 };
-
-async function fetchTopo(labId: string): Promise<TopoDef | null> {
-  const fileName = SLUG_MAP[labId];
-  if (!fileName) return null;
-  try {
-    const mod = await import(`@/content/labs/topology/${fileName}.json`);
-    return mod.default as TopoDef;
-  } catch {
-    return null;
-  }
-}
 
 export default function TopologyLabPage({ params }: { params: Promise<{ labId: string }> }) {
   const { labId } = use(params);
@@ -82,21 +76,20 @@ export default function TopologyLabPage({ params }: { params: Promise<{ labId: s
   const [activeTab, setActiveTab] = useState<"instructions" | "grading">("instructions");
 
   useEffect(() => {
-    fetchTopo(labId).then((l) => {
-      if (l) {
-        setLab(l);
-        const states: Record<string, DeviceState> = {};
-        for (const d of l.devices) {
-          if (d.type === "router" || d.type === "switch") {
-            states[d.id] = {
-              ...createDevice(d.initialState?.hostname ?? d.id),
-              ...(d.initialState ?? {}),
-            } as DeviceState;
-          }
+    const nextLab = TOPOLOGY_LABS[labId] ?? null;
+    setLab(nextLab);
+    if (nextLab) {
+      const states: Record<string, DeviceState> = {};
+      for (const d of nextLab.devices) {
+        if (d.type === "router" || d.type === "switch") {
+          states[d.id] = {
+            ...createDevice(d.initialState?.hostname ?? d.id),
+            ...(d.initialState ?? {}),
+          } as DeviceState;
         }
-        setDeviceStates(states);
       }
-    });
+      setDeviceStates(states);
+    }
   }, [labId]);
 
   useEffect(() => {
