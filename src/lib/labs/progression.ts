@@ -6,6 +6,24 @@ export type LabProgressionItem = {
   focus: string;
 };
 
+export const COMMON_LAB_MISSES: Record<string, string[]> = {
+  "lab-001": [
+    "Interfaces must be brought up with no shutdown.",
+    "The IP address and subnet mask both need to match the task.",
+    "Hostname changes only count after they are applied in global config mode.",
+  ],
+  "lab-002": [
+    "Static routes need the remote network, the correct mask, and a reachable next hop.",
+    "Check both directions. A route on one router does not create return reachability.",
+    "Default routes should point toward the next-hop router, not the final destination network.",
+  ],
+  "lab-003": [
+    "Creating a VLAN is not enough; the correct access port must be assigned to it.",
+    "Access ports should be in access mode before the access VLAN is set.",
+    "Double-check interface names. A correct VLAN on the wrong port still fails.",
+  ],
+};
+
 export const CLI_LAB_PATH: LabProgressionItem[] = [
   {
     id: "lab-001",

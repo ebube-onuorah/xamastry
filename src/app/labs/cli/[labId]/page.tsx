@@ -9,7 +9,7 @@ import GradingPanel from "@/components/labs/GradingPanel";
 import { createDevice, type DeviceState } from "@/lib/ios/state";
 import type { TaskResult } from "@/components/labs/GradingPanel";
 import { cn } from "@/lib/utils";
-import { getNextLab } from "@/lib/labs/progression";
+import { COMMON_LAB_MISSES, getNextLab } from "@/lib/labs/progression";
 import { trackUsage } from "@/components/UsageTracker";
 
 // Dynamic import — xterm.js requires browser APIs
@@ -223,6 +223,8 @@ export default function CliLabPage({ params }: { params: Promise<{ labId: string
                 labId={lab.id}
                 labType="cli"
                 nextLab={nextLab}
+                commonMisses={COMMON_LAB_MISSES[lab.id] ?? []}
+                onBackToTasks={() => setActiveTab("instructions")}
               />
             )}
           </div>

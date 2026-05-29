@@ -4,6 +4,7 @@ import { CheckCircle2, Lightbulb, BookOpen, XCircle } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 import ReportIssue from "@/components/ReportIssue";
+import { trackUsage } from "@/components/UsageTracker";
 
 export interface LabTask {
   id: string;
@@ -147,7 +148,17 @@ export default function LabInstructions({
                     {isFailed && <XCircle className="h-4 w-4 text-red-400" />}
                     {task.hint && !isPassed && (
                       <button
-                        onClick={() => setExpandedHint(isHintOpen ? null : task.id)}
+                        onClick={() => {
+                          const nextHint = isHintOpen ? null : task.id;
+                          setExpandedHint(nextHint);
+                          if (nextHint) {
+                            trackUsage("lab_hints_opened", {
+                              labId: id,
+                              taskId: task.id,
+                              source: "task_hint",
+                            });
+                          }
+                        }}
                         className="text-yellow-500/70 transition-colors hover:text-yellow-400"
                         title="Show hint"
                       >

@@ -257,6 +257,7 @@ export default function TopologyLabPage({ params }: { params: Promise<{ labId: s
                 labId={lab.id}
                 labType="topology"
                 nextLab={nextLab}
+                onBackToTasks={() => setActiveTab("instructions")}
               />
             )}
           </div>

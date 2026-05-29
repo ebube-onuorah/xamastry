@@ -11,6 +11,8 @@ const ALLOWED_EVENTS = new Set([
   "lab_checked",
   "lab_passed",
   "lab_failed",
+  "lab_retry_clicked",
+  "lab_hints_opened",
   "next_lab_clicked",
   "progress_backup_created",
   "progress_restored",

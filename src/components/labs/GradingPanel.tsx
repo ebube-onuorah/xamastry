@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowRight, CheckCircle2, XCircle, Trophy, RefreshCw, Loader2 } from "lucide-react";
+import { ArrowRight, BookOpen, CheckCircle2, Lightbulb, XCircle, Trophy, RefreshCw, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { trackUsage } from "@/components/UsageTracker";
 import type { LabProgressionItem } from "@/lib/labs/progression";
@@ -20,6 +20,8 @@ interface GradingPanelProps {
   labId: string;
   labType: "cli" | "topology";
   nextLab?: LabProgressionItem | null;
+  commonMisses?: string[];
+  onBackToTasks?: () => void;
 }
 
 export default function GradingPanel({
@@ -31,6 +33,8 @@ export default function GradingPanel({
   labId,
   labType,
   nextLab,
+  commonMisses = [],
+  onBackToTasks,
 }: GradingPanelProps) {
   const passedCount = Object.values(taskResults).filter((r) => r.passed).length;
   const gradedCount = Object.keys(taskResults).length;
@@ -38,12 +42,36 @@ export default function GradingPanel({
   const generalResults = Object.entries(taskResults).filter(([id]) => !taskIds.has(id));
   const attempted = gradedCount > 0;
   const close = attempted && !allPassed && tasks.length > 0 && passedCount >= Math.max(1, tasks.length - 1);
+  const failedTasks = tasks.filter((task) => taskResults[task.id] && !taskResults[task.id].passed);
+  const passedTasks = tasks.filter((task) => taskResults[task.id]?.passed);
+  const failedCount = failedTasks.length + generalResults.filter(([, result]) => !result.passed).length;
+
+  function handleRetry() {
+    trackUsage("lab_retry_clicked", {
+      labId,
+      labType,
+      passedTasks: passedCount,
+      failedTasks: failedCount,
+      totalTasks: tasks.length,
+    });
+    onGrade();
+  }
+
+  function handleBackToTasks() {
+    trackUsage("lab_hints_opened", {
+      labId,
+      labType,
+      source: "grading_panel",
+      failedTasks: failedCount,
+    });
+    onBackToTasks?.();
+  }
 
   return (
     <div className="flex flex-col gap-3">
       {/* Grade button */}
       <button
-        onClick={onGrade}
+        onClick={attempted && !allPassed ? handleRetry : onGrade}
         disabled={isGrading}
         className={cn(
           "w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-lg font-semibold text-sm transition-all duration-200",
@@ -65,7 +93,7 @@ export default function GradingPanel({
         ) : (
           <>
             <RefreshCw className="w-4 h-4" />
-            Check My Work
+            {attempted ? "Fix And Check Again" : "Check My Work"}
           </>
         )}
       </button>
@@ -117,6 +145,27 @@ export default function GradingPanel({
                 ? "You are one step away. Open the failed task, compare the expected state, and check again."
                 : "Use the failed task messages as your checklist. Most lab misses come from interface status, subnet details, or applying config in the wrong mode."}
           </p>
+          {!allPassed && (
+            <div className="mt-3 grid gap-2 sm:grid-cols-2">
+              <button
+                type="button"
+                onClick={handleBackToTasks}
+                className="flex items-center justify-center gap-2 border border-zinc-700 px-3 py-2.5 text-sm font-semibold text-zinc-200 transition-colors hover:border-yellow-500/60 hover:bg-yellow-500/10"
+              >
+                <BookOpen className="h-4 w-4" />
+                Back to Tasks
+              </button>
+              <button
+                type="button"
+                onClick={handleRetry}
+                disabled={isGrading}
+                className="flex items-center justify-center gap-2 border border-teal-500/40 bg-teal-500/10 px-3 py-2.5 text-sm font-semibold text-teal-200 transition-colors hover:bg-teal-500/20 disabled:cursor-not-allowed disabled:opacity-60"
+              >
+                <RefreshCw className={cn("h-4 w-4", isGrading && "animate-spin")} />
+                Fix And Check Again
+              </button>
+            </div>
+          )}
           {nextLab && (
             <Link
               href={nextLab.href}
@@ -153,7 +202,7 @@ export default function GradingPanel({
 
       {/* Per-task results */}
       {gradedCount > 0 && (
-        <div className="space-y-1.5">
+        <div className="space-y-3">
           {generalResults.map(([id, result]) => (
             <div
               key={id}
@@ -175,9 +224,68 @@ export default function GradingPanel({
             </div>
           ))}
 
+          {failedTasks.length > 0 && (
+            <div>
+              <p className="mb-1.5 font-mono text-[10px] font-bold uppercase tracking-widest text-red-300">
+                Fix these first
+              </p>
+              <div className="space-y-1.5">
+                {failedTasks.map((task) => {
+                  const result = taskResults[task.id];
+                  return (
+                    <div
+                      key={task.id}
+                      className="flex items-start gap-2 border border-red-500/20 bg-red-500/8 p-2 text-xs"
+                    >
+                      <XCircle className="mt-0.5 h-3.5 w-3.5 flex-shrink-0 text-red-400" />
+                      <span className="text-red-300/85">{result.message}</span>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+
+          {commonMisses.length > 0 && !allPassed && (
+            <div className="border border-yellow-500/20 bg-yellow-500/10 p-3">
+              <div className="mb-2 flex items-center gap-2 font-mono text-[10px] font-bold uppercase tracking-widest text-yellow-300">
+                <Lightbulb className="h-3.5 w-3.5" />
+                Common misses
+              </div>
+              <ul className="space-y-1.5 text-xs leading-5 text-yellow-100/80">
+                {commonMisses.map((miss) => (
+                  <li key={miss}>- {miss}</li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          {passedTasks.length > 0 && (
+            <div>
+              <p className="mb-1.5 font-mono text-[10px] font-bold uppercase tracking-widest text-emerald-300">
+                Already passing
+              </p>
+              <div className="space-y-1.5">
+                {passedTasks.map((task) => {
+                  const result = taskResults[task.id];
+                  return (
+                    <div
+                      key={task.id}
+                      className="flex items-start gap-2 border border-emerald-500/20 bg-emerald-500/8 p-2 text-xs"
+                    >
+                      <CheckCircle2 className="mt-0.5 h-3.5 w-3.5 flex-shrink-0 text-emerald-400" />
+                      <span className="text-emerald-300/80">{result.message}</span>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+
           {tasks.map((task) => {
             const result = taskResults[task.id];
             if (!result) return null;
+            if (result.passed || failedTasks.some((failedTask) => failedTask.id === task.id)) return null;
             return (
               <div
                 key={task.id}
