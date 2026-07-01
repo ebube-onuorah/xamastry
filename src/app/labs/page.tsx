@@ -105,12 +105,12 @@ export default function LabsPage() {
         </p>
 
         {/* Table header */}
-        <div className="grid grid-cols-[5rem_1fr_auto_auto_5rem] gap-4 border-b border-zinc-300 bg-zinc-100 px-4 py-2 font-mono text-[10px] uppercase tracking-widest text-zinc-500">
+        <div className="grid grid-cols-[5rem_1fr_auto] sm:grid-cols-[5rem_1fr_auto_auto_5rem] gap-4 border-b border-zinc-300 bg-zinc-100 px-4 py-2 font-mono text-[10px] uppercase tracking-widest text-zinc-500">
           <span>Type</span>
           <span>Lab</span>
-          <span>Domain</span>
+          <span className="hidden sm:block">Domain</span>
           <span>Diff</span>
-          <span>Est</span>
+          <span className="hidden sm:block">Est</span>
         </div>
 
         <div>
@@ -122,7 +122,7 @@ export default function LabsPage() {
                 key={lab.id}
                 href={href}
                 className={cn(
-                  "grid grid-cols-[5rem_1fr_auto_auto_5rem] items-center gap-4 px-4 py-4 transition-colors hover:bg-zinc-100",
+                  "grid grid-cols-[5rem_1fr_auto] sm:grid-cols-[5rem_1fr_auto_auto_5rem] items-center gap-4 px-4 py-4 transition-colors hover:bg-zinc-100",
                   i < filtered.length - 1 ? "border-b border-zinc-200" : "",
                 )}
               >
@@ -142,7 +142,7 @@ export default function LabsPage() {
                 <span className={cn("border px-1.5 py-0.5 font-mono text-[10px] uppercase tracking-widest", diffColor)}>
                   {lab.difficulty}
                 </span>
-                <span className="font-mono text-[10px] text-zinc-400">{lab.est}m</span>
+                <span className="hidden sm:block font-mono text-[10px] text-zinc-400">{lab.est}m</span>
               </Link>
             );
           })}
