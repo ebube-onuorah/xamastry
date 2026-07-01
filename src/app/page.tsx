@@ -243,12 +243,12 @@ export default function Home() {
           </div>
 
           {/* Table header */}
-          <div className="grid grid-cols-[3rem_1fr_4rem_4rem_10rem] gap-4 border-b border-zinc-300 bg-zinc-100 px-6 py-2 font-mono text-[10px] uppercase tracking-widest text-zinc-500 sm:px-8">
+          <div className="grid grid-cols-[3rem_1fr_4rem] sm:grid-cols-[3rem_1fr_4rem_4rem_10rem] gap-4 border-b border-zinc-300 bg-zinc-100 px-6 py-2 font-mono text-[10px] uppercase tracking-widest text-zinc-500 sm:px-8">
             <span>ID</span>
             <span>Domain</span>
-            <span className="text-right">Weight</span>
+            <span className="hidden sm:block text-right">Weight</span>
             <span className="text-right">Score</span>
-            <span className="pl-2">Progress</span>
+            <span className="hidden sm:block pl-2">Progress</span>
           </div>
 
           {/* Rows */}
@@ -258,7 +258,7 @@ export default function Home() {
               return (
                 <div
                   key={d.id}
-                  className={`grid grid-cols-[3rem_1fr_4rem_4rem_10rem] items-center gap-4 px-6 py-3.5 sm:px-8 ${
+                  className={`grid grid-cols-[3rem_1fr_4rem] sm:grid-cols-[3rem_1fr_4rem_4rem_10rem] items-center gap-4 px-6 py-3.5 sm:px-8 ${
                     i < domains.length - 1 ? "border-b border-zinc-200" : ""
                   }`}
                 >
@@ -266,9 +266,9 @@ export default function Home() {
                   <span className="border border-black px-2 py-0.5 font-mono text-[10px] uppercase tracking-widest text-black w-fit">
                     {d.name}
                   </span>
-                  <span className="font-mono text-xs text-right text-zinc-500">{d.weight}%</span>
+                  <span className="hidden sm:block font-mono text-xs text-right text-zinc-500">{d.weight}%</span>
                   <span className="text-right"><ScoreStamp score={d.score} /></span>
-                  <div className="h-1.5 bg-zinc-200 pl-2">
+                  <div className="hidden sm:block h-1.5 bg-zinc-200 pl-2">
                     <div className={`h-1.5 ${barColor}`} style={{ width: `${d.score}%` }} />
                   </div>
                 </div>
@@ -301,10 +301,10 @@ export default function Home() {
           </div>
 
           {/* Table header */}
-          <div className="grid grid-cols-[5rem_1fr_auto_auto] gap-4 border-b border-zinc-300 bg-zinc-100 px-6 py-2 font-mono text-[10px] uppercase tracking-widest text-zinc-500 sm:px-8">
+          <div className="grid grid-cols-[5rem_1fr_auto] sm:grid-cols-[5rem_1fr_auto_auto] gap-4 border-b border-zinc-300 bg-zinc-100 px-6 py-2 font-mono text-[10px] uppercase tracking-widest text-zinc-500 sm:px-8">
             <span>Type</span>
             <span>Lab</span>
-            <span>Domain</span>
+            <span className="hidden sm:block">Domain</span>
             <span>Diff</span>
           </div>
 
@@ -317,7 +317,7 @@ export default function Home() {
                 <Link
                   key={lab.id}
                   href={href}
-                  className={`grid grid-cols-[5rem_1fr_auto_auto] items-center gap-4 px-6 py-3.5 transition-colors hover:bg-zinc-100 sm:px-8 ${
+                  className={`grid grid-cols-[5rem_1fr_auto] sm:grid-cols-[5rem_1fr_auto_auto] items-center gap-4 px-6 py-3.5 transition-colors hover:bg-zinc-100 sm:px-8 ${
                     i < labs.length - 1 ? "border-b border-zinc-200" : ""
                   }`}
                 >

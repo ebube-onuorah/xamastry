@@ -187,16 +187,18 @@ export default function PracticePage() {
       {/* Nav */}
       <nav className="border-b-2 border-black">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-3 sm:px-8">
-          <Link href="/" className="flex items-center gap-3">
+          <Link href="/" className="flex items-center gap-2 sm:gap-3">
             <span className="grid size-7 place-items-center bg-black font-mono text-sm font-bold text-white">X</span>
-            <span className="font-mono text-sm font-bold uppercase tracking-widest text-black">Xamastry</span>
+            <span className="hidden sm:inline font-mono text-sm font-bold uppercase tracking-widest text-black">Xamastry</span>
           </Link>
           <BackButton fallbackHref="/dashboard" className="text-zinc-500 hover:text-black" />
           <ThemeToggle />
-          <div className="flex items-center gap-4 font-mono text-xs text-zinc-400">
-            <span className="text-emerald-700 font-bold">{score.correct} correct</span>
+          <div className="flex items-center gap-2 sm:gap-4 font-mono text-xs text-zinc-400">
+            <span className="text-emerald-700 font-bold">
+              {score.correct}<span className="hidden sm:inline"> correct</span>
+            </span>
             <span>/</span>
-            <span>{score.total} answered</span>
+            <span>{score.total}<span className="hidden sm:inline"> answered</span></span>
           </div>
         </div>
       </nav>
